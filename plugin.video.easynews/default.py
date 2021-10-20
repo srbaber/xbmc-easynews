@@ -59,6 +59,10 @@ def download(url, cookie=None, user_agent=None, referer=None, username=None, pas
     d = gethtml.download(url, __datapath__, cookie=cookie, user_agent=user_agent, referer=referer, username=username, password=password)
     return d
 
+def onNotification(self, sender, method, data):
+    if method in ['System.OnQuit', 'System.OnRestart', 'System.OnSleep']:
+        xbmc.log("Shutdown Cleanup")
+
 def notify(title, message, times, icon):
     xbmcgui.Dialog().notification(title, message, icon, times, False)
 
@@ -192,7 +196,6 @@ def add_dir(name, url, mode, iconimage):
     liz.setInfo(type='Video', infoLabels={'Title': name})
     return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,
                                      listitem=liz, isFolder=True)
-
 
 topparams = get_params()
 topurl = None
