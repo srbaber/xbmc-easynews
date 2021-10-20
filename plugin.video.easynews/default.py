@@ -59,10 +59,10 @@ def download(url, cookie=None, user_agent=None, referer=None, username=None, pas
     d = gethtml.download(url, __datapath__, cookie=cookie, user_agent=user_agent, referer=referer, username=username, password=password)
     return d
 
-def Notify(title, message, times, icon):
+def notify(title, message, times, icon):
     xbmcgui.Dialog().notification(title, message, icon, times, False)
 
-def getProperty(name, withDefault = None):
+def get_property(name, withDefault = None):
     usrsettings = xbmcaddon.Addon(id=__addonname__)
     value = usrsettings.getSetting(name)
     if value:
@@ -70,25 +70,25 @@ def getProperty(name, withDefault = None):
     else:
         return withDefault
 
-def STARTUP_ROUTINES():
+def startup():
     # deal with bug that happens if the datapath doesn't exist
     if not os.path.exists(__datapath__):
         os.makedirs(__datapath__)
 
 def CATEGORIES():
-    groups = getProperty('groups')
+    groups = get_property('groups')
 
     mode = 1
-    addDir('Videos By Date (' + groups + ')',
+    add_dir('Videos By Date (' + groups + ')',
            main_url + '?&ns=' + groups + '&fex=mp4&pby=500&pno=1&s1=dtime&s1d=-&s2=nrfile&s2d=-&s3=dsize&s3d=-&sS=5&d1t=&d2t=&b1t=&b2t=&px1t=&px2t=&fps1t=&fps2t=&bps1t=&bps2t=&hz1t=&hz2t=&rn1t=&rn2t=&grpF[]=&fty[]=VIDEO&spamf=1&u=1&st=adv&safeO=0&sb=1', mode, default_image)
-    addDir('Videos By Size (' + groups + ')',
+    add_dir('Videos By Size (' + groups + ')',
            main_url + '?&ns=' + groups + '&fex=mp4&pby=500&pno=1&s1=dsize&s1d=-&s2=nrfile&s2d=-&s3=dtime&s3d=-&sS=5&d1t=&d2t=&b1t=&b2t=&px1t=&px2t=&fps1t=&fps2t=&bps1t=&bps2t=&hz1t=&hz2t=&rn1t=&rn2t=&grpF[]=&fty[]=VIDEO&spamf=1&u=1&st=adv&safeO=0&sb=1', mode, default_image)
 
     mode = 2
 
     # didn't need to pass search a url. so i was lazy and passed it the
     # main_url as a dummy
-    addDir('Search', main_url, 5, default_image)
+    add_dir('Search', main_url, 5, default_image)
 
     xbmc.log('pluginhandle %s' % pluginhandle)
     xbmcplugin.endOfDirectory(pluginhandle)
@@ -108,7 +108,7 @@ def SEARCH(url):
             xbmc.log('SEARCH:%s' % search_url)
             INDEX(search_url)
 
-def cleanupTitle(title):
+def cleanup_title(title):
     xbmc.log("Title: %s" % title)
     if title.find('AutoUnRAR') >= 0:
         title = re.sub('.*\) [0-9]* \(', '', title)
@@ -117,8 +117,8 @@ def cleanupTitle(title):
     return title
 
 def INDEX(url):
-    user = getProperty('username')
-    passwd = getProperty('password')
+    user = get_property('username')
+    passwd = get_property('password')
 
     data = get_html(url, username=user, password=passwd)
 
@@ -128,24 +128,17 @@ def INDEX(url):
         for item in items:
             title = re.compile('<title>(.+?)</title>', re.DOTALL).findall(item)
             title = html.unescape(title[0])
-            title = cleanupTitle(title)
+            title = cleanup_title(title)
 
             gurl = re.compile('<link>(.+?)</link>', re.DOTALL).findall(item)
             gurl = html.unescape(gurl[0])
-            addSupportedLinks(gurl, title, "easynews")
+            add_supported_link(gurl, title, "easynews")
 
-    xbmcplugin.endOfDirectory(pluginhandle)
-
-
-def addSupportedLinks(gurl, name, thumbnail):
-    mode = 4
-    addLink(name, gurl, mode, thumbnail)
-    return
-
+    return xbmcplugin.endOfDirectory(pluginhandle)
 
 def PLAY(url, thumbnail):
-    user = getProperty('username')
-    passwd = getProperty('password')
+    user = get_property('username')
+    passwd = get_property('password')
 
     xbmc.log('Download URL: %s' % url)
     vidfile = download(url, username=user, password=passwd)
@@ -172,35 +165,33 @@ def get_params():
                 param[splitparams[0]] = splitparams[1]
     return param
 
+def add_supported_link(gurl, name, thumbnail):
+    mode = 4
+    add_link(name, gurl, mode, thumbnail)
 
-def addLink(name, url, mode, iconimage):
+def add_link(name, url, mode, iconimage):
     u = sys.argv[0] + "?url=" + urllib_parse.quote_plus(url) + "&mode=" + str(mode) \
         + "&name=" + urllib_parse.quote_plus(name) + "&iconimage=" \
         + urllib_parse.quote_plus(iconimage)
-    ok = True
     liz = xbmcgui.ListItem(name)
     liz.setArt({'thumb': iconimage,
                 'icon': 'DefaultVideo.png',
                 'poster': iconimage})
     liz.setProperty('IsPlayable', 'true')
     liz.setInfo(type='Video', infoLabels={'Title': name})
-    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,
+    return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,
                                      listitem=liz)
-    return ok
 
-
-def addDir(name, url, mode, iconimage):
+def add_dir(name, url, mode, iconimage):
     u = sys.argv[0] + "?url=" + urllib_parse.quote_plus(url) + "&mode=" + str(mode) \
         + "&name=" + urllib_parse.quote_plus(name)
-    ok = True
     liz = xbmcgui.ListItem(name)
     liz.setArt({'thumb': iconimage,
                 'icon': 'DefaultVideo.png',
                 'poster': iconimage})
     liz.setInfo(type='Video', infoLabels={'Title': name})
-    ok = xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,
+    return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,
                                      listitem=liz, isFolder=True)
-    return ok
 
 
 topparams = get_params()
@@ -231,7 +222,7 @@ xbmc.log('Mode: ' + str(topmode))
 xbmc.log('URL: ' + str(topurl))
 xbmc.log('Name: ' + str(topname))
 
-STARTUP_ROUTINES()
+startup()
 
 if topmode is None:
     xbmc.log('Generate Main Menu')
