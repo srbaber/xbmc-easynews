@@ -87,11 +87,11 @@ def startup():
 def build_url(search = None, groups = None, extensions = DEFAULT_EXTENSION, sort1 = SORT_BY_SIZE, sort1desc = True, sort2 = SORT_BY_NAME, sort2desc = True, sort3 = SORT_BY_DATE, sort3desc = True, page = 1, perpage = 500):
     url = main_url + '?'
     if search != None:
-        url += '&gps=' + search
+        url += '&gps=' + urllib_parse.quote_plus(search)
     if groups != None:
-        url += '&ns=' + groups
+        url += '&ns=' + urllib_parse.quote_plus(groups)
     if extensions != None:
-        url += '&fex=' + extensions
+        url += '&fex=' + urllib_parse.quote_plus(extensions)
 
     url += '&pby=%d' % perpage
     url += '&pno=%d' % page
