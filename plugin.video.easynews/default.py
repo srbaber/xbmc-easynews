@@ -48,6 +48,11 @@ main_url = 'https://secure.members.easynews.com/global5/search.html'
 ios_ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
 USER_AGENT_STRING = 'Mozilla/5.0 (Windows; U; Windows NT 5.1; en-GB; rv:1.9.0.3) Gecko/2008092417 Firefox/3.0.3'
 
+DEFAULT_EXTENSION = '.mp4'
+
+SORT_BY_SIZE = 'dsize'
+SORT_BY_NAME = 'nrfile'
+SORT_BY_DATE = 'dtime'
 
 def get_html(url, cookie=None, user_agent=None, referer=None, username=None, password=None):
     xbmc.log("Get Url: %s %s %s" % (url, username, password))
@@ -79,14 +84,52 @@ def startup():
     if not os.path.exists(__datapath__):
         os.makedirs(__datapath__)
 
+def build_url(search = None, groups = None, extensions = DEFAULT_EXTENSION, sort1 = SORT_BY_SIZE, sort1desc = True, sort2 = SORT_BY_NAME, sort2desc = True, sort3 = SORT_BY_DATE, sort3desc = True, page = 1, perpage = 500):
+    url = main_url + '?'
+    if search != None:
+        url += '&gps=' + search
+    if groups != None:
+        url += '&ns=' + groups
+    if extensions != None:
+        url += '&fex=' + extensions
+
+    url += '&pby=%d' % perpage
+    url += '&pno=%d' % page
+
+    url += '&s1=' + sort1
+    if sort1desc:
+        url += '&s1d=-'
+    else:
+        url += '&s1d=+'
+
+    url += '&s2=' + sort2
+    if sort2desc:
+        url += '&s2d=-'
+    else:
+        url += '&s2d=+'
+
+    url += '&s3=' + sort3
+    if sort3desc:
+        url += '&s3d=-'
+    else:
+        url += '&s3d=+'
+
+    url += '&sS=5&d1t=&d2t=&b1t=&b2t=&px1t=&px2t=&fps1t=&fps2t=&bps1t=&bps2t=&hz1t=&hz2t=&rn1t=&rn2t=&grpF[]=&fty[]=VIDEO&spamf=1&u=1&st=adv&safeO=0&sb=1'
+
+    return url
+
 def CATEGORIES():
-    groups = get_property('groups')
+    groupsfilter = get_property('groups')
 
     mode = 1
-    add_dir('Videos By Date (' + groups + ')',
-           main_url + '?&ns=' + groups + '&fex=mp4&pby=500&pno=1&s1=dtime&s1d=-&s2=nrfile&s2d=-&s3=dsize&s3d=-&sS=5&d1t=&d2t=&b1t=&b2t=&px1t=&px2t=&fps1t=&fps2t=&bps1t=&bps2t=&hz1t=&hz2t=&rn1t=&rn2t=&grpF[]=&fty[]=VIDEO&spamf=1&u=1&st=adv&safeO=0&sb=1', mode, default_image)
-    add_dir('Videos By Size (' + groups + ')',
-           main_url + '?&ns=' + groups + '&fex=mp4&pby=500&pno=1&s1=dsize&s1d=-&s2=nrfile&s2d=-&s3=dtime&s3d=-&sS=5&d1t=&d2t=&b1t=&b2t=&px1t=&px2t=&fps1t=&fps2t=&bps1t=&bps2t=&hz1t=&hz2t=&rn1t=&rn2t=&grpF[]=&fty[]=VIDEO&spamf=1&u=1&st=adv&safeO=0&sb=1', mode, default_image)
+    add_dir('Videos By Date (' + groupsfilter + ')',
+        build_url(groups = groupsfilter, sort1 = SORT_BY_DATE, sort3 = SORT_BY_SIZE),
+        mode,
+        default_image)
+    add_dir('Videos By Size (' + groupsfilter + ')',
+        build_url(groups = groupsfilter),
+        mode,
+        default_image)
 
     mode = 2
 
@@ -103,12 +146,12 @@ def SEARCH(url):
     kb.doModal()
     if kb.isConfirmed():
         # get text from keyboard
-        search = kb.getText()
+        searchPhrase = kb.getText()
 
         # if the search text is not nothing
-        if search != '':
+        if searchPhrase != '':
             # create the search url
-            search_url = main_url + '?&gps=' + search + '&fex=mp4&pby=500&pno=1&s1=dsize&s1d=-&s2=nrfile&s2d=-&s3=dtime&s3d=-&sS=5&d1t=&d2t=&b1t=&b2t=&px1t=&px2t=&fps1t=&fps2t=&bps1t=&bps2t=&hz1t=&hz2t=&rn1t=&rn2t=&grpF[]=&fty[]=VIDEO&spamf=1&u=1&st=adv&safeO=0&sb=1'
+            search_url = build_url(search = searchPhrase)
             xbmc.log('SEARCH:%s' % search_url)
             INDEX(search_url)
 
