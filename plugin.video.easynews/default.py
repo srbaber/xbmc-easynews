@@ -108,10 +108,13 @@ def SEARCH(url):
             xbmc.log('SEARCH:%s' % search_url)
             INDEX(search_url)
 
-def cleanupAutoUnrar(title):
-    if title.index('AutoUnRAR'):
-        title = re.sub('.+?\(', '', title)
+def cleanupTitle(title):
+    xbmc.log("Title: %s" % title)
+    if title.find('AutoUnRAR') >= 0:
+        title = re.sub('.*\) [0-9]* \(', '', title)
         title = re.sub(' AutoUnRAR\)', '', title)
+
+    return title
 
 def INDEX(url):
     user = getProperty('username')
@@ -121,12 +124,12 @@ def INDEX(url):
 
     items = re.compile('<item>(.+?)</item>',
                        re.DOTALL).findall(data)
-    xbmc.log("Items: %s" % items)
     if items:
         for item in items:
             title = re.compile('<title>(.+?)</title>', re.DOTALL).findall(item)
             title = html.unescape(title[0])
-            title = cleanupAutoUnrar(title)
+            title = cleanupTitle(title)
+
             gurl = re.compile('<link>(.+?)</link>', re.DOTALL).findall(item)
             gurl = html.unescape(gurl[0])
             addSupportedLinks(gurl, title, "easynews")

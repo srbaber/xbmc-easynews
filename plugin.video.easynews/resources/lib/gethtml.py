@@ -82,6 +82,7 @@ def createOpener(cookiepath, username, password):
         cj.load(cookiepath)
     cj.set_cookie(make_cookie(name="chickenlicker", value="noahbuddy:sh1tface"))
     cj.set_cookie(make_cookie(name="c_f", value="5Q4kjKmsz%2FmGtZIDLQBmwse%2BNWvZz9KddfBc19Jc7Q4tpQYKKngPZtCLBTlZSonihNLkujDLAuguV4Ug%2BCcgASrRL13mouk9jXocCziCYk9zvdi5XV%2ByZK3O9puyucMuosQlhoPYznF2ozIjQdQMk34clW55KuozQl2caDhBPtc%3D"))
+    cj.save(cookiepath)
 
     # create a password manager
     password_mgr = urllib_request.HTTPPasswordMgrWithDefaultRealm()
@@ -140,9 +141,7 @@ def _loadwithoutcookies(url, user_agent):
     return link
 
 def download(url, cookiepath=None, cookie=None, user_agent=None, referer=None, username=None, password=None):
-    global tmp_file
-    tmp_file = tempfile.mktemp(dir=cookiepath,
-                               suffix=VIDEO_EXTENSION)
+    tmp_file = os.path.join(cookiepath, 'easynews' + VIDEO_EXTENSION)
     tmp_file = xbmcvfs.makeLegalFilename(tmp_file)
 
     # use cookies if cookiepath is set and if the cookiepath exists.
