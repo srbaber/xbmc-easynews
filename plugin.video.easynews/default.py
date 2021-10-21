@@ -84,49 +84,73 @@ def startup():
     if not os.path.exists(__datapath__):
         os.makedirs(__datapath__)
 
-def build_url(search = None, groups = None, extensions = DEFAULT_EXTENSION, sort1 = SORT_BY_SIZE, sort1desc = True, sort2 = SORT_BY_NAME, sort2desc = True, sort3 = SORT_BY_DATE, sort3desc = True, page = 1, perpage = 500):
+def build_url_sorting(url, idx, sort, sortdesc):
+    url += '&s%d=' % idx + sort
+    if sortdesc:
+        url += '&s%dd=-' % idx
+    else:
+        url += '&s%dd=+' % idx
+    return url
+
+def build_url(search = None, groups = None, extensions = None, sort1 = SORT_BY_SIZE, sort1desc = True, sort2 = SORT_BY_NAME, sort2desc = True, sort3 = SORT_BY_DATE, sort3desc = True, page = "1", perpage = None):
+    xbmc.log('Search: %s Groups: %s Extensions: %s' % (search, groups, extensions))
+
     url = main_url + '?'
     if search != None:
         url += '&gps=' + urllib_parse.quote_plus(search)
     if groups != None:
         url += '&ns=' + urllib_parse.quote_plus(groups)
-    if extensions != None:
-        url += '&fex=' + urllib_parse.quote_plus(extensions)
+    if extensions == None:
+        extensions = get_property('extensions')
+    if extensions == '':
+        extensions = DEFAULT_EXTENSION
+    if perpage == None:
+        perpage = get_property('perpage')
+    if perpage == '':
+        perpage = 5
 
-    url += '&pby=%d' % perpage
-    url += '&pno=%d' % page
-
-    url += '&s1=' + sort1
-    if sort1desc:
-        url += '&s1d=-'
-    else:
-        url += '&s1d=+'
-
-    url += '&s2=' + sort2
-    if sort2desc:
-        url += '&s2d=-'
-    else:
-        url += '&s2d=+'
-
-    url += '&s3=' + sort3
-    if sort3desc:
-        url += '&s3d=-'
-    else:
-        url += '&s3d=+'
-
+    url += '&fex=' + urllib_parse.quote_plus(extensions)
+    url += '&pby=' + urllib_parse.quote_plus(perpage)
+    url += '&pno=' + page
+    url = build_url_sorting(url, 1, sort1, sort1desc)
+    url = build_url_sorting(url, 2, sort2, sort2desc)
+    url = build_url_sorting(url, 3, sort3, sort3desc)
     url += '&sS=5&d1t=&d2t=&b1t=&b2t=&px1t=&px2t=&fps1t=&fps2t=&bps1t=&bps2t=&hz1t=&hz2t=&rn1t=&rn2t=&grpF[]=&fty[]=VIDEO&spamf=1&u=1&st=adv&safeO=0&sb=1'
-
     return url
+
+def build_nextpage_url(url):
+    idx = url.find('&pno=') + 5
+    end_idx = url.find('&', idx)
+    next_page = url[idx:end_idx]
+    next_page = int(next_page) + 1
+    next_url="%s%d%s" % (url[0:idx], next_page, url[end_idx:])
+    xbmc.log("Next Url: %s" % next_url)
+    return next_url
+
+
+def build_thumbnail_url (url):
+    thumb_url = 'https://th.easynews.com/thumbnails-'
+    thumb_url += url[40 : 43]
+    thumb_url += '/pr-'
+    thumb_url += url[40 : 81]
+    thumb_url += '.jpg/th-'
+    thumb_url += url[90 : url.index('?', 91) - 4]
+    thumb_url += '.jpg'
+    xbmc.log("Url      : %s" % url)
+    xbmc.log("Thumbnail: %s" % thumb_url)
+    return thumb_url
 
 def CATEGORIES():
     groupsfilter = get_property('groups')
+    perpagefilter = get_property('perpage')
+    extensionsfilter = get_property('extensions')
 
     mode = 1
-    add_dir('Videos By Date (' + groupsfilter + ')',
+    add_dir('Videos By Date',
         build_url(groups = groupsfilter, sort1 = SORT_BY_DATE, sort3 = SORT_BY_SIZE),
         mode,
         default_image)
-    add_dir('Videos By Size (' + groupsfilter + ')',
+    add_dir('Videos By Size',
         build_url(groups = groupsfilter),
         mode,
         default_image)
@@ -179,7 +203,12 @@ def INDEX(url):
 
             gurl = re.compile('<link>(.+?)</link>', re.DOTALL).findall(item)
             gurl = html.unescape(gurl[0])
-            add_supported_link(gurl, title, "easynews")
+
+            thumbnail = build_thumbnail_url (gurl)
+
+            add_supported_link(gurl, title, thumbnail)
+
+    add_dir('Next page', build_nextpage_url(url), 1, default_image)
 
     return xbmcplugin.endOfDirectory(pluginhandle)
 

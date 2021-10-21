@@ -29,22 +29,22 @@ msgctxt "#30100"
 msgid "Account"
 msgstr "Konto"
 
-msgctxt "#30200"
-msgid "Use Easynews.com account"
-msgstr "Verwenden Sie das Konto Fantasti.cc"
-
 msgctxt "#30201"
 msgid "Username"
-msgstr "Benutzername"
+msgstr "Nutzername"
 
 msgctxt "#30202"
 msgid "Password"
 msgstr "Passwort"
 
-msgctxt "#30203"
-msgid "Hide successful login notifications"
-msgstr "Erfolgreiche Anmeldemeldungen ausblenden"
-
 msgctxt "#30204"
 msgid "Group regex filter"
-msgstr "Filterech du Groupflighten"
+msgstr "Gruppe suchfilter"
+
+msgctxt "#30205"
+msgid "Max results"
+msgstr "Maximale ergebnisse"
+
+msgctxt "#30206"
+msgid "File extensions"
+msgstr "Dateierweiterungen"

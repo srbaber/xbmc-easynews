@@ -1,9 +1,9 @@
 <settings>
 	<category label="30100">
-		<setting id="use-account" type="bool" label="30200" default="false"/>
-		<setting id="username" type="text" label="30201" default="" enable="!eq(-1,false)"/>
-		<setting id="password" type="text" label="30202" default="" option="hidden" enable="!eq(-2,false)"/>
-		<setting id="hide-successful-login-messages" type="bool" label="30203" default="false" enable="!eq(-3,false)"/>
+		<setting id="username" type="text" label="30201" default=""/>
+		<setting id="password" type="text" label="30202" default="" option="hidden"/>
 		<setting id="groups" type="text" label="30204" default="erotica" />
+		<setting id="perpage" type="text" label="30205" default="100" />
+		<setting id="extensions" type="text" label="30206" default="mp4|avi" />
 	</category>
 </settings>

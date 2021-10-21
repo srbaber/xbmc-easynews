@@ -29,10 +29,6 @@ msgctxt "#30100"
 msgid "Account"
 msgstr ""
 
-msgctxt "#30200"
-msgid "Use Easynews.com account"
-msgstr ""
-
 msgctxt "#30201"
 msgid "Username"
 msgstr ""
@@ -41,10 +37,14 @@ msgctxt "#30202"
 msgid "Password"
 msgstr ""
 
-msgctxt "#30203"
-msgid "Hide successful login notifications"
-msgstr ""
-
 msgctxt "#30204"
 msgid "Group regex filter"
+msgstr ""
+
+msgctxt "#30205"
+msgid "Max results"
+msgstr ""
+
+msgctxt "#30206"
+msgid "File extensions"
 msgstr ""

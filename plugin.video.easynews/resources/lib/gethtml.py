@@ -3,13 +3,6 @@ gethtml with cookies support  v1
 by anarchintosh @ xbmcforums
 Copyleft = GNU GPL v3 (2011 onwards)
 
-this function is paired with weblogin.py
-and is intended to make it easier for coders wishing
-to scrape source of pages, while logged in to that site.
-
-USAGE:
-!!!!!First set the compatible_urllist below!!!!!!!!!
-
 import gethtml
 
 to load html without cookies
