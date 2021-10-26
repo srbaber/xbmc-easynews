@@ -100,7 +100,7 @@ def createRequest(url, cookie, user_agent, referer):
 
     return req
 
-def get(url, cookiepath=None, cookie=None, user_agent=None, referer=None, username=None, password=None):
+def stream(url, cookiepath=None, cookie=None, user_agent=None, referer=None, username=None, password=None):
     # use cookies if cookiepath is set and if the cookiepath exists.
     if cookiepath is not None:
         req = createRequest(url, cookie, user_agent, referer)
@@ -111,14 +111,17 @@ def get(url, cookiepath=None, cookie=None, user_agent=None, referer=None, userna
         except urllib_error.URLError as e:
             xbmc.log('%s Error opening %s' % (e, url))
             sys.exit(1)
-        link = response.read()
-        response.close()
-        return link
+        return response
     else:
-        return _loadwithoutcookies(url, user_agent)
+        return load_without_cookies(url, user_agent)
 
+def get(url, cookiepath=None, cookie=None, user_agent=None, referer=None, username=None, password=None):
+    link = stream()
+    link = response.read()
+    response.close()
+    return link
 
-def _loadwithoutcookies(url, user_agent):
+def load_without_cookies(url, user_agent):
     xbmc.log('Loading without cookies')
     url = url.replace('http:', 'https:')
 
@@ -129,9 +132,7 @@ def _loadwithoutcookies(url, user_agent):
     except urllib_error.HTTPError as e:
         xbmc.log("%s %s" % (url, e.reason), xbmc.LOGFATAL)
         sys.exit(0)
-    link = response.read()
-    response.close()
-    return link
+    return response
 
 def download(url, cookiepath=None, cookie=None, user_agent=None, referer=None, username=None, password=None):
     tmp_file = os.path.join(cookiepath, 'easynews' + VIDEO_EXTENSION)

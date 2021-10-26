@@ -2,7 +2,7 @@
 <addon id="plugin.video.easynews"
        name="Easynews.com"
        version="0.0.1"
-       provider-name="xbmc-adult">
+       provider-name="xbmc-easynews">
     <requires>
         <!-- Commenting xbmc.python allows install on all versions of Kodi -->
         <!-- <import addon="xbmc.python" version="2.1.0"/> -->
@@ -19,7 +19,7 @@
         <assets>
             <icon>icon.png</icon>
         </assets>
-        <summary lang="en">Easynews.com -- access to all videos posted to the erotica newsgroups</summary>
-        <description lang="en">Browse collections (user designed categories) of videos</description>
+        <summary lang="en">Easynews.com -  Browse videos from Easynews.com.  Account required.</summary>
+        <description lang="en">Browse newsgroups as well as search</description>
     </extension>
 </addon>

@@ -43,6 +43,7 @@ default_image = os.path.join(__addonpath__, 'resources', 'images',
 
 # string to simplify urls
 main_url = 'https://secure.members.easynews.com/global5/search.html'
+groups_url = 'https://secure.members.easynews.com/index.html'
 
 # User-Agent used for playback
 ios_ua = 'Mozilla/5.0 (iPhone; CPU iPhone OS 10_3_1 like Mac OS X) AppleWebKit/603.1.30 (KHTML, like Gecko) Version/10.0 Mobile/14E304 Safari/602.1'
@@ -53,11 +54,19 @@ DEFAULT_EXTENSION = '.mp4'
 SORT_BY_SIZE = 'dsize'
 SORT_BY_NAME = 'nrfile'
 SORT_BY_DATE = 'dtime'
+GROUP_TOKEN = 'YOURGROUPHERE'
+EXTENSION_TOKEN = 'YOUREXTENSIONSHERE'
+PERPAGE_TOKEN = 'YOURPERPAGESHERE'
 
 def get_html(url, cookie=None, user_agent=None, referer=None, username=None, password=None):
     xbmc.log("Get Url: %s %s %s" % (url, username, password))
     d = gethtml.get(url, __datapath__, cookie=cookie, user_agent=user_agent, referer=referer, username=username, password=password)
     return six.ensure_text(d) if six.PY3 else d
+
+def stream(url, cookie=None, user_agent=None, referer=None, username=None, password=None):
+    xbmc.log("Stream Url: %s %s %s" % (url, username, password))
+    d = gethtml.stream(url, __datapath__, cookie=cookie, user_agent=user_agent, referer=referer, username=username, password=password)
+    return d
 
 def download(url, cookie=None, user_agent=None, referer=None, username=None, password=None):
     xbmc.log("Download Url: %s %s %s" % (url, username, password))
@@ -84,6 +93,13 @@ def startup():
     if not os.path.exists(__datapath__):
         os.makedirs(__datapath__)
 
+def build_url_groups(groups = None):
+    xbmc.log('Groups: %s' % (groups))
+    url = groups_url + '?nocache=1635253521&sortOpt=0'
+    if groups != None:
+        url += '&search=' + urllib_parse.quote_plus(groups)
+    return url
+
 def build_url_sorting(url, idx, sort, sortdesc):
     url += '&s%d=' % idx + sort
     if sortdesc:
@@ -101,11 +117,11 @@ def build_url(search = None, groups = None, extensions = None, sort1 = SORT_BY_S
     if groups != None:
         url += '&ns=' + urllib_parse.quote_plus(groups)
     if extensions == None:
-        extensions = get_property('extensions')
+        extensions = EXTENSION_TOKEN
     if extensions == '':
         extensions = DEFAULT_EXTENSION
     if perpage == None:
-        perpage = get_property('perpage')
+        perpage = PERPAGE_TOKEN
     if perpage == '':
         perpage = 5
 
@@ -116,6 +132,12 @@ def build_url(search = None, groups = None, extensions = None, sort1 = SORT_BY_S
     url = build_url_sorting(url, 2, sort2, sort2desc)
     url = build_url_sorting(url, 3, sort3, sort3desc)
     url += '&sS=5&d1t=&d2t=&b1t=&b2t=&px1t=&px2t=&fps1t=&fps2t=&bps1t=&bps2t=&hz1t=&hz2t=&rn1t=&rn2t=&grpF[]=&fty[]=VIDEO&spamf=1&u=1&st=adv&safeO=0&sb=1'
+    return url
+
+def replace_url_tokens(url):
+    url = url.replace(EXTENSION_TOKEN, get_property('extensions'))
+    url = url.replace(GROUP_TOKEN, get_property('groups'))
+    url = url.replace(PERPAGE_TOKEN, get_property('perpage'))
     return url
 
 def build_nextpage_url(url):
@@ -141,17 +163,13 @@ def build_thumbnail_url (url):
     return thumb_url
 
 def CATEGORIES():
-    groupsfilter = get_property('groups')
-    perpagefilter = get_property('perpage')
-    extensionsfilter = get_property('extensions')
-
     mode = 1
     add_dir('Videos By Date',
-        build_url(groups = groupsfilter, sort1 = SORT_BY_DATE, sort3 = SORT_BY_SIZE),
+        build_url(groups = GROUP_TOKEN, sort1 = SORT_BY_DATE, sort3 = SORT_BY_SIZE),
         mode,
         default_image)
     add_dir('Videos By Size',
-        build_url(groups = groupsfilter),
+        build_url(groups = GROUP_TOKEN),
         mode,
         default_image)
 
@@ -161,9 +179,49 @@ def CATEGORIES():
     # main_url as a dummy
     add_dir('Search', main_url, 5, default_image)
 
+    mode = 3
+
+    add_dir('Groups',
+        build_url_groups(groups = GROUP_TOKEN),
+        mode,
+        default_image)
+
     xbmc.log('pluginhandle %s' % pluginhandle)
     xbmcplugin.endOfDirectory(pluginhandle)
 
+
+def GROUPS(url):
+    user = get_property('username')
+    passwd = get_property('password')
+
+    url = replace_url_tokens(url)
+    data = get_html(url, username=user, password=passwd)
+
+    mode = 1
+
+    results=re.compile('<table class="grouplist"(.+?)</table>',
+                    re.DOTALL).findall(data)[0]
+    items = re.compile('<tr class=(.+?)</tr>',
+                    re.DOTALL).findall(results)
+
+    if items:
+        for item in items:
+            count = re.compile('<td class="count">(.+?)</td>',
+                  re.DOTALL).findall(item)
+            count = count[0]
+
+            group = re.compile('value="(.+?)"',
+                    re.DOTALL).findall(item)
+            group = html.unescape(group[0])
+
+            xbmc.log('Group : %s %s' % (count, group))
+
+            add_dir('%s (%s)' % (group , count),
+                build_url(groups = group),
+                mode,
+                default_image)
+
+    xbmcplugin.endOfDirectory(pluginhandle)
 
 def SEARCH(url):
     kb = xbmc.Keyboard('', 'Search Easynews.com Videos', False)
@@ -191,6 +249,7 @@ def INDEX(url):
     user = get_property('username')
     passwd = get_property('password')
 
+    url = replace_url_tokens(url)
     data = get_html(url, username=user, password=passwd)
 
     items = re.compile('<item>(.+?)</item>',
@@ -216,8 +275,8 @@ def PLAY(url, thumbnail):
     user = get_property('username')
     passwd = get_property('password')
 
-    xbmc.log('Download URL: %s' % url)
-    vidfile = download(url, username=user, password=passwd)
+    xbmc.log('Play URL: %s' % url)
+    vidfile = stream(url, username=user, password=passwd)
     item = xbmcgui.ListItem(path=vidfile)
     result = True
     if vidfile is not None and os.path.isfile(vidfile):
@@ -308,7 +367,8 @@ elif topmode == 1:
 elif topmode == 2:
     xbmc.log('Indexing Collections')
 elif topmode == 3:
-    xbmc.log('Indexing Personal Videos')
+    xbmc.log('Indexing Groups')
+    GROUPS(topurl)
 elif topmode == 4:
     xbmc.log('Play Video')
     PLAY(topurl, topthumbnail)

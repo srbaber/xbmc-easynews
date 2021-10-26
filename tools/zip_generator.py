@@ -39,7 +39,7 @@ def main():
     if(addon_dir.startswith('.')):
       # skip hidden dirs
       continue
-    if(addon_dir == "repository.xbmc-adult"):
+    if(addon_dir == "repository.xbmc-easynews"):
       # skip download directory
       continue
     create_zip_file(addon_dir)
