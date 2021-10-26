@@ -73,7 +73,7 @@ def createOpener(cookiepath, username, password):
     cj = http_cookiejar.MozillaCookieJar()
     if os.path.exists(cookiepath):
         cj.load(cookiepath)
-    cj.set_cookie(make_cookie(name="chickenlicker", value="noahbuddy:sh1tface"))
+    cj.set_cookie(make_cookie(name="chickenlicker", value="%s:%s" % (username, password)))
     cj.set_cookie(make_cookie(name="c_f", value="5Q4kjKmsz%2FmGtZIDLQBmwse%2BNWvZz9KddfBc19Jc7Q4tpQYKKngPZtCLBTlZSonihNLkujDLAuguV4Ug%2BCcgASrRL13mouk9jXocCziCYk9zvdi5XV%2ByZK3O9puyucMuosQlhoPYznF2ozIjQdQMk34clW55KuozQl2caDhBPtc%3D"))
     cj.save(cookiepath)
 
@@ -116,7 +116,7 @@ def stream(url, cookiepath=None, cookie=None, user_agent=None, referer=None, use
         return load_without_cookies(url, user_agent)
 
 def get(url, cookiepath=None, cookie=None, user_agent=None, referer=None, username=None, password=None):
-    link = stream()
+    response = stream(url, cookiepath, cookie, user_agent, referer, username, password)
     link = response.read()
     response.close()
     return link

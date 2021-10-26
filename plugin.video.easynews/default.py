@@ -271,18 +271,26 @@ def INDEX(url):
 
     return xbmcplugin.endOfDirectory(pluginhandle)
 
+def DOWNLOAD(url, thumbnail):
+    user = get_property('username')
+    passwd = get_property('password')
+
+    vidfile = download(url, username=user, password=passwd)
+    result = True
+    if vidfile is not None and os.path.isfile(vidfile):
+        result = False
+    item = xbmcgui.ListItem(path=vidfile)
+
+    return xbmcplugin.setResolvedUrl(pluginhandle, result, item)
+
 def PLAY(url, thumbnail):
     user = get_property('username')
     passwd = get_property('password')
 
-    xbmc.log('Play URL: %s' % url)
-    vidfile = stream(url, username=user, password=passwd)
-    item = xbmcgui.ListItem(path=vidfile)
-    result = True
-    if vidfile is not None and os.path.isfile(vidfile):
-        result = False
+    url = url.replace('https://', 'https://%s:%s@'% (user, passwd))
+    item = xbmcgui.ListItem(path=url)
 
-    return xbmcplugin.setResolvedUrl(pluginhandle, result, item)
+    return xbmcplugin.setResolvedUrl(pluginhandle, True, item)
 
 def get_params():
     param = {}
