@@ -48,3 +48,7 @@ msgstr ""
 msgctxt "#30206"
 msgid "File extensions"
 msgstr ""
+
+msgctxt "#30207"
+msgid "Download before playback"
+msgstr ""

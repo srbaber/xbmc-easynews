@@ -69,12 +69,14 @@ def createOpener(cookiepath, username, password):
         # of the path a common filename.
         cookiepath = os.path.join(cookiepath, 'cookies.moz')
 
-    # check that the cookie exists
     cj = http_cookiejar.MozillaCookieJar()
-    if os.path.exists(cookiepath):
-        cj.load(cookiepath)
     cj.set_cookie(make_cookie(name="chickenlicker", value="%s:%s" % (username, password)))
     cj.set_cookie(make_cookie(name="c_f", value="5Q4kjKmsz%2FmGtZIDLQBmwse%2BNWvZz9KddfBc19Jc7Q4tpQYKKngPZtCLBTlZSonihNLkujDLAuguV4Ug%2BCcgASrRL13mouk9jXocCziCYk9zvdi5XV%2ByZK3O9puyucMuosQlhoPYznF2ozIjQdQMk34clW55KuozQl2caDhBPtc%3D"))
+
+    # check that the cookie file exists
+    if os.path.exists(cookiepath):
+        cj.load(cookiepath)
+
     cj.save(cookiepath)
 
     # create a password manager
@@ -140,7 +142,7 @@ def download(url, cookiepath=None, cookie=None, user_agent=None, referer=None, u
 
     # use cookies if cookiepath is set and if the cookiepath exists.
     if cookiepath is not None:
-        progressDialog.create('Easynews')
+        progressDialog.create('Easynews download')
 
         req = createRequest(url, cookie, user_agent, referer)
         opener = createOpener(cookiepath, username, password)

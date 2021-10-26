@@ -135,9 +135,9 @@ def build_url(search = None, groups = None, extensions = None, sort1 = SORT_BY_S
     return url
 
 def replace_url_tokens(url):
-    url = url.replace(EXTENSION_TOKEN, get_property('extensions'))
-    url = url.replace(GROUP_TOKEN, get_property('groups'))
-    url = url.replace(PERPAGE_TOKEN, get_property('perpage'))
+    url = url.replace(EXTENSION_TOKEN, get_property('extensions', DEFAULT_EXTENSION))
+    url = url.replace(GROUP_TOKEN, get_property('groups', ''))
+    url = url.replace(PERPAGE_TOKEN, get_property('perpage', '10'))
     return url
 
 def build_nextpage_url(url):
@@ -242,6 +242,9 @@ def cleanup_title(title):
     if title.find('AutoUnRAR') >= 0:
         title = re.sub('.*\) [0-9]* \(', '', title)
         title = re.sub(' AutoUnRAR\)', '', title)
+    title = re.sub('\[[0-9]*/[0-9]*\]', '', title)
+    title = re.sub('\([0-9]*/[0-9]*\)', '', title)
+    title = re.sub(' - ', ' ', title)
 
     return title
 
@@ -282,6 +285,9 @@ def DOWNLOAD(url, thumbnail):
     return xbmcplugin.setResolvedUrl(pluginhandle, result, item)
 
 def PLAY(url, thumbnail):
+    if get_property('download') == True:
+        return DOWNLOAD(url, thumbnail)
+
     user = get_property('username')
     passwd = get_property('password')
 
