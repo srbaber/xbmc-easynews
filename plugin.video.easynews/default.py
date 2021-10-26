@@ -276,10 +276,8 @@ def DOWNLOAD(url, thumbnail):
     passwd = get_property('password')
 
     vidfile = download(url, username=user, password=passwd)
-    result = True
-    if vidfile is not None and os.path.isfile(vidfile):
-        result = False
     item = xbmcgui.ListItem(path=vidfile)
+    result = vidfile is not None and os.path.isfile(vidfile)
 
     return xbmcplugin.setResolvedUrl(pluginhandle, result, item)
 
