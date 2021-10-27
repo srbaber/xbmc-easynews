@@ -84,7 +84,7 @@ def get_property(name, withDefault = None):
     usrsettings = xbmcaddon.Addon(id=__addonname__)
     value = usrsettings.getSetting(name)
     if value:
-        return value
+        return value.strip()
     else:
         return withDefault
 
@@ -149,7 +149,6 @@ def build_nextpage_url(url):
     xbmc.log("Next Url: %s" % next_url)
     return next_url
 
-
 def build_thumbnail_url (url):
     thumb_url = 'https://th.easynews.com/thumbnails-'
     thumb_url += url[40 : 43]
@@ -161,6 +160,45 @@ def build_thumbnail_url (url):
     xbmc.log("Url      : %s" % url)
     xbmc.log("Thumbnail: %s" % thumb_url)
     return thumb_url
+
+def cleanup_title(title):
+    xbmc.log("Title: %s" % title)
+    if title.find('AutoUnRAR') >= 0:
+        title = re.sub('.*\) [0-9]* \(', '', title)
+        title = re.sub(' AutoUnRAR\)', '', title)
+    title = re.sub('\[[0-9]*/[0-9]*\]', '', title)
+    title = re.sub('\([0-9]*/[0-9]*\)', '', title)
+    title = re.sub(' - ', ' ', title)
+
+    return title
+
+def add_supported_link(gurl, name, thumbnail):
+    mode = 4
+    add_link(name, gurl, mode, thumbnail)
+
+def add_link(name, url, mode, iconimage):
+    u = sys.argv[0] + "?url=" + urllib_parse.quote_plus(url) + "&mode=" + str(mode) \
+        + "&name=" + urllib_parse.quote_plus(name) + "&iconimage=" \
+        + urllib_parse.quote_plus(iconimage)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({'thumb': iconimage,
+                'icon': 'DefaultVideo.png',
+                'poster': iconimage})
+    liz.setProperty('IsPlayable', 'true')
+    liz.setInfo(type='Video', infoLabels={'Title': name})
+    return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,
+                                     listitem=liz)
+
+def add_dir(name, url, mode, iconimage):
+    u = sys.argv[0] + "?url=" + urllib_parse.quote_plus(url) + "&mode=" + str(mode) \
+        + "&name=" + urllib_parse.quote_plus(name)
+    liz = xbmcgui.ListItem(name)
+    liz.setArt({'thumb': iconimage,
+                'icon': 'DefaultVideo.png',
+                'poster': iconimage})
+    liz.setInfo(type='Video', infoLabels={'Title': name})
+    return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,
+                                     listitem=liz, isFolder=True)
 
 def CATEGORIES():
     mode = 1
@@ -237,17 +275,6 @@ def SEARCH(url):
             xbmc.log('SEARCH:%s' % search_url)
             INDEX(search_url)
 
-def cleanup_title(title):
-    xbmc.log("Title: %s" % title)
-    if title.find('AutoUnRAR') >= 0:
-        title = re.sub('.*\) [0-9]* \(', '', title)
-        title = re.sub(' AutoUnRAR\)', '', title)
-    title = re.sub('\[[0-9]*/[0-9]*\]', '', title)
-    title = re.sub('\([0-9]*/[0-9]*\)', '', title)
-    title = re.sub(' - ', ' ', title)
-
-    return title
-
 def INDEX(url):
     user = get_property('username')
     passwd = get_property('password')
@@ -311,34 +338,6 @@ def get_params():
             if (len(splitparams)) == 2:
                 param[splitparams[0]] = splitparams[1]
     return param
-
-def add_supported_link(gurl, name, thumbnail):
-    mode = 4
-    add_link(name, gurl, mode, thumbnail)
-
-def add_link(name, url, mode, iconimage):
-    u = sys.argv[0] + "?url=" + urllib_parse.quote_plus(url) + "&mode=" + str(mode) \
-        + "&name=" + urllib_parse.quote_plus(name) + "&iconimage=" \
-        + urllib_parse.quote_plus(iconimage)
-    liz = xbmcgui.ListItem(name)
-    liz.setArt({'thumb': iconimage,
-                'icon': 'DefaultVideo.png',
-                'poster': iconimage})
-    liz.setProperty('IsPlayable', 'true')
-    liz.setInfo(type='Video', infoLabels={'Title': name})
-    return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,
-                                     listitem=liz)
-
-def add_dir(name, url, mode, iconimage):
-    u = sys.argv[0] + "?url=" + urllib_parse.quote_plus(url) + "&mode=" + str(mode) \
-        + "&name=" + urllib_parse.quote_plus(name)
-    liz = xbmcgui.ListItem(name)
-    liz.setArt({'thumb': iconimage,
-                'icon': 'DefaultVideo.png',
-                'poster': iconimage})
-    liz.setInfo(type='Video', infoLabels={'Title': name})
-    return xbmcplugin.addDirectoryItem(handle=int(sys.argv[1]), url=u,
-                                     listitem=liz, isFolder=True)
 
 topparams = get_params()
 topurl = None
