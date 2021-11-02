@@ -71,7 +71,7 @@ def createOpener(cookiepath, username, password):
 
     cj = http_cookiejar.MozillaCookieJar()
     cj.set_cookie(make_cookie(name="chickenlicker", value="%s:%s" % (username, password)))
-    cj.set_cookie(make_cookie(name="c_f", value="5Q4kjKmsz%2FmGtZIDLQBmwse%2BNWvZz9KddfBc19Jc7Q4tpQYKKngPZtCLBTlZSonihNLkujDLAuguV4Ug%2BCcgASrRL13mouk9jXocCziCYk9zvdi5XV%2ByZK3O9puyucMuosQlhoPYznF2ozIjQdQMk34clW55KuozQl2caDhBPtc%3D"))
+    cj.set_cookie(make_cookie(name="c_f", value="kj%2Fxs1KgiijnHPetcvlAhPP4wqXuqfWWMhsyQGzB4YjcRLrbtPzsVT5zNzbSqMfhwve4ryj5xPoU9CUeK5j84bM%2BQi86hvb1QwCEmIFuYF5weoGI9y3Ku9%2FiLfFWPB9MHsbGp9xo7NQRzMtVZo1vI%2FuyT%2B7RlMBqoo4tXJJHR9M%3D"))
 
     # check that the cookie file exists
     if os.path.exists(cookiepath):
@@ -81,7 +81,7 @@ def createOpener(cookiepath, username, password):
 
     # create a password manager
     password_mgr = urllib_request.HTTPPasswordMgrWithDefaultRealm()
-    urllib_request.HTTPBasicAuthHandler(password_mgr),
+    urllib_request.HTTPBasicAuthHandler(password_mgr)
 
     if username and password:
         top_level_url = 'easynews.com'
