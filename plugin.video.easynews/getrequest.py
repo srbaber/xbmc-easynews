@@ -1,10 +1,12 @@
 import requests
 import base64
 import json
+import os
 
 import xbmc, xbmcvfs
 
 import properties
+import constants
 
 timeout = 60
 
@@ -25,24 +27,20 @@ def get(self, url, params={}):
 def download(self, url, filename, download_report_hook):
     with stream(self, url, None, True) as response:
         size = response.headers['Content-Length']
-        xbmc.log("Stream ready %s" % size, 1)
-        if size is None:
-            pass
-        else:
+        if not size is None:
             read = 0
             size = int(size)
             chunk_size=max(int(size/1000), 1024*1024)
+            filename = os.path.join(constants.DATA_PATH, filename)
 
             with open(filename, 'wb') as filehandle:
-                xbmc.log("Starting download", 1)
                 for buf in response.iter_content(chunk_size):
                     if buf:
                         filehandle.write(buf)
                         read += len(buf)
                         download_report_hook(read, size)
-                xbmc.log("Finished download", 1)
 
-            download_report_hook(size, chunk_size, size)
+            download_report_hook(size, size)
 
     return filename
 
