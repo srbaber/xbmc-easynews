@@ -32,8 +32,8 @@ class DownloadHandler():
         filename = self.extract_filename(url)
 
         progressDialog.create('Easynews Downloading')
-        filename = getrequest.download(self, url, filename, download_report_hook)
-        result = filename is not None and os.path.isfile(filename)
+        fullpath = getrequest.download(self, url, filename, download_report_hook)
+        result = filename is not None and os.path.isfile(fullpath)
         progressDialog.close()
 
         if result:
