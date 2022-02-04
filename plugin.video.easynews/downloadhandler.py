@@ -22,7 +22,6 @@ class DownloadHandler():
     def extract_filename(self, url):
         filename = re.sub('^.*/', '', url)
         filename = re.sub('\?.*', '', filename)
-        filename = os.path.join(constants.DATA_PATH, filename)
         return filename
 
     def apply(self, addonhandle, activity):
@@ -33,10 +32,9 @@ class DownloadHandler():
 
         progressDialog.create('Easynews Downloading')
         fullpath = getrequest.download(self, url, filename, download_report_hook)
-        result = filename is not None and os.path.isfile(fullpath)
         progressDialog.close()
 
-        if result:
+        if fullpath is not None and os.path.isfile(fullpath):
             title = 'Download Complete'
         else:
             title = 'Download Failed'
@@ -45,7 +43,6 @@ class DownloadHandler():
 
 def download_report_hook(size, totalsize):
     percent = int(float(size * 100) / totalsize)
-    xbmc.log('Downloaded %s of %s  %s%%' % (size, totalsize, percent))
     progressDialog.update(percent)
     if progressDialog.iscanceled():
         raise KeyboardInterrupt
