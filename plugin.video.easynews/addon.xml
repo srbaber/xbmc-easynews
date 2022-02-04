@@ -4,7 +4,7 @@
        version="1.0.1"
        provider-name="xbmc-easynews">
     <requires>
-        <import addon="script.module.requests" version="2.27.1"/>
+        <import addon="script.module.requests"/>
     </requires>
     <extension point="xbmc.python.pluginsource"
                library="xbmc-easynews.py">
