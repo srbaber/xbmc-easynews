@@ -43,9 +43,9 @@ class DownloadHandler():
 
         xbmcgui.Dialog().ok(title, filename)
 
-def download_report_hook(count, blocksize, totalsize):
-    percent = int(float(count * blocksize * 100) / totalsize)
-    xbmc.log('Downloaded %s of %s  %s%%' % (count, totalsize, percent))
+def download_report_hook(size, totalsize):
+    percent = int(float(size * 100) / totalsize)
+    xbmc.log('Downloaded %s of %s  %s%%' % (size, totalsize, percent))
     progressDialog.update(percent)
     if progressDialog.iscanceled():
         raise KeyboardInterrupt

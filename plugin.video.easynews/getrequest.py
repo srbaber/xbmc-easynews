@@ -39,7 +39,7 @@ def download(self, url, filename, download_report_hook):
                     if buf:
                         filehandle.write(buf)
                         read += len(buf)
-                        download_report_hook(read, chunk_size, size)
+                        download_report_hook(read, size)
                 xbmc.log("Finished download", 1)
 
             download_report_hook(size, chunk_size, size)
