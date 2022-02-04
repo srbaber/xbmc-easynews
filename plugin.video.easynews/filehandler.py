@@ -14,6 +14,10 @@ class FileHandler():
     delete = 'Delete'
     clear = 'Clear'
 
+    def add_clear_downloads(self, addonhandle):
+        historyAction = action.of(self.name, self.clear, 'Delete Downloads')
+        xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.directoryitem(), isFolder=False)
+
     def add_file(self, addonhandle, filename, fullpath):
         fileAction = action.of(self.name, self.playback, filename, state={'url' : fullpath})
         item = fileAction.fileitem()
@@ -34,6 +38,7 @@ class FileHandler():
             fullpath = os.path.join(constants.DATA_PATH, f)
             self.add_file(addonhandle, f, fullpath)
 
+        self.add_clear_downloads(addonhandle)
         xbmcplugin.endOfDirectory(addonhandle)
 
     def delete_downloads(self, addonhandle):
