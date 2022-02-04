@@ -1,16 +1,13 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.easynews"
        name="Easynews.com"
-       version="1.0.0"
+       version="1.0.1"
        provider-name="xbmc-easynews">
     <requires>
-        <!-- Commenting xbmc.python allows install on all versions of Kodi -->
-        <!-- <import addon="xbmc.python" version="2.1.0"/> -->
-        <import addon="script.module.kodi-six"/>
-        <import addon="script.module.six"/>
+        <import addon="script.module.requests" version="2.27.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource"
-               library="default.py">
+               library="xbmc-easynews.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">

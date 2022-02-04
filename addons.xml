@@ -2,16 +2,13 @@
 <addons>
 <addon id="plugin.video.easynews"
        name="Easynews.com"
-       version="1.0.0"
+       version="1.0.1"
        provider-name="xbmc-easynews">
     <requires>
-        <!-- Commenting xbmc.python allows install on all versions of Kodi -->
-        <!-- <import addon="xbmc.python" version="2.1.0"/> -->
-        <import addon="script.module.kodi-six"/>
-        <import addon="script.module.six"/>
+        <import addon="script.module.requests" version="2.27.1"/>
     </requires>
     <extension point="xbmc.python.pluginsource"
-               library="default.py">
+               library="xbmc-easynews.py">
         <provides>video</provides>
     </extension>
     <extension point="xbmc.addon.metadata">
@@ -25,7 +22,7 @@
     </extension>
 </addon>
 
-<addon id="repository.easynews" name="XBMC-Easynews Addons" version="1.0.0" provider-name="xbmc-easynews">
+<addon id="repository.easynews" name="XBMC-Easynews Addons" version="1.0.1" provider-name="xbmc-easynews">
 	<extension point="xbmc.addon.repository" name="XBMC Easynews Addons">
 		<info compressed="false">https://srbaber.github.io/xbmc-easynews/addons.xml</info>
 		<checksum>https://srbaber.github.io/xbmc-easynews/addons.xml.md5</checksum>
@@ -39,7 +36,7 @@
 	</extension>
 </addon>
 
-<addon id="repository.easynews" name="XBMC-Easynews Addons" version="1.0.0" provider-name="xbmc-easynews">
+<addon id="repository.easynews" name="XBMC-Easynews Addons" version="1.0.1" provider-name="xbmc-easynews">
 	<extension point="xbmc.addon.repository" name="XBMC Easynews Addons">
 		<info compressed="false">https://srbaber.github.io/xbmc-easynews/addons.xml</info>
 		<checksum>https://srbaber.github.io/xbmc-easynews/addons.xml.md5</checksum>
