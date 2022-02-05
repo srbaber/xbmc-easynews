@@ -42,5 +42,4 @@ def download(self, url, filename, download_report_hook):
 
             download_report_hook(size, size)
 
-    return filename
 
