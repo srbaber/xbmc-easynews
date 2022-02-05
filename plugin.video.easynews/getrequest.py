@@ -31,6 +31,7 @@ def download(self, url, filename, download_report_hook):
             read = 0
             size = int(size)
             chunk_size=max(int(size/1000), 1024*1024)
+            filename = os.path.join(constants.DATA_PATH, filename)
 
             with open(filename, 'wb') as filehandle:
                 for buf in response.iter_content(chunk_size):
