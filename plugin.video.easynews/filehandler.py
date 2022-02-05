@@ -4,6 +4,7 @@ import xbmc, xbmcplugin, xbmcgui
 
 import action
 import constants
+import properties
 
 #
 # handler responsible for listing downloaded content
@@ -27,23 +28,26 @@ class FileHandler():
 
     def list_files(self):
         files = []
-        for f in os.listdir(constants.DATA_PATH):
-            fullpath = os.path.join(constants.DATA_PATH, f)
+        datapath = properties.get_property('download', constants.DATA_PATH)
+        for f in os.listdir(datapath):
+            fullpath = os.path.join(datapath, f)
             if os.path.isfile(fullpath) and f != 'settings.xml' and f != '.DS_Store':
                 files.append(f)
         return files
 
     def list_downloads(self, addonhandle):
+        datapath = properties.get_property('download', constants.DATA_PATH)
         for f in self.list_files():
-            fullpath = os.path.join(constants.DATA_PATH, f)
+            fullpath = os.path.join(datapath, f)
             self.add_file(addonhandle, f, fullpath)
 
         self.add_clear_downloads(addonhandle)
         xbmcplugin.endOfDirectory(addonhandle)
 
     def delete_downloads(self, addonhandle):
+        datapath = properties.get_property('download', constants.DATA_PATH)
         for f in self.list_files():
-            fullpath = os.path.join(constants.DATA_PATH, f)
+            fullpath = os.path.join(datapath, f)
             os.remove(fullpath)
         xbmc.executebuiltin('Container.Refresh')
 

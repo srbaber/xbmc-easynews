@@ -5,6 +5,7 @@ import xbmc, xbmcplugin, xbmcgui
 import action
 import constants
 import getrequest
+import properties
 
 progressDialog = xbmcgui.DialogProgress()
 
@@ -29,9 +30,11 @@ class DownloadHandler():
 
         url = activity.state['url']
         filename = self.extract_filename(url)
+        datapath = properties.get_property('download', constants.DATA_PATH)
+        fullpath = os.path.join(datapath, filename)
 
         progressDialog.create('Easynews Downloading')
-        fullpath = getrequest.download(self, url, filename, download_report_hook)
+        getrequest.download(self, url, fullpath, download_report_hook)
         progressDialog.close()
 
         if fullpath is not None and os.path.isfile(fullpath):
