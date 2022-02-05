@@ -2,10 +2,11 @@ import xbmc, xbmcplugin
 
 import properties
 import action
+import properties
 from easynewshistoryhandler import EasynewsHistoryHandler
 
 lastKeywords = 'lastKeywords'
-maxHistory = 10
+maxHistory = properties.get_property('history', '10')
 
 class HistoryHandler():
     name = 'HistoryHandler'
@@ -21,7 +22,7 @@ class HistoryHandler():
         xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.directoryitem(), isFolder=False)
 
     def show_history(self, addonhandle):
-        for i in range(maxHistory):
+        for i in range(int(maxHistory)):
             searchPhrase = get_search(i)
             if searchPhrase != '':
                 self.add_history(addonhandle, searchPhrase)
@@ -48,9 +49,9 @@ def last_search():
     return get_search(0)
 
 def add_search(searchPhrase):
-    last_index = maxHistory - 1
+    last_index = int(maxHistory) - 1
 
-    for i in range(maxHistory):
+    for i in range(int(maxHistory)):
         last_search = get_search(i)
         if searchPhrase == last_search:
             last_index = i+1
@@ -63,5 +64,5 @@ def add_search(searchPhrase):
     set_search(0, searchPhrase)
 
 def clear_history():
-    for i in range(maxHistory):
+    for i in range(int(maxHistory)):
         set_search(i, '')

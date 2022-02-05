@@ -52,3 +52,7 @@ msgstr "Dateierweiterungen"
 msgctxt "#30207"
 msgid "Download folder"
 msgstr "Download ordner"
+
+msgctxt "#30208"
+msgid "History size"
+msgstr "Geschichte größe"
