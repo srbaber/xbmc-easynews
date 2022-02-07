@@ -10,8 +10,8 @@ class EasynewsSizeHandler(easynewssearchhandler.EasynewsSearchHandler):
     def __init__(self):
         pass
 
-    def build_params(self):
-        params = super().build_params()
+    def build_params(self, action):
+        params = super().build_params(action)
         params['s1'] = easynewssearchhandler.SORT_BY_SIZE
         params['s3'] = easynewssearchhandler.SORT_BY_DATE
         return params

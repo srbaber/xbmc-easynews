@@ -19,8 +19,8 @@ class EasynewsGroupsHandler(easynewssearchhandler.EasynewsSearchHandler):
     def __init__(self):
         pass
 
-    def build_params(self):
-        params = super().build_params()
+    def build_params(self, action):
+        params = super().build_params(action)
 
         params['search'] = params['ns']
         params['nocache'] = '1635253521'
