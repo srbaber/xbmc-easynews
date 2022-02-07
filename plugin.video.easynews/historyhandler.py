@@ -12,10 +12,11 @@ class HistoryHandler():
     name = 'HistoryHandler'
     showHistory = 'ShowHistory'
     clearHistory = 'ClearHistory'
+    removeHistory = 'Remove'
 
     def add_history(self, addonhandle, searchPhrase):
         historyAction = action.of(EasynewsHistoryHandler.name, EasynewsHistoryHandler.searchKeyword, searchPhrase, state={'searchPhrase': searchPhrase})
-        xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.directoryitem(), isFolder=True)
+        xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.historyitem(), isFolder=True)
 
     def add_clear_history(self, addonhandle):
         historyAction = action.of(self.name, self.clearHistory, 'Clear History')
@@ -37,6 +38,9 @@ class HistoryHandler():
             self.show_history(addonhandle)
         elif activity.operation == self.clearHistory:
             clear_history()
+            xbmc.executebuiltin('Container.Refresh')
+        elif activity.operation == self.removeHistory:
+            remove_history(activity.state['searchPhrase'])
             xbmc.executebuiltin('Container.Refresh')
 
 def get_search(index):
@@ -65,4 +69,15 @@ def add_search(searchPhrase):
 
 def clear_history():
     for i in range(int(maxHistory)):
+        set_search(i, '')
+
+def remove_history(searchPhrase):
+    j=0
+    for i in range(int(maxHistory)):
+        value = get_search(i)
+        if value != searchPhrase:
+            set_search(j, value)
+            j=j+1
+
+    for i in range(j+1, int(maxHistory), 1):
         set_search(i, '')

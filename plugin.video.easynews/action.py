@@ -8,6 +8,7 @@ import constants
 
 from downloadhandler import DownloadHandler
 from filehandler import FileHandler
+from historyhandler import HistoryHandler
 
 class Action:
     handler = None
@@ -31,6 +32,14 @@ class Action:
     def videoitem(self):
         download = of(DownloadHandler.name, DownloadHandler.download, DownloadHandler.download, self.thumbnail, self.state)
         cm = [(DownloadHandler.download, 'RunPlugin(%s)' % download.url())]
+
+        item = self.playableitem()
+        item.addContextMenuItems(cm)
+        return item
+
+    def historyitem(self):
+        remove = of(HistoryHandler.name, HistoryHandler.removeHistory, HistoryHandler.removeHistory, self.thumbnail, self.state)
+        cm = [(HistoryHandler.removeHistory, 'RunPlugin(%s)' % remove.url())]
 
         item = self.playableitem()
         item.addContextMenuItems(cm)
