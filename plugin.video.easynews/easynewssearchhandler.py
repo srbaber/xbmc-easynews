@@ -13,8 +13,6 @@ ASCENDING = '+'
 DECENDING = '-'
 MAIN_URL = 'https://secure.members.easynews.com/global5/search.html'
 
-DEFAULT_EXTENSION = ''
-DEFAULT_GROUPS = 'movies'
 DEFAULT_PERPAGE = 100
 
 #
@@ -34,17 +32,18 @@ class EasynewsSearchHandler():
     def build_url(self):
         return MAIN_URL
 
-    def build_params(self):
+    def build_params(self, action):
         params = {}
 
-        extensions = properties.get_property('extensions', DEFAULT_EXTENSION)
-        groups = properties.get_property('groups', DEFAULT_GROUPS)
+        extensions = properties.get_property('extensions', '')
+        groups = properties.get_property('groups', '')
         perpage = properties.get_property('perpage', DEFAULT_PERPAGE)
-        keyword = ''
 
-        params['gps'] = keyword
-        params['ns'] = groups
-        params['fex'] = extensions
+        if groups != '':
+            params['ns'] = groups
+        if extensions != '':
+            params['fex'] = extensions
+
         params['pby'] = perpage
         params['pno'] = self.pagenumber
 
@@ -64,8 +63,8 @@ class EasynewsSearchHandler():
         params['sb'] = '1'
         return params
 
-    def search(self):
-        return getrequest.get(self, self.build_url(), self.build_params())
+    def search(self, action):
+        return getrequest.get(self, self.build_url(), self.build_params(action))
 
     def build_thumbnail_url (self, url):
         thumb_url = 'https://th.easynews.com/thumbnails-'
@@ -120,7 +119,7 @@ class EasynewsSearchHandler():
 
         self.paginate(activity)
 
-        response = self.search()
+        response = self.search(activity)
         self.parse(addonhandle, response)
 
         self.add_next_page(addonhandle, activity)

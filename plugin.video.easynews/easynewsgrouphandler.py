@@ -13,8 +13,8 @@ class EasynewsGroupHandler(easynewssearchhandler.EasynewsSearchHandler):
     def __init__(self):
         pass
 
-    def build_params(self):
-        params = super().build_params()
+    def build_params(self, action):
+        params = super().build_params(action)
         params['ns'] = self.group
         return params
 
