@@ -17,10 +17,8 @@ class EasynewsKeywordHandler(easynewssearchhandler.EasynewsSearchHandler):
     def build_params(self, action):
         params = super().build_params(action)
 
-        pageno = action.state['pagenumber']
         searchPhrase = historyhandler.last_search()
-
-        if pageno == None or pageno == '1':
+        if not 'pagenumber' in action.state or action.state['pagenumber'] == '1':
             kb = xbmc.Keyboard(searchPhrase, 'Search Easynews.com Videos', False)
             kb.doModal()
             if kb.isConfirmed():
