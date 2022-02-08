@@ -67,13 +67,27 @@ class EasynewsSearchHandler():
         return getrequest.get(self, self.build_url(), self.build_params(action))
 
     def build_thumbnail_url (self, url):
+        if len(url) <= 40:
+            return None
+
+        firstdot = url.find('.', 40)
+        if firstdot == -1:
+            return None
+        nextslash = url.find('/', firstdot)
+        if nextslash == -1:
+            return None
+        seconddot = url.find('.', nextslash)
+        if seconddot == -1:
+            return None
+
         thumb_url = 'https://th.easynews.com/thumbnails-'
         thumb_url += url[40 : 43]
         thumb_url += '/pr-'
-        thumb_url += url[40 : 81]
+        thumb_url += url[40 : firstdot - 4]
         thumb_url += '.jpg/th-'
-        thumb_url += url[90 : url.index('?', 91) - 4]
+        thumb_url += url[nextslash + 1 : seconddot]
         thumb_url += '.jpg'
+
         return thumb_url
 
     def cleanup_title(self, title):
