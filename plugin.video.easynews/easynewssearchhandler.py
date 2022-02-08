@@ -39,10 +39,8 @@ class EasynewsSearchHandler():
         groups = properties.get_property('groups', '')
         perpage = properties.get_property('perpage', DEFAULT_PERPAGE)
 
-        if groups != '':
-            params['ns'] = groups
-        if extensions != '':
-            params['fex'] = extensions
+        params['ns'] = groups
+        params['fex'] = extensions
 
         params['pby'] = perpage
         params['pno'] = self.pagenumber

@@ -18,6 +18,7 @@ def url_auth(url):
 def stream(self, url, params, stream):
     usernm = properties.get_property('username')
     passwd = properties.get_property('password')
+
     response = requests.get(url, params=params, auth=(usernm, passwd), timeout=timeout, stream=stream)
     return response
 
