@@ -11,7 +11,7 @@ SORT_BY_NAME = 'nrfile'
 SORT_BY_DATE = 'dtime'
 ASCENDING = '+'
 DECENDING = '-'
-MAIN_URL = 'https://secure.members.easynews.com/global5/search.html'
+MAIN_URL = 'https://members.easynews.com/global5/search.html'
 
 DEFAULT_PERPAGE = 100
 
