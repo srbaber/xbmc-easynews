@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
-<addon id="repository.easynews" name="XBMC-Easynews Addons" version="1.0.1" provider-name="xbmc-easynews">
+<addon id="repository.easynews" name="XBMC-Easynews Addons" version="1.0.2" provider-name="xbmc-easynews">
 	<extension point="xbmc.addon.repository" name="XBMC Easynews Addons">
 		<info compressed="false">https://srbaber.github.io/xbmc-easynews/addons.xml</info>
 		<datadir zip="true">https://srbaber.github.io/xbmc-easynews/</datadir>

@@ -7,7 +7,7 @@ import easynewssearchhandler
 
 from easynewsgrouphandler import EasynewsGroupHandler
 
-MAIN_URL = 'https://secure.members.easynews.com/index.html'
+MAIN_URL = 'https://members.easynews.com/index.html'
 
 #
 # handler responsible for performing the groups search for easynews
