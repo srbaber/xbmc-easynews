@@ -89,12 +89,33 @@ class EasynewsSearchHandler():
         return thumb_url
 
     def cleanup_title(self, title):
+        org_title = title
+
         if title.find('AutoUnRAR') >= 0:
             title = re.sub('.*\) [0-9]* \(', '', title)
             title = re.sub(' AutoUnRAR\)', '', title)
+        title = re.sub('part[0-9]*.rar', '', title)
         title = re.sub('\[[0-9]*/[0-9]*\]', '', title)
         title = re.sub('\([0-9]*/[0-9]*\)', '', title)
+        title = re.sub('[A-z0-9-\:\/]{20,}', '', title)
+        title = re.sub('^\[PRiVATE\] \.\. ', '', title)
+        title = re.sub('y[eE]nc', '', title)
+        title = re.sub('newzNZB', '', title)
+        title = re.sub('"', '', title)
+        title = re.sub('^[ -/]*', '', title)
+        title = re.sub('  *', ' ', title)
+        title = re.sub(' *$', '', title)
+        title = re.sub('\(', '', title)
+        title = re.sub('\)', '', title)
+        title = re.sub('\{', '', title)
+        title = re.sub('\}', '', title)
+        title = re.sub('\[', '', title)
+        title = re.sub('\]', '', title)
         title = re.sub(' - ', ' ', title)
+
+        if len(title) < 20:
+            title = org_title
+
         return title
 
     def paginate(self, activity):
@@ -111,6 +132,7 @@ class EasynewsSearchHandler():
         xbmcplugin.addDirectoryItem(addonhandle, url, videoAction.videoitem(), isFolder=False)
 
     def parse(self, addonhandle, data):
+        # xbmc.log("Parse Data : %s" % data, 1)
         items = re.compile('<item>(.+?)</item>', re.DOTALL).findall(data)
         if items:
             for item in items:
