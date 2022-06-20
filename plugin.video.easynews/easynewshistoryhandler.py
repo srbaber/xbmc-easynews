@@ -1,3 +1,4 @@
+import constants
 import xbmc
 
 import easynewssearchhandler
@@ -10,15 +11,13 @@ class EasynewsHistoryHandler(easynewssearchhandler.EasynewsSearchHandler):
     searchKeyword = 'SearchKeywordAndOrderBySize'
     searchPhrase = ''
 
-    def __init__(self):
-        pass
-
     def build_params(self, action):
         params = super().build_params(action)
         params['gps'] = self.searchPhrase
         return params
 
     def apply(self, addonhandle, activity):
-        xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
+        if constants.APPLY_LOG:
+            xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
         self.searchPhrase = activity.state['searchPhrase']
         super().apply(addonhandle, activity)

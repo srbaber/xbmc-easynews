@@ -1,9 +1,5 @@
 import requests
-import base64
-import json
 import os
-
-import xbmc, xbmcvfs
 
 import properties
 import constants
@@ -22,7 +18,9 @@ def stream(self, url, params, stream):
     response = requests.get(url, params=params, auth=(usernm, passwd), timeout=timeout, stream=stream)
     return response
 
-def get(self, url, params={}):
+def get(self, url, params=None):
+    if params is None:
+        params = {}
     return stream(self, url, params, False).text
 
 def download(self, url, filename, download_report_hook):

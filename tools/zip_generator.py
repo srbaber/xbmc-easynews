@@ -36,7 +36,7 @@ def main():
   for addon_dir in dirs:
     if(not os.path.isdir(addon_dir)):
       continue
-    if(addon_dir.startswith('.')):
+    if(addon_dir.startswith('.') or addon_dir.startswith("target") or addon_dir.startswith("tests")):
       # skip hidden dirs
       continue
     if(addon_dir == "repository.xbmc-easynews"):

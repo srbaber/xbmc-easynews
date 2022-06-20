@@ -1,14 +1,13 @@
 import json
-import html
 import base64
 
 from types import SimpleNamespace
-import xbmc,xbmcgui
+import xbmcgui
 import constants
 
 from downloadhandler import DownloadHandler
 from filehandler import FileHandler
-from historyhandler import HistoryHandler
+from easynewscleanuphandler import EasynewsCleanupHandler
 
 class Action:
     handler = None
@@ -26,7 +25,7 @@ class Action:
     def playableitem(self):
         item = self.directoryitem()
         item.setProperty('IsPlayable', 'true')
-        item.setInfo(type='Video', infoLabels={'Title': self.title})
+        item.setInfo('Video', {'Title': self.title})
         return item
 
     def videoitem(self):
@@ -38,8 +37,8 @@ class Action:
         return item
 
     def historyitem(self):
-        remove = of(HistoryHandler.name, HistoryHandler.removeHistory, HistoryHandler.removeHistory, self.thumbnail, self.state)
-        cm = [(HistoryHandler.removeHistory, 'RunPlugin(%s)' % remove.url())]
+        remove = of(EasynewsCleanupHandler.name, EasynewsCleanupHandler.removeHistory, EasynewsCleanupHandler.removeHistory, self.thumbnail, self.state)
+        cm = [(EasynewsCleanupHandler.removeHistory, 'RunPlugin(%s)' % remove.url())]
 
         item = self.playableitem()
         item.addContextMenuItems(cm)
@@ -54,7 +53,7 @@ class Action:
         return item
 
     def directoryitem(self):
-        item = xbmcgui.ListItem(self.title, offscreen=True)
+        item = xbmcgui.ListItem(self.title)
 
         if self.thumbnail:
             item.setArt({'thumb': self.thumbnail,
