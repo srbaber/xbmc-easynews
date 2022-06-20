@@ -33,6 +33,9 @@ class HistoryHandler():
         if activity.operation == self.showHistory:
             self.show_history(addonhandle)
 
+def last_search():
+    return get_search(0)
+
 def add_search(searchPhrase):
     last_index = int(maxHistory) - 1
 

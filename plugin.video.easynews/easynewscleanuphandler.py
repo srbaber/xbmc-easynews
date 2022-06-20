@@ -1,9 +1,9 @@
 import xbmc
 
-from constants import LAST_KEYWORDS
 import properties
 
 maxHistory = properties.get_property('history', '10')
+LAST_KEYWORDS = 'lastKeywords'
 
 #
 # handler responsible for clean up of download delete
