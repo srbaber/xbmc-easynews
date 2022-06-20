@@ -4,7 +4,6 @@ import action
 from easynewshistoryhandler import EasynewsHistoryHandler
 from easynewscleanuphandler import get_search, set_search, maxHistory, EasynewsCleanupHandler
 
-
 class HistoryHandler():
     name = 'HistoryHandler'
     showHistory = 'ShowHistory'
