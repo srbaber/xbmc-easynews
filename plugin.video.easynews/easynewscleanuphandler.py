@@ -4,7 +4,6 @@ from constants import LAST_KEYWORDS
 import properties
 
 maxHistory = properties.get_property('history', '10')
-clearHistory = 'ClearHistory'
 
 #
 # handler responsible for clean up of download delete
@@ -12,6 +11,7 @@ clearHistory = 'ClearHistory'
 class EasynewsCleanupHandler():
     name = 'EasynewsCleanupHandler'
     removeHistory = 'Remove'
+    clearHistory = 'ClearHistory'
 
     def __init__(self):
         pass
@@ -21,7 +21,7 @@ class EasynewsCleanupHandler():
         if activity.operation == self.removeHistory:
             remove_history(activity.state['searchPhrase'])
             xbmc.executebuiltin('Container.Refresh')
-        elif activity.operation == clearHistory:
+        elif activity.operation == self.clearHistory:
             clear_history()
             xbmc.executebuiltin('Container.Refresh')
 

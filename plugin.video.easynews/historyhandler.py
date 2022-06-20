@@ -2,7 +2,7 @@ import xbmc, xbmcplugin
 
 import action
 from easynewshistoryhandler import EasynewsHistoryHandler
-from easynewscleanuphandler import get_search, set_search, maxHistory, clearHistory
+from easynewscleanuphandler import get_search, set_search, maxHistory, EasynewsCleanupHandler
 
 
 class HistoryHandler():
@@ -14,7 +14,8 @@ class HistoryHandler():
         xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.historyitem(), isFolder=True)
 
     def add_clear_history(self, addonhandle):
-        historyAction = action.of(self.name, clearHistory, 'Clear History')
+        handler = EasynewsCleanupHandler()
+        historyAction = action.of(handler.name, handler.clearHistory, 'Clear History')
         xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.directoryitem(), isFolder=False)
 
     def show_history(self, addonhandle):
