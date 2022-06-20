@@ -1,3 +1,4 @@
+import constants
 import xbmc
 
 import properties
@@ -17,7 +18,8 @@ class EasynewsCleanupHandler():
         pass
 
     def apply(self, addonhandle, activity):
-        xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
+        if constants.APPLY_LOG:
+            xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
         if activity.operation == self.removeHistory:
             remove_history(activity.state['searchPhrase'])
             xbmc.executebuiltin('Container.Refresh')

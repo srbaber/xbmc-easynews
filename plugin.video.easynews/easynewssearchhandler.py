@@ -1,4 +1,6 @@
 import re, html
+
+import constants
 import xbmc, xbmcplugin
 
 import action
@@ -186,7 +188,8 @@ class EasynewsSearchHandler():
                 self.add_video(addonhandle, gurl, title, thumbnail)
 
     def apply(self, addonhandle, activity):
-        xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
+        if constants.APPLY_LOG:
+            xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
 
         self.paginate(activity)
 

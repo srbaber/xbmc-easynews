@@ -1,3 +1,4 @@
+import constants
 import xbmc, xbmcplugin
 
 import action
@@ -26,7 +27,8 @@ class MainMenuHandler():
         pass
 
     def apply(self, addonhandle, activity):
-        xbmc.log('%s.apply %s' % (self.name, addonhandle), 1)
+        if constants.APPLY_LOG:
+            xbmc.log('%s.apply %s' % (self.name, addonhandle), 1)
 
         activity = action.of(EasynewsSearchHandler.name, EasynewsSearchHandler.searchByDate, self.searchByDate)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)

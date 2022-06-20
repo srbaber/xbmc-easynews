@@ -1,8 +1,8 @@
 import re,os
 
-import xbmc, xbmcgui
-
 import constants
+import xbmcgui
+
 import getrequest
 import properties
 
@@ -25,8 +25,6 @@ class DownloadHandler():
         return filename
 
     def apply(self, addonhandle, activity):
-        xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
-
         url = activity.state['url']
         filename = self.extract_filename(url)
         datapath = properties.get_property('download', constants.DATA_PATH)

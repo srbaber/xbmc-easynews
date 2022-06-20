@@ -1,3 +1,4 @@
+import constants
 import xbmc, xbmcplugin
 
 import action
@@ -27,7 +28,8 @@ class HistoryHandler():
         xbmcplugin.endOfDirectory(addonhandle)
 
     def apply(self, addonhandle, activity):
-        xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
+        if constants.APPLY_LOG:
+            xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
 
         if activity.operation == self.showHistory:
             self.show_history(addonhandle)
