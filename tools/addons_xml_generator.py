@@ -24,9 +24,10 @@ class Generator:
         addons_xml = "<?xml version=\"1.0\" encoding=\"UTF-8\" standalone=\"yes\"?>\n<addons>\n"
         # loop thru and add each addons addon.xml file
         for addon in addons:
+            _path = None
             try:
                 # skip any file or .svn folder
-                if ( not os.path.isdir( addon ) or addon.startswith('.') ): continue
+                if ( not os.path.isdir( addon ) or addon.startswith('.') or addon.startswith('target') or addon.startswith('tests') ): continue
                 # create path
                 _path = os.path.join( addon, "addon.xml" )
                 # split lines for stripping
