@@ -2,7 +2,6 @@ import re, html
 import xbmc, xbmcplugin
 
 import action
-import constants
 import getrequest
 import properties
 
@@ -25,6 +24,8 @@ class EasynewsSearchHandler():
     nextPage = 'Next Page'
 
     pagenumber='1'
+
+    num_significant_chars=10
 
     def __init__(self):
         pass
@@ -88,34 +89,71 @@ class EasynewsSearchHandler():
 
         return thumb_url
 
+    def split_index(self, title, open_char, close_char):
+        inside_paren_count = 0
+        start_idx = len(title)-1
+        while start_idx >= 0:
+            if title[start_idx] == close_char:
+                inside_paren_count += 1
+            elif title[start_idx] == open_char:
+                inside_paren_count -= 1
+                if inside_paren_count == 0:
+                    break
+            start_idx -= 1
+
+        return start_idx
+
+    def normalize(self, title):
+        return re.sub('[^\w]', '', title).lower()
+
     def cleanup_title(self, title):
+        xbmc.log("Clean Title < : %s" % title, 1)
+
+        title = re.sub(' AutoUnRAR', '', title)
+        title = re.sub('\.part[0-9]*\.rar', '', title)
+        title = re.sub('y[eE]nc \([0-9]*/[0-9]*\) ', '', title)
+        title = re.sub('\[[0-9]*/[0-9]*] ', '', title)
+
         org_title = title
 
-        if title.find('AutoUnRAR') >= 0:
-            title = re.sub('.*\) [0-9]* \(', '', title)
-            title = re.sub(' AutoUnRAR\)', '', title)
-        title = re.sub('part[0-9]*.rar', '', title)
-        title = re.sub('\[[0-9]*/[0-9]*\]', '', title)
-        title = re.sub('\([0-9]*/[0-9]*\)', '', title)
-        title = re.sub('[A-z0-9-\:\/]{20,}', '', title)
-        title = re.sub('^\[PRiVATE\] \.\. ', '', title)
-        title = re.sub('y[eE]nc', '', title)
-        title = re.sub('newzNZB', '', title)
-        title = re.sub('"', '', title)
-        title = re.sub('^[ -/]*', '', title)
-        title = re.sub('  *', ' ', title)
-        title = re.sub(' *$', '', title)
-        title = re.sub('\(', '', title)
-        title = re.sub('\)', '', title)
-        title = re.sub('\{', '', title)
-        title = re.sub('\}', '', title)
-        title = re.sub('\[', '', title)
-        title = re.sub('\]', '', title)
-        title = re.sub(' - ', ' ', title)
+        split_pos = self.split_index(title, '(', ')')
+        if split_pos == -1:
+            description = title
+            filename = ''
+        else:
+            description = title[0:split_pos-1]
+            description = re.sub('\w{15,}', '', description)
+            filename = title[split_pos:len(title)]
+            filename = re.sub('[()]', '', filename)
+
+        if description.find('"') == -1:
+            quoted_text = ''
+        else:
+            quoted_text = re.sub('^(.*?)"', '', description)
+            quoted_text = re.sub('".*$', '', quoted_text)
+
+        normalized_filename = re.sub('\.[^.]*$', '', filename)
+        normalized_filename = re.sub('\.[^.]*$', '', normalized_filename)
+        normalized_filename = self.normalize(normalized_filename)
+        normalized_description = self.normalize(description)
+
+        title = filename
+        if len(filename) > 0 and normalized_description.find(normalized_filename) == -1:
+            if len(quoted_text) > 10:
+                title += ' "' + quoted_text + '"'
+            elif len(description) > 20:
+                title += ' (' + description + ')'
 
         if len(title) < 20:
             title = org_title
 
+        # xbmc.log("    filename    : %s" % filename, 1)
+        # xbmc.log("    quoted text : %s" % quoted_text, 1)
+        # xbmc.log("    description : %s" % description, 1)
+        # xbmc.log("    normal desc : %s" % normalized_description, 1)
+        # xbmc.log("    normal file : %s" % normalized_filename, 1)
+
+        xbmc.log("Clean Title > : %s\n" % title, 1)
         return title
 
     def paginate(self, activity):

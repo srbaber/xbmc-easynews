@@ -1,7 +1,6 @@
-import xbmc, xbmcplugin, xbmcgui
+import xbmc, xbmcplugin
 
 import action
-import constants
 
 from easynewssearchhandler import EasynewsSearchHandler
 from easynewssizehandler import EasynewsSizeHandler

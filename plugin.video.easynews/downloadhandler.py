@@ -1,8 +1,7 @@
 import re,os
 
-import xbmc, xbmcplugin, xbmcgui
+import xbmc, xbmcgui
 
-import action
 import constants
 import getrequest
 import properties

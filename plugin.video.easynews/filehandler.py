@@ -1,6 +1,6 @@
-import re, os
+import os
 
-import xbmc, xbmcplugin, xbmcgui
+import xbmc, xbmcplugin
 
 import action
 import constants
