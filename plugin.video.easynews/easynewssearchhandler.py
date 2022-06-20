@@ -107,7 +107,7 @@ class EasynewsSearchHandler():
         return re.sub('[^\w]', '', title).lower()
 
     def cleanup_title(self, title):
-        xbmc.log("Clean Title < : %s" % title, 1)
+        #xbmc.log("Clean Title < : %s" % title, 1)
 
         title = re.sub(' AutoUnRAR', '', title)
         title = re.sub('\.part[0-9]*\.rar', '', title)
@@ -152,8 +152,7 @@ class EasynewsSearchHandler():
         # xbmc.log("    description : %s" % description, 1)
         # xbmc.log("    normal desc : %s" % normalized_description, 1)
         # xbmc.log("    normal file : %s" % normalized_filename, 1)
-
-        xbmc.log("Clean Title > : %s\n" % title, 1)
+        #xbmc.log("Clean Title > : %s\n" % title, 1)
         return title
 
     def paginate(self, activity):
