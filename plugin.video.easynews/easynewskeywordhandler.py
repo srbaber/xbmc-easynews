@@ -1,7 +1,6 @@
 import xbmc
 
 import easynewssearchhandler
-import properties
 import historyhandler
 
 #
@@ -27,5 +26,6 @@ class EasynewsKeywordHandler(easynewssearchhandler.EasynewsSearchHandler):
                 historyhandler.add_search(searchPhrase)
 
         params['gps'] = searchPhrase
+        params['sbj'] = searchPhrase
 
         return params
