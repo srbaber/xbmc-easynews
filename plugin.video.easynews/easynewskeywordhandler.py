@@ -1,7 +1,6 @@
 import xbmc
 
 import easynewssearchhandler
-import properties
 import historyhandler
 
 #

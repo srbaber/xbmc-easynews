@@ -7,6 +7,7 @@ from easynewssearchhandler import EasynewsSearchHandler
 from easynewssizehandler import EasynewsSizeHandler
 from easynewskeywordhandler import EasynewsKeywordHandler
 from easynewsgroupshandler import EasynewsGroupsHandler
+from easynewszipmanagerhandler import EasynewsZipManagerHandler
 from historyhandler import HistoryHandler
 from filehandler import FileHandler
 
@@ -22,6 +23,7 @@ class MainMenuHandler():
     searchHistory = 'Search History'
     searchGroup = 'Group Search'
     downloads = 'Downloads'
+    zipmanager = 'Zip Manager'
 
     def __init__(self):
         pass
@@ -46,6 +48,9 @@ class MainMenuHandler():
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
         activity = action.of(FileHandler.name, FileHandler.playback, self.downloads)
+        xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
+
+        activity = action.of(EasynewsZipManagerHandler.name, EasynewsZipManagerHandler.listQueues, self.zipmanager)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
         xbmcplugin.endOfDirectory(addonhandle)
