@@ -14,7 +14,6 @@ class EasynewsHistoryHandler(easynewssearchhandler.EasynewsSearchHandler):
     def build_params(self, action):
         params = super().build_params(action)
         params['gps'] = self.searchPhrase
-        params['sbj'] = self.searchPhrase
         return params
 
     def apply(self, addonhandle, activity):

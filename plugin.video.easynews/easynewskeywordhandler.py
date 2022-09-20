@@ -26,6 +26,5 @@ class EasynewsKeywordHandler(easynewssearchhandler.EasynewsSearchHandler):
                 historyhandler.add_search(searchPhrase)
 
         params['gps'] = searchPhrase
-        params['sbj'] = searchPhrase
 
         return params
