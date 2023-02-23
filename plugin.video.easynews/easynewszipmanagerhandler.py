@@ -44,6 +44,7 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
 
     def parse(self, addonhandle, data):
         items = re.compile('<td class="fileName" >(.+?)</td>', re.DOTALL).findall(data)
+        videoActions = []
         if items:
             for item in items:
                 title = re.compile('target="fileTarget" >(.+?)</a>', re.DOTALL).findall(item)
@@ -56,7 +57,12 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
                 thumbnail = self.build_thumbnail_url (gurl)
 
                 gurl = getrequest.url_auth(gurl)
-                self.add_video(addonhandle, gurl, title, thumbnail)
+
+                videoActions.append(action.of(self.name, self.playbackOperation, title, thumbnail, gurl))
+
+        videoActions.sort(key=sortByTitle)
+        for videoAction in videoActions:
+            self.add_video(addonhandle, videoAction.state, videoAction.title, videoAction.thumbnail)
 
     def apply(self, addonhandle, activity):
         if constants.APPLY_LOG:
@@ -69,4 +75,7 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
             self.list_queues_menu(addonhandle)
 
         xbmcplugin.endOfDirectory(addonhandle)
+
+def sortByTitle(videoAction):
+    return videoAction.title
 
