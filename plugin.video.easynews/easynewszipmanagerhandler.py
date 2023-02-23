@@ -60,7 +60,7 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
 
                 videoActions.append(action.of(self.name, self.playbackOperation, title, thumbnail, gurl))
 
-        videoActions.sort(key=sortByTitle)
+        videoActions.sort(key=sortByTitle, reverse=True)
         for videoAction in videoActions:
             self.add_video(addonhandle, videoAction.state, videoAction.title, videoAction.thumbnail)
 
