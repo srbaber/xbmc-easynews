@@ -30,7 +30,7 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
 
     def add_zip_queue(self, addonhandle, title, queuename):
         queueAction = action.of(EasynewsZipManagerHandler.name, EasynewsZipManagerHandler.listQueue, title, state={'queue':queuename})
-        xbmcplugin.addDirectoryItem(addonhandle, queueAction.url(), queueAction.videoitem(), isFolder=True)
+        xbmcplugin.addDirectoryItem(addonhandle, queueAction.url(), queueAction.directoryitem(), isFolder=True)
 
     def list_queues_menu(self, addonhandle):
         self.add_zip_queue(addonhandle, 'Unqueued Files', 'Z')

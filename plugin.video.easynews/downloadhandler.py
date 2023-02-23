@@ -14,7 +14,6 @@ progressDialog = xbmcgui.DialogProgress()
 class DownloadHandler():
     name = 'DownloadHandler'
     download = 'Download'
-    delete = 'Delete'
 
     def __init__(self):
         pass
