@@ -6,8 +6,6 @@ import xbmcgui
 import constants
 
 from downloadhandler import DownloadHandler
-from filehandler import FileHandler
-from easynewscleanuphandler import EasynewsCleanupHandler
 
 class Action:
     handler = None
@@ -31,22 +29,6 @@ class Action:
     def videoitem(self):
         download = of(DownloadHandler.name, DownloadHandler.download, DownloadHandler.download, self.thumbnail, self.state)
         cm = [(DownloadHandler.download, 'RunPlugin(%s)' % download.url())]
-
-        item = self.playableitem()
-        item.addContextMenuItems(cm)
-        return item
-
-    def historyitem(self):
-        remove = of(EasynewsCleanupHandler.name, EasynewsCleanupHandler.removeHistory, EasynewsCleanupHandler.removeHistory, self.thumbnail, self.state)
-        cm = [(EasynewsCleanupHandler.removeHistory, 'RunPlugin(%s)' % remove.url())]
-
-        item = self.playableitem()
-        item.addContextMenuItems(cm)
-        return item
-
-    def fileitem(self):
-        delete = of(FileHandler.name, FileHandler.delete, FileHandler.delete, self.thumbnail, self.state)
-        cm = [(FileHandler.delete, 'RunPlugin(%s)' % delete.url())]
 
         item = self.playableitem()
         item.addContextMenuItems(cm)
