@@ -17,7 +17,7 @@
         <assets>
             <icon>icon.png</icon>
         </assets>
-        <summary lang="en">Easynews.com -  Browse videos from Easynews.com.  Account required.</summary>
+        <summary lang="en">Easynews.com - Browse videos from Easynews.com. Account required.</summary>
         <description lang="en">Browse newsgroups as well as search</description>
     </extension>
 </addon>
