@@ -1,10 +1,11 @@
 import os
 
-import xbmc, xbmcplugin
-
 import action
 import constants
 import properties
+import xbmc
+import xbmcplugin
+
 
 #
 # handler responsible for listing downloaded content
@@ -28,7 +29,7 @@ class FileHandler():
         return item
 
     def add_file(self, addonhandle, filename, fullpath):
-        fileAction = action.of(self.name, self.playback, filename, state={'url' : fullpath})
+        fileAction = action.of(self.name, self.playback, filename, state={'url': fullpath})
         contextmenu = self.contextmenu(fileAction)
         contextmenu.setPath(fullpath)
 
@@ -73,4 +74,3 @@ class FileHandler():
             self.delete_download(addonhandle, activity.state['url'])
         elif activity.operation == self.clear:
             self.delete_downloads(addonhandle)
-

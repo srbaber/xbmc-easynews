@@ -1,7 +1,7 @@
 import constants
+import easynewssearchhandler
 import xbmc
 
-import easynewssearchhandler
 
 #
 # handler responsible for performing the size search for easynews

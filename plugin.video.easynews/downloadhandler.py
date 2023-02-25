@@ -1,12 +1,13 @@
-import re,os
+import os
+import re
 
 import constants
-import xbmcgui
-
 import getrequest
 import properties
+import xbmcgui
 
 progressDialog = xbmcgui.DialogProgress()
+
 
 #
 # handler responsible for downloading content
@@ -39,6 +40,7 @@ class DownloadHandler():
             title = 'Download Failed'
 
         xbmcgui.Dialog().ok(title, filename)
+
 
 def download_report_hook(size, totalsize):
     percent = int(float(size * 100) / totalsize)

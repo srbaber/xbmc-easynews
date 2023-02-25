@@ -1,15 +1,15 @@
-import constants
-import xbmc, xbmcplugin
-
 import action
-
+import constants
+import xbmc
+import xbmcplugin
+from easynewsgroupshandler import EasynewsGroupsHandler
+from easynewskeywordhandler import EasynewsKeywordHandler
 from easynewssearchhandler import EasynewsSearchHandler
 from easynewssizehandler import EasynewsSizeHandler
-from easynewskeywordhandler import EasynewsKeywordHandler
-from easynewsgroupshandler import EasynewsGroupsHandler
 from easynewszipmanagerhandler import EasynewsZipManagerHandler
-from historyhandler import HistoryHandler
 from filehandler import FileHandler
+from historyhandler import HistoryHandler
+
 
 #
 # handler responsible for building the main menu

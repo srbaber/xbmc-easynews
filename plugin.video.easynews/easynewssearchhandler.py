@@ -1,11 +1,12 @@
-import re, html
-
-import constants
-import xbmc, xbmcplugin
+import html
+import re
 
 import action
+import constants
 import getrequest
 import properties
+import xbmc
+import xbmcplugin
 from downloadhandler import DownloadHandler
 
 SORT_BY_SIZE = 'dsize'
@@ -17,6 +18,7 @@ MAIN_URL = 'https://members.easynews.com/global5/search.html'
 
 DEFAULT_PERPAGE = 100
 
+
 #
 # handler responsible for performing the basic search for easynews
 #
@@ -26,9 +28,9 @@ class EasynewsSearchHandler():
     playbackOperation = 'Video'
     nextPage = 'Next Page'
 
-    pagenumber='1'
+    pagenumber = '1'
 
-    num_significant_chars=10
+    num_significant_chars = 10
 
     def __init__(self):
         pass
@@ -68,7 +70,7 @@ class EasynewsSearchHandler():
     def search(self, action):
         return getrequest.get(self, self.build_url(), self.build_params(action))
 
-    def build_thumbnail_url (self, url):
+    def build_thumbnail_url(self, url):
         if len(url) <= 40:
             return None
 
@@ -83,18 +85,18 @@ class EasynewsSearchHandler():
             return None
 
         thumb_url = 'https://th.easynews.com/thumbnails-'
-        thumb_url += url[40 : 43]
+        thumb_url += url[40: 43]
         thumb_url += '/pr-'
-        thumb_url += url[40 : firstdot - 4]
+        thumb_url += url[40: firstdot - 4]
         thumb_url += '.jpg/th-'
-        thumb_url += url[nextslash + 1 : seconddot]
+        thumb_url += url[nextslash + 1: seconddot]
         thumb_url += '.jpg'
 
         return thumb_url
 
     def split_index(self, title, open_char, close_char):
         inside_paren_count = 0
-        start_idx = len(title)-1
+        start_idx = len(title) - 1
         while start_idx >= 0:
             if title[start_idx] == close_char:
                 inside_paren_count += 1
@@ -110,7 +112,7 @@ class EasynewsSearchHandler():
         return re.sub('[^\w]', '', title).lower()
 
     def cleanup_title(self, title):
-        #xbmc.log("Clean Title < : %s" % title, 1)
+        # xbmc.log("Clean Title < : %s" % title, 1)
 
         title = re.sub(' AutoUnRAR', '', title)
         title = re.sub('\.part[0-9]*\.rar', '', title)
@@ -124,7 +126,7 @@ class EasynewsSearchHandler():
             description = title
             filename = ''
         else:
-            description = title[0:split_pos-1]
+            description = title[0:split_pos - 1]
             description = re.sub('\w{15,}', '', description)
             filename = title[split_pos:len(title)]
             filename = re.sub('[()]', '', filename)
@@ -155,7 +157,7 @@ class EasynewsSearchHandler():
         # xbmc.log("    description : %s" % description, 1)
         # xbmc.log("    normal desc : %s" % normalized_description, 1)
         # xbmc.log("    normal file : %s" % normalized_filename, 1)
-        #xbmc.log("Clean Title > : %s\n" % title, 1)
+        # xbmc.log("Clean Title > : %s\n" % title, 1)
         return title
 
     def paginate(self, activity):
@@ -168,7 +170,8 @@ class EasynewsSearchHandler():
         xbmcplugin.addDirectoryItem(addonhandle, pageAction.url(), pageAction.directoryitem(), isFolder=True)
 
     def contextmenu(self, activity):
-        download = action.of(DownloadHandler.name, DownloadHandler.download, DownloadHandler.download, activity.thumbnail, activity.state)
+        download = action.of(DownloadHandler.name, DownloadHandler.download, DownloadHandler.download,
+                             activity.thumbnail, activity.state)
         cm = [(DownloadHandler.download, 'RunPlugin(%s)' % download.url())]
 
         item = activity.playableitem()
@@ -192,7 +195,7 @@ class EasynewsSearchHandler():
                 gurl = re.compile('<link>(.+?)</link>', re.DOTALL).findall(item)
                 gurl = html.unescape(gurl[0])
 
-                thumbnail = self.build_thumbnail_url (gurl)
+                thumbnail = self.build_thumbnail_url(gurl)
 
                 gurl = getrequest.url_auth(gurl)
                 self.add_video(addonhandle, gurl, title, thumbnail)
@@ -209,4 +212,3 @@ class EasynewsSearchHandler():
         self.add_next_page(addonhandle, activity)
 
         xbmcplugin.endOfDirectory(addonhandle)
-

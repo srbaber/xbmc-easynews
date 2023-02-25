@@ -1,12 +1,14 @@
-import urllib
-
-import xbmc, xbmcplugin
-
-import action, constants, getrequest, re, html
+import action
+import constants
 import easynewssearchhandler
+import getrequest
+import html
+import re
+import xbmc
+import xbmcplugin
 
 MAIN_URL = 'https://members.easynews.com/2.0/tools/zip-manager/index.html'
-REMOVE_URL = 'https://members.easynews.com/2.0/tools/zip-manager'
+
 
 #
 # handler responsible for build the zip manager menu
@@ -54,7 +56,7 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
                 gurl = re.compile('<a href="(.+?)" target="fileTarget" >', re.DOTALL).findall(item)
                 gurl = html.unescape(gurl[0])
 
-                thumbnail = self.build_thumbnail_url (gurl)
+                thumbnail = self.build_thumbnail_url(gurl)
 
                 gurl = getrequest.url_auth(gurl)
 
@@ -74,12 +76,13 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
                 self.add_video(addonhandle, title, thumbnail, gurl, state)
 
     def add_zip_queue(self, addonhandle, title, queuename):
-        queueAction = action.of(EasynewsZipManagerHandler.name, EasynewsZipManagerHandler.listQueue, title, state={'queue':queuename})
+        queueAction = action.of(EasynewsZipManagerHandler.name, EasynewsZipManagerHandler.listQueue, title,
+                                state={'queue': queuename})
         xbmcplugin.addDirectoryItem(addonhandle, queueAction.url(), queueAction.directoryitem(), isFolder=True)
 
     def list_queues_menu(self, addonhandle):
         self.add_zip_queue(addonhandle, 'Unqueued Files', 'Z')
-        for queuenumber in range (1,11):
+        for queuenumber in range(1, 11):
             title = 'Queue %02d' % queuenumber
             queuename = 'Q%02d' % queuenumber
             self.add_zip_queue(addonhandle, title, queuename)
@@ -90,14 +93,10 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
     def delete(self, action):
         formdata = {}
         formdata['editque'] = action.state['queue']
-        formdata['sS'] = '0'
-        formdata['nameZipQ0'] = ''
-        formdata['copyque'] = ''
-        formdata['nameZipQ'] = ''
         formdata[action.state['sig']] = action.state['val']
         formdata['DEL'] = 'Remove Checked Files'
 
-        getrequest.post(self, REMOVE_URL, formdata)
+        getrequest.post(self, self.build_url(), formdata)
 
     def apply(self, addonhandle, activity):
         if constants.APPLY_LOG:
@@ -114,6 +113,6 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
 
         xbmcplugin.endOfDirectory(addonhandle)
 
+
 def sort_by_title(videoAction):
     return videoAction['title']
-

@@ -1,11 +1,10 @@
-import json
 import base64
-
+import json
 from types import SimpleNamespace
-import xbmcgui
-import constants
 
-from downloadhandler import DownloadHandler
+import constants
+import xbmcgui
+
 
 class Action:
     handler = None
@@ -31,15 +30,17 @@ class Action:
 
         if self.thumbnail:
             item.setArt({'thumb': self.thumbnail,
-                            'icon': 'DefaultVideo.png',
-                            'poster': self.thumbnail})
+                         'icon': 'DefaultVideo.png',
+                         'poster': self.thumbnail})
         return item
 
     def tostring(self):
         return json.dumps(self, default=lambda x: x.__dict__)
 
+
 def copy(action):
     return of(action.handler, action.operation, action.title, action.thumbnail, action.state)
+
 
 def of(handler=None, operation=None, title=None, thumbnail=None, state=None):
     a = Action()
@@ -54,11 +55,13 @@ def of(handler=None, operation=None, title=None, thumbnail=None, state=None):
 
     return a
 
+
 def encode(action):
     data = json.dumps(action, default=lambda x: x.__dict__)
     data = data.encode('utf-8')
     data = base64.urlsafe_b64encode(data).decode('utf-8')
     return data
+
 
 def decode(data):
     data = base64.urlsafe_b64decode(data.encode('utf-8'))
@@ -67,4 +70,3 @@ def decode(data):
         return None
     else:
         return of(dict.handler, dict.operation, dict.title, dict.thumbnail, dict.state.__dict__)
-

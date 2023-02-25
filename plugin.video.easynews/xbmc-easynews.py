@@ -1,22 +1,22 @@
 import sys
 from urllib.parse import parse_qsl
-import action
 
-from mainmenuhandler import MainMenuHandler
+import action
+from downloadhandler import DownloadHandler
+from easynewscleanuphandler import EasynewsCleanupHandler
+from easynewsgrouphandler import EasynewsGroupHandler
+from easynewsgroupshandler import EasynewsGroupsHandler
+from easynewshistoryhandler import EasynewsHistoryHandler
+from easynewskeywordhandler import EasynewsKeywordHandler
 from easynewssearchhandler import EasynewsSearchHandler
 from easynewssizehandler import EasynewsSizeHandler
-from easynewskeywordhandler import EasynewsKeywordHandler
-from easynewsgroupshandler import EasynewsGroupsHandler
-from easynewsgrouphandler import EasynewsGroupHandler
-from easynewshistoryhandler import EasynewsHistoryHandler
-from easynewscleanuphandler import EasynewsCleanupHandler
 from easynewszipmanagerhandler import EasynewsZipManagerHandler
-from downloadhandler import DownloadHandler
-from historyhandler import HistoryHandler
 from filehandler import FileHandler
+from historyhandler import HistoryHandler
+from mainmenuhandler import MainMenuHandler
 
 handlers = {
-    MainMenuHandler.name : MainMenuHandler(),
+    MainMenuHandler.name: MainMenuHandler(),
     EasynewsSearchHandler.name: EasynewsSearchHandler(),
     EasynewsSizeHandler.name: EasynewsSizeHandler(),
     EasynewsKeywordHandler.name: EasynewsKeywordHandler(),
@@ -31,7 +31,7 @@ handlers = {
 }
 
 handle = int(sys.argv[1])
-params = dict(parse_qsl(sys.argv[2].replace('?','')))
+params = dict(parse_qsl(sys.argv[2].replace('?', '')))
 actionparam = params.get('action')
 
 if (actionparam == None):
@@ -41,4 +41,3 @@ else:
 
 handlerName = activity.handler
 handlers[handlerName].apply(handle, activity)
-
