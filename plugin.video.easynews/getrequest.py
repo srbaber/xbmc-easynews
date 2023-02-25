@@ -18,10 +18,22 @@ def stream(self, url, params, stream):
     response = requests.get(url, params=params, auth=(usernm, passwd), timeout=timeout, stream=stream)
     return response
 
+def submit(self, url, params, stream):
+    usernm = properties.get_property('username')
+    passwd = properties.get_property('password')
+
+    response = requests.post(url, data=params, auth=(usernm, passwd), timeout=timeout, stream=stream)
+    return response
+
 def get(self, url, params=None):
     if params is None:
         params = {}
     return stream(self, url, params, False).text
+
+def post(self, url, params=None):
+    if params is None:
+        params = {}
+    return submit(self, url, params, False).text
 
 def download(self, url, filename, download_report_hook):
     with stream(self, url, None, True) as response:

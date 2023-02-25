@@ -6,6 +6,7 @@ import xbmc, xbmcplugin
 import action
 import getrequest
 import properties
+from downloadhandler import DownloadHandler
 
 SORT_BY_SIZE = 'dsize'
 SORT_BY_NAME = 'nrfile'
@@ -166,9 +167,18 @@ class EasynewsSearchHandler():
         pageAction = action.of(activity.handler, activity.operation, self.nextPage, state=activity.state)
         xbmcplugin.addDirectoryItem(addonhandle, pageAction.url(), pageAction.directoryitem(), isFolder=True)
 
+    def contextmenu(self, activity):
+        download = action.of(DownloadHandler.name, DownloadHandler.download, DownloadHandler.download, activity.thumbnail, activity.state)
+        cm = [(DownloadHandler.download, 'RunPlugin(%s)' % download.url())]
+
+        item = activity.playableitem()
+        item.addContextMenuItems(cm)
+        return item
+
     def add_video(self, addonhandle, url, title, thumbnail):
         videoAction = action.of(self.name, self.playbackOperation, title, thumbnail, {'url': url})
-        xbmcplugin.addDirectoryItem(addonhandle, url, videoAction.videoitem(), isFolder=False)
+        contextmenu = self.contextmenu(videoAction)
+        xbmcplugin.addDirectoryItem(addonhandle, url, contextmenu, isFolder=False)
 
     def parse(self, addonhandle, data):
         # xbmc.log("Parse Data : %s" % data, 1)

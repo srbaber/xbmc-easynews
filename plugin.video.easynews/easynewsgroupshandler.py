@@ -4,6 +4,7 @@ import xbmc, xbmcplugin
 
 import action
 import easynewssearchhandler
+from downloadhandler import DownloadHandler
 
 from easynewsgrouphandler import EasynewsGroupHandler
 
@@ -31,10 +32,19 @@ class EasynewsGroupsHandler(easynewssearchhandler.EasynewsSearchHandler):
     def build_url(self):
         return MAIN_URL
 
+    def contextmenu(self, activity):
+        download = action.of(DownloadHandler.name, DownloadHandler.download, DownloadHandler.download, activity.thumbnail, activity.state)
+        cm = [(DownloadHandler.download, 'RunPlugin(%s)' % download.url())]
+
+        item = activity.playableitem()
+        item.addContextMenuItems(cm)
+        return item
+
     def add_group(self, addonhandle, group, count):
         title = '%s (%s posts)' % (group , count)
         groupAction = action.of(EasynewsGroupHandler.name, EasynewsGroupHandler.searchGroup, title, state={'group':group})
-        xbmcplugin.addDirectoryItem(addonhandle, groupAction.url(), groupAction.videoitem(), isFolder=True)
+        contextmenu = self.contextmenu(groupAction)
+        xbmcplugin.addDirectoryItem(addonhandle, groupAction.url(), contextmenu, isFolder=True)
 
     def parse(self, addonhandle, data):
         xbmc.log("Parse Data : %s" % data, 1)

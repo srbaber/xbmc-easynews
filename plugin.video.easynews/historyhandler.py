@@ -9,17 +9,18 @@ class HistoryHandler():
     name = 'HistoryHandler'
     showHistory = 'ShowHistory'
 
-    def historyitem(self, historyAction):
-        remove = action.of(EasynewsCleanupHandler.name, EasynewsCleanupHandler.removeHistory, EasynewsCleanupHandler.removeHistory, historyAction.thumbnail, historyAction.state)
+    def contextmenu(self, activity):
+        remove = action.of(EasynewsCleanupHandler.name, EasynewsCleanupHandler.removeHistory, EasynewsCleanupHandler.removeHistory, activity.thumbnail, activity.state)
         cm = [(EasynewsCleanupHandler.removeHistory, 'RunPlugin(%s)' % remove.url())]
 
-        item = historyAction.playableitem()
+        item = activity.playableitem()
         item.addContextMenuItems(cm)
         return item
 
     def add_history(self, addonhandle, searchPhrase):
         historyAction = action.of(EasynewsHistoryHandler.name, EasynewsHistoryHandler.searchKeyword, searchPhrase, state={'searchPhrase': searchPhrase})
-        xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), self.historyitem(historyAction), isFolder=True)
+        contextmenu = self.contextmenu(historyAction)
+        xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), contextmenu, isFolder=True)
 
     def add_clear_history(self, addonhandle):
         handler = EasynewsCleanupHandler()

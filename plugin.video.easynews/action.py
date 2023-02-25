@@ -26,14 +26,6 @@ class Action:
         item.setInfo('Video', {'Title': self.title})
         return item
 
-    def videoitem(self):
-        download = of(DownloadHandler.name, DownloadHandler.download, DownloadHandler.download, self.thumbnail, self.state)
-        cm = [(DownloadHandler.download, 'RunPlugin(%s)' % download.url())]
-
-        item = self.playableitem()
-        item.addContextMenuItems(cm)
-        return item
-
     def directoryitem(self):
         item = xbmcgui.ListItem(self.title)
 

@@ -19,20 +19,20 @@ class FileHandler():
         historyAction = action.of(self.name, self.clear, 'Delete Downloads')
         xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.directoryitem(), isFolder=False)
 
-    def fileitem(self, fileAction):
-        delete = action.of(self.name, self.delete, self.delete, fileAction.thumbnail, fileAction.state)
+    def contextmenu(self, activity):
+        delete = action.of(self.name, self.delete, self.delete, activity.thumbnail, activity.state)
         cm = [(self.delete, 'RunPlugin(%s)' % delete.url())]
 
-        item = fileAction.playableitem()
+        item = activity.playableitem()
         item.addContextMenuItems(cm)
         return item
 
     def add_file(self, addonhandle, filename, fullpath):
         fileAction = action.of(self.name, self.playback, filename, state={'url' : fullpath})
-        item = self.fileitem(fileAction)
-        item.setPath(fullpath)
+        contextmenu = self.contextmenu(fileAction)
+        contextmenu.setPath(fullpath)
 
-        xbmcplugin.addDirectoryItem(addonhandle, fullpath, item, isFolder=False)
+        xbmcplugin.addDirectoryItem(addonhandle, fullpath, contextmenu, isFolder=False)
 
     def list_files(self):
         files = []
