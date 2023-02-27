@@ -1,5 +1,6 @@
 import easynewssearchhandler
 
+
 #
 # handler responsible for performing the size search for easynews
 #
@@ -15,5 +16,3 @@ class EasynewsSizeHandler(easynewssearchhandler.EasynewsSearchHandler):
         params['s1'] = easynewssearchhandler.SORT_BY_SIZE
         params['s3'] = easynewssearchhandler.SORT_BY_DATE
         return params
-
-

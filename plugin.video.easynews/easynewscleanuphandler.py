@@ -1,10 +1,10 @@
 import constants
-import xbmc
-
 import properties
+import xbmc
 
 maxHistory = properties.get_property('history', '10')
 LAST_KEYWORDS = 'lastKeywords'
+
 
 #
 # handler responsible for clean up of download delete
@@ -27,23 +27,27 @@ class EasynewsCleanupHandler():
             clear_history()
             xbmc.executebuiltin('Container.Refresh')
 
+
 def clear_history():
     for i in range(int(maxHistory)):
         set_search(i, '')
 
+
 def remove_history(searchPhrase):
-    j=0
+    j = 0
     for i in range(int(maxHistory)):
         value = get_search(i)
         if value != searchPhrase:
             set_search(j, value)
-            j=j+1
+            j = j + 1
 
-    for i in range(j+1, int(maxHistory), 1):
+    for i in range(j + 1, int(maxHistory), 1):
         set_search(i, '')
+
 
 def get_search(index):
     return properties.get_property(LAST_KEYWORDS + '_%d' % index, '')
+
 
 def set_search(index, searchPhrase):
     properties.set_property(LAST_KEYWORDS + "_%d" % index, searchPhrase)

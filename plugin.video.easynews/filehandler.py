@@ -1,10 +1,11 @@
 import os
 
-import xbmc, xbmcplugin
-
 import action
 import constants
 import properties
+import xbmc
+import xbmcplugin
+
 
 #
 # handler responsible for listing downloaded content
@@ -19,12 +20,20 @@ class FileHandler():
         historyAction = action.of(self.name, self.clear, 'Delete Downloads')
         xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.directoryitem(), isFolder=False)
 
-    def add_file(self, addonhandle, filename, fullpath):
-        fileAction = action.of(self.name, self.playback, filename, state={'url' : fullpath})
-        item = fileAction.fileitem()
-        item.setPath(fullpath)
+    def contextmenu(self, activity):
+        delete = action.of(self.name, self.delete, self.delete, activity.thumbnail, activity.state)
+        cm = [(self.delete, 'RunPlugin(%s)' % delete.url())]
 
-        xbmcplugin.addDirectoryItem(addonhandle, fullpath, item, isFolder=False)
+        item = activity.playableitem()
+        item.addContextMenuItems(cm)
+        return item
+
+    def add_file(self, addonhandle, filename, fullpath):
+        fileAction = action.of(self.name, self.playback, filename, state={'url': fullpath})
+        contextmenu = self.contextmenu(fileAction)
+        contextmenu.setPath(fullpath)
+
+        xbmcplugin.addDirectoryItem(addonhandle, fullpath, contextmenu, isFolder=False)
 
     def list_files(self):
         files = []
@@ -65,4 +74,3 @@ class FileHandler():
             self.delete_download(addonhandle, activity.state['url'])
         elif activity.operation == self.clear:
             self.delete_downloads(addonhandle)
-

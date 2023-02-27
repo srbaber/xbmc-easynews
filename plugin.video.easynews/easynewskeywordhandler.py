@@ -1,7 +1,7 @@
-import xbmc
-
 import easynewssearchhandler
 import historyhandler
+import xbmc
+
 
 #
 # handler responsible for performing the keyword search for easynews
