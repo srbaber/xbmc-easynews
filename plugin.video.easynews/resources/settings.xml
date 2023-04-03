@@ -1,5 +1,5 @@
 <settings>
-    <category label="30100">
+    <category label="30200">
         <setting id="username" type="text" label="30201" default=""/>
         <setting id="password" type="text" label="30202" default="" option="hidden"/>
         <setting id="groups" type="text" label="30204" default="erotica"/>
@@ -7,5 +7,7 @@
         <setting id="extensions" type="text" label="30206" default="mp4|avi"/>
         <setting id="download" type="folder" label="30207" default="" source="auto" option="writeable"/>
         <setting id="history" type="text" label="30208" default="10"/>
+        <setting id="videos" type="bool" label="30209" default="true"/>
+        <setting id="images" type="bool" label="30210" default="false"/>
     </category>
 </settings>

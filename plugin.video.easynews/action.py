@@ -22,7 +22,7 @@ class Action:
     def playableitem(self):
         item = self.directoryitem()
         item.setProperty('IsPlayable', 'true')
-        item.setInfo('Video', {'Title': self.title})
+        item.setLabel(self.title)
         return item
 
     def directoryitem(self):

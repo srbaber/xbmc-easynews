@@ -6,10 +6,7 @@ import easynewssearchhandler
 #
 class EasynewsSizeHandler(easynewssearchhandler.EasynewsSearchHandler):
     name = 'EasynewsSizeHandler'
-    searchBySize = 'SearchAndOrderBySize'
-
-    def __init__(self):
-        pass
+    search_by_size_operation = 'SearchAndOrderBySize'
 
     def build_params(self, action):
         params = super().build_params(action)
