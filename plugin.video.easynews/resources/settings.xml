@@ -7,5 +7,6 @@
         <setting id="extensions" type="text" label="30206" default="mp4|avi"/>
         <setting id="download" type="folder" label="30207" default="" source="auto" option="writeable"/>
         <setting id="history" type="text" label="30208" default="10"/>
+        <setting id="minSize" type="text" label="30209" default=""/>
     </category>
 </settings>

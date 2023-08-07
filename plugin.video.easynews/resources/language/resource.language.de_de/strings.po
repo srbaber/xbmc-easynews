@@ -56,3 +56,7 @@ msgstr "Download ordner"
 msgctxt "#30208"
 msgid "History size"
 msgstr "Geschichte größe"
+
+msgctxt "#30209"
+msgid "Minimum file size (in MB)"
+msgstr "Minimale Dateigröße (in MB)"

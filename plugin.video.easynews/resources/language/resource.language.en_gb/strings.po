@@ -56,3 +56,7 @@ msgstr ""
 msgctxt "#30208"
 msgid "History size"
 msgstr ""
+
+msgctxt "#30209"
+msgid "Minimum file size (in MB)"
+msgstr ""

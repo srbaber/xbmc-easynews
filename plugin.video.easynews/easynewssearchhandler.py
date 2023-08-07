@@ -45,6 +45,12 @@ class EasynewsSearchHandler():
         groups = properties.get_property('groups', '')
         perpage = properties.get_property('perpage', DEFAULT_PERPAGE)
 
+        minSize = properties.get_property('minSize', '')
+
+        if minSize != '':
+            params['b1'] = minSize
+            params['b1t'] = '8'
+
         params['ns'] = groups
         params['fex'] = extensions
 
