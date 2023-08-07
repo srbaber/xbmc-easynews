@@ -45,11 +45,11 @@ class EasynewsSearchHandler():
         groups = properties.get_property('groups', '')
         perpage = properties.get_property('perpage', DEFAULT_PERPAGE)
 
-        minSize = properties.get_property('minSize', '')
+        minSize = properties.get_property('minsize', '')
 
         if minSize != '':
             if constants.APPLY_LOG:
-                xbmc.log('Using minSize as %s MB' % (minSize), 1)
+                xbmc.log('Using minsize as %s MB' % (minSize), 1)
             params['b1'] = minSize
             params['b1t'] = '8'
             params['b2'] = ''
