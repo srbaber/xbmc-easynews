@@ -10,6 +10,7 @@ from easynewshistoryhandler import EasynewsHistoryHandler
 from easynewskeywordhandler import EasynewsKeywordHandler
 from easynewssearchhandler import EasynewsSearchHandler
 from easynewssizehandler import EasynewsSizeHandler
+from savedSearchHandler import SavedSearchHandler
 from easynewszipmanagerhandler import EasynewsZipManagerHandler
 from filehandler import FileHandler
 from historyhandler import HistoryHandler
@@ -18,6 +19,7 @@ from mainmenuhandler import MainMenuHandler
 handlers = {
     MainMenuHandler.name: MainMenuHandler(),
     EasynewsSearchHandler.name: EasynewsSearchHandler(),
+    SavedSearchHandler.name:SavedSearchHandler(),
     EasynewsSizeHandler.name: EasynewsSizeHandler(),
     EasynewsKeywordHandler.name: EasynewsKeywordHandler(),
     EasynewsGroupsHandler.name: EasynewsGroupsHandler(),
