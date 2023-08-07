@@ -48,8 +48,12 @@ class EasynewsSearchHandler():
         minSize = properties.get_property('minSize', '')
 
         if minSize != '':
+            if constants.APPLY_LOG:
+                xbmc.log('Using minSize as %s MB' % (minSize), 1)
             params['b1'] = minSize
             params['b1t'] = '8'
+            params['b2'] = ''
+            params['b2t'] = ''
 
         params['ns'] = groups
         params['fex'] = extensions
