@@ -19,7 +19,7 @@ from mainmenuhandler import MainMenuHandler
 handlers = {
     MainMenuHandler.name: MainMenuHandler(),
     EasynewsSearchHandler.name: EasynewsSearchHandler(),
-    SavedSearchHandler.name:SavedSearchHandler(),
+    SavedSearchHandler.name: SavedSearchHandler(),
     EasynewsSizeHandler.name: EasynewsSizeHandler(),
     EasynewsKeywordHandler.name: EasynewsKeywordHandler(),
     EasynewsGroupsHandler.name: EasynewsGroupsHandler(),

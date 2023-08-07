@@ -37,7 +37,7 @@ class MainMenuHandler():
         activity = action.of(EasynewsKeywordHandler.name, EasynewsKeywordHandler.searchKeyword, self.searchKeyword)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
-        activity = action.of(SavedSearchHandler.name, SavedSearchHandler.show_saved_searches, self.savedSearches)
+        activity = action.of(SavedSearchHandler.name, SavedSearchHandler.showSavedSearches, self.savedSearches)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
         activity = action.of(EasynewsGroupsHandler.name, EasynewsGroupsHandler.searchGroups, self.searchGroup)
