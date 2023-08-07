@@ -49,9 +49,9 @@ class EasynewsSearchHandler():
 
         if minSize != '':
             if constants.APPLY_LOG:
-                xbmc.log('Using minsize as %s MB' % (minSize), 1)
-            params['b1'] = minSize
-            params['b1t'] = '8'
+                xbmc.log('Using minsize as %smb' % (minSize), 1)
+            params['b1'] = minSize + 'mb'
+            params['b1t'] = ''
             params['b2'] = ''
             params['b2t'] = ''
 
