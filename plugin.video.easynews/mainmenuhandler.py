@@ -5,6 +5,7 @@ import xbmcplugin
 from easynewsgroupshandler import EasynewsGroupsHandler
 from easynewskeywordhandler import EasynewsKeywordHandler
 from easynewssearchhandler import EasynewsSearchHandler
+from savedSearchHandler import SavedSearchHandler
 from easynewssizehandler import EasynewsSizeHandler
 from easynewszipmanagerhandler import EasynewsZipManagerHandler
 from filehandler import FileHandler
@@ -20,6 +21,7 @@ class MainMenuHandler():
     searchByDate = 'Search By Date'
     searchBySize = 'Search By Size'
     searchKeyword = 'Keyword Search'
+    savedSearches = 'Saved Searches'
     searchHistory = 'Search History'
     searchGroup = 'Group Search'
     downloads = 'Downloads'
@@ -32,16 +34,19 @@ class MainMenuHandler():
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s' % (self.name, addonhandle), 1)
 
-        activity = action.of(EasynewsSearchHandler.name, EasynewsSearchHandler.searchByDate, self.searchByDate)
+        activity = action.of(EasynewsKeywordHandler.name, EasynewsKeywordHandler.searchKeyword, self.searchKeyword)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
-        activity = action.of(EasynewsSizeHandler.name, EasynewsSizeHandler.searchBySize, self.searchBySize)
+        activity = action.of(SavedSearchHandler.name, SavedSearchHandler.show_saved_searches, self.savedSearches)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
         activity = action.of(EasynewsGroupsHandler.name, EasynewsGroupsHandler.searchGroups, self.searchGroup)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
-        activity = action.of(EasynewsKeywordHandler.name, EasynewsKeywordHandler.searchKeyword, self.searchKeyword)
+        activity = action.of(EasynewsSearchHandler.name, EasynewsSearchHandler.searchByDate, self.searchByDate)
+        xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
+
+        activity = action.of(EasynewsSizeHandler.name, EasynewsSizeHandler.searchBySize, self.searchBySize)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
         activity = action.of(HistoryHandler.name, HistoryHandler.showHistory, self.searchHistory)
