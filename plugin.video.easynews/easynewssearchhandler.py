@@ -74,7 +74,7 @@ class EasynewsSearchHandler():
         if len(url) <= 40:
             return None
 
-        firstdot = url.find('.', 40)
+        firstdot = url.find('.', 41)
         if firstdot == -1:
             return None
         nextslash = url.find('/', firstdot)
@@ -85,9 +85,9 @@ class EasynewsSearchHandler():
             return None
 
         thumb_url = 'https://th.easynews.com/thumbnails-'
-        thumb_url += url[40: 43]
+        thumb_url += url[41: 44]
         thumb_url += '/pr-'
-        thumb_url += url[40: firstdot - 4]
+        thumb_url += url[41: firstdot - 4]
         thumb_url += '.jpg/th-'
         thumb_url += url[nextslash + 1: seconddot]
         thumb_url += '.jpg'
