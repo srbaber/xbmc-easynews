@@ -27,7 +27,7 @@ class SavedSearchHandler():
         return SAVED_SEARCH_URL
 
     def search(self, action):
-        return getrequest.get(self, self.build_url(), self.build_params(action))
+        return getrequest.get(self, self.build_url(), {})
 
     def parse(self, data):
         searches = []
