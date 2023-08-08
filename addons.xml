@@ -2,7 +2,7 @@
 <addons>
 <addon id="plugin.video.easynews"
        name="Easynews.com"
-       version="20.0.3"
+       version="20.0.2"
        provider-name="xbmc-easynews">
     <requires>
         <import addon="script.module.requests"/>
@@ -22,12 +22,12 @@
     </extension>
 </addon>
 
-<addon id="repository.easynews" name="XBMC-Easynews Addons" version="20.0.3" provider-name="xbmc-easynews">
+<addon id="repository.easynews" name="XBMC-Easynews Addons" version="20.0.2" provider-name="xbmc-easynews">
 	<extension point="xbmc.addon.repository" name="XBMC Easynews Addons">
 		<dir>
-			<info compressed="false">https://guycls.github.io/xbmc-easynews/addons.xml</info>
-			<checksum>https://guycls.github.io/xbmc-easynews/addons.xml.md5</checksum>
-			<datadir zip="true">https://guycls.github.io/xbmc-easynews/</datadir>
+			<info compressed="false">https://srbaber.github.io/xbmc-easynews/addons.xml</info>
+			<checksum>https://srbaber.github.io/xbmc-easynews/addons.xml.md5</checksum>
+			<datadir zip="true">https://srbaber.github.io/xbmc-easynews/</datadir>
 		</dir>
 	</extension>
 	<extension point="xbmc.addon.metadata">
@@ -38,11 +38,11 @@
 	</extension>
 </addon>
 
-<addon id="repository.easynews" name="XBMC-Easynews Addons" version="20.0.3" provider-name="xbmc-easynews">
+<addon id="repository.easynews" name="XBMC-Easynews Addons" version="20.0.2" provider-name="xbmc-easynews">
 	<extension point="xbmc.addon.repository" name="XBMC Easynews Addons">
 		<dir>
-			<info compressed="false">https://guycls.github.io/xbmc-easynews/addons.xml</info>
-			<datadir zip="true">https://guycls.github.io/xbmc-easynews/</datadir>
+			<info compressed="false">https://srbaber.github.io/xbmc-easynews/addons.xml</info>
+			<datadir zip="true">https://srbaber.github.io/xbmc-easynews/</datadir>
 		</dir>
 	</extension>
 	<extension point="xbmc.addon.metadata">
