@@ -83,7 +83,7 @@ class EasynewsSearchHandler():
         return getrequest.get(self, self.build_url(), self.build_params(action))
 
     def build_thumbnail_url(self, url):
-        if len(url) <= 40:
+        if len(url) <= 41:
             return None
 
         firstdot = url.find('.', 41)
