@@ -48,6 +48,7 @@ class EasynewsSearchHandler():
         perpage = properties.get_property('perpage', DEFAULT_PERPAGE)
         filter_video = properties.get_property('videos', 'true') == 'true'
         filter_image = properties.get_property('images', 'false') == 'true'
+        minSize = properties.get_property('minsize', '')
 
         params['ns'] = groups
         
@@ -70,6 +71,12 @@ class EasynewsSearchHandler():
 
         if filter_image:
             params['fty[]'].append("IMAGES")
+
+        if minSize != '':
+            params['b1'] = minSize + 'mb'
+            params['b1t'] = ''
+            params['b2'] = ''
+            params['b2t'] = ''
 
         params['spamf'] = '1'
         params['u'] = '1'
