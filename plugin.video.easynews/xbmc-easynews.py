@@ -11,6 +11,7 @@ from easynewskeywordhandler import EasynewsKeywordHandler
 from easynewssearchhandler import EasynewsSearchHandler
 from easynewssizehandler import EasynewsSizeHandler
 from easynewszipmanagerhandler import EasynewsZipManagerHandler
+from easynewssavedsearchhandler import EasynewsSavedSearchHandler
 from filehandler import FileHandler
 from historyhandler import HistoryHandler
 from mainmenuhandler import MainMenuHandler
@@ -25,6 +26,7 @@ handlers = {
     EasynewsHistoryHandler.name: EasynewsHistoryHandler(),
     EasynewsCleanupHandler.name: EasynewsCleanupHandler(),
     EasynewsZipManagerHandler.name: EasynewsZipManagerHandler(),
+    EasynewsSavedSearchHandler.name: EasynewsSavedSearchHandler(),
     DownloadHandler.name: DownloadHandler(),
     FileHandler.name: FileHandler(),
     HistoryHandler.name: HistoryHandler()
