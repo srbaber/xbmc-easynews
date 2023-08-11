@@ -9,5 +9,6 @@
         <setting id="history" type="text" label="30208" default="10"/>
         <setting id="videos" type="bool" label="30209" default="true"/>
         <setting id="images" type="bool" label="30210" default="false"/>
+        <setting id="minsize" type="text" label="30211" default=""/>
     </category>
 </settings>
