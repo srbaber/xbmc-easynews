@@ -82,19 +82,19 @@ class EasynewsSearchHandler():
     def search(self, action):
         return getrequest.get(self, self.build_url(), self.build_params(action))
 
-    def findNth(self, str, val, occurance):
+    def find_nth(self, str, val, occurrence):
         start = str.find(val)
-        while start >= 0 and occurance > 1:
+        while start >= 0 and occurrence > 1:
             start = str.find(val, start+len(val))
-            occurance -= 1
+            occurrence -= 1
         return start
 
     def build_thumbnail_url(self, url):
-        sixth_slash = self.findNth(url, "/", 6)
+        sixth_slash = self.find_nth(url, "/", 6)
         if sixth_slash == -1:
             return None
 
-        seventh_slash = self.findNth(url, "/", 7)
+        seventh_slash = self.find_nth(url, "/", 7)
         if seventh_slash == -1:
             return None
 
