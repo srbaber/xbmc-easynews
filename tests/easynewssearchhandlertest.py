@@ -4,6 +4,31 @@ from easynewssearchhandler import EasynewsSearchHandler
 handler = EasynewsSearchHandler()
 
 class EasynewsSearchHandlerTestCase(unittest.TestCase):
+
+    def test_no_extension_url(self):
+        url = "https://members.easynews.com/dl/iad/447/3a82a335fd40e8ebee0dbdecc63ef04607951827cae1a/UEL_2022_2023_Final_Sevilla_vs_Roma_2160p_FEED_HDTV_MP2_H_265_HBO?sid=df99baf8e98eb8bf60c0f5b6b615d003f6d69a11:6&sig=MTY4Njc5NjA5Mi08YXV0b3Jhci1mNDU5ZTE1N2IzNTE0NTZkOTBkMmFjZDAxN2I3ODYyNUBuZ1Bvc3QtNzhmNzNjNmI+"
+        desired = "https://th.easynews.com/thumbnails-3a8/pr-3a82a335fd40e8ebee0dbdecc63ef04607951827c.jpg/th-UEL_2022_2023_Final_Sevilla_vs_Roma_2160p_FEED_HDTV_MP2_H_265_HBO.jpg"
+        actual = handler.build_thumbnail_url(url)
+        self.assertEqual(desired, actual)
+
+    def test_lots_of_dots_url(self):
+        url = "https://members.easynews.com/dl/iad/447/3a82a335fd40e8ebee0dbdecc63ef04607951827cae1a.mkv/UEL.2022.2023.Final.Sevilla.vs.Roma.2160p.FEED.HDTV.MP2.H.265-HBO.mkv?sid=df99baf8e98eb8bf60c0f5b6b615d003f6d69a11:6&sig=MTY4Njc5NjA5Mi08YXV0b3Jhci1mNDU5ZTE1N2IzNTE0NTZkOTBkMmFjZDAxN2I3ODYyNUBuZ1Bvc3QtNzhmNzNjNmI+"
+        desired = "https://th.easynews.com/thumbnails-3a8/pr-3a82a335fd40e8ebee0dbdecc63ef04607951827c.jpg/th-UEL.2022.2023.Final.Sevilla.vs.Roma.2160p.FEED.HDTV.MP2.H.265-HBO.jpg"
+        actual = handler.build_thumbnail_url(url)
+        self.assertEqual(desired, actual)
+
+    def test_auto_download_url(self):
+        url = "https://members.easynews.com/dl/auto/443/2790b226e1cedd7b47924e4587050f9809779f17c77f4.avi/Teen%20Titans%20-%203x11%20-%20%2337%20-%20Bunny%20Raven%20or%20How%20To%20Make%20a%20TitanAnimal%20Disappear.avi"
+        desired = "https://th.easynews.com/thumbnails-279/pr-2790b226e1cedd7b47924e4587050f9809779f17c.jpg/th-Teen%20Titans%20-%203x11%20-%20%2337%20-%20Bunny%20Raven%20or%20How%20To%20Make%20a%20TitanAnimal%20Disappear.jpg"
+        actual = handler.build_thumbnail_url(url)
+        self.assertEqual(desired, actual)
+
+    def test_iad_download_url(self):
+        url = "https://members.easynews.com/dl/iad/447/d130c8aca87927f1019e0d2b7d83eb8f0e0235a314fcc.mkv/b75bd85864bd5c16408c8064976eb2017023661f5525ac8f7fbb1bd1a7fe0c96.mkv?sid=492c2937286ee9b64e41d734c367a1df45026cba:98&sig=MTY5MTc1MDE4MS08WHVHY0lqVG9PYkF3SmtMeFp3UWpRbE53LTE2OTE3MTU1MTUzMDRAUFJpVkFURT4="
+        desired = "https://th.easynews.com/thumbnails-d13/pr-d130c8aca87927f1019e0d2b7d83eb8f0e0235a31.jpg/th-b75bd85864bd5c16408c8064976eb2017023661f5525ac8f7fbb1bd1a7fe0c96.jpg"
+        actual = handler.build_thumbnail_url(url)
+        self.assertEqual(desired, actual)
+
     def test_its_all_crap(self):
         desired = "e1f654e1433d40249b09a70460057c38.mkv 97.31 GB"
         actual = handler.cleanup_title("e1f654e1433d40249b09a70460057c38 [251/263] \"e1f654e1433d40249b09a70460057c38.part250.rar\" yEnc (1/103) (e1f654e1433d40249b09a70460057c38.mkv AutoUnRAR) 97.31 GB")

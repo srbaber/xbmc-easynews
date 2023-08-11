@@ -82,26 +82,40 @@ class EasynewsSearchHandler():
     def search(self, action):
         return getrequest.get(self, self.build_url(), self.build_params(action))
 
+    def find_nth(self, str, val, occurrence):
+        start = str.find(val)
+        while start >= 0 and occurrence > 1:
+            start = str.find(val, start+len(val))
+            occurrence -= 1
+        return start
+
     def build_thumbnail_url(self, url):
-        if len(url) <= 41:
+        sixth_slash = self.find_nth(url, "/", 6)
+        if sixth_slash == -1:
             return None
 
-        firstdot = url.find('.', 41)
-        if firstdot == -1:
+        seventh_slash = self.find_nth(url, "/", 7)
+        if seventh_slash == -1:
             return None
-        nextslash = url.find('/', firstdot)
-        if nextslash == -1:
-            return None
-        seconddot = url.find('.', nextslash)
-        if seconddot == -1:
-            return None
+
+        html_parms = url.find("?", seventh_slash)
+        if html_parms == -1:
+            html_parms = len(url)
+
+        extension_dot = url.rfind('.', 0, seventh_slash)
+        if extension_dot == -1 or extension_dot < sixth_slash:
+            extension_dot = seventh_slash
+
+        thumb_dot = url.rfind('.', 0, html_parms)
+        if thumb_dot == -1 or thumb_dot < seventh_slash:
+            thumb_dot = html_parms
 
         thumb_url = 'https://th.easynews.com/thumbnails-'
-        thumb_url += url[41: 44]
+        thumb_url += url[sixth_slash + 1: sixth_slash + 4]
         thumb_url += '/pr-'
-        thumb_url += url[41: firstdot - 4]
+        thumb_url += url[sixth_slash + 1: extension_dot - 4]
         thumb_url += '.jpg/th-'
-        thumb_url += url[nextslash + 1: seconddot]
+        thumb_url += url[seventh_slash + 1: thumb_dot]
         thumb_url += '.jpg'
 
         return thumb_url
