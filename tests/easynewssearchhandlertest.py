@@ -5,6 +5,12 @@ handler = EasynewsSearchHandler()
 
 class EasynewsSearchHandlerTestCase(unittest.TestCase):
 
+    def test_no_extension_url(self):
+        url = "https://members.easynews.com/dl/iad/447/3a82a335fd40e8ebee0dbdecc63ef04607951827cae1a/UEL_2022_2023_Final_Sevilla_vs_Roma_2160p_FEED_HDTV_MP2_H_265_HBO?sid=df99baf8e98eb8bf60c0f5b6b615d003f6d69a11:6&sig=MTY4Njc5NjA5Mi08YXV0b3Jhci1mNDU5ZTE1N2IzNTE0NTZkOTBkMmFjZDAxN2I3ODYyNUBuZ1Bvc3QtNzhmNzNjNmI+"
+        desired = "https://th.easynews.com/thumbnails-3a8/pr-3a82a335fd40e8ebee0dbdecc63ef04607951827c.jpg/th-UEL_2022_2023_Final_Sevilla_vs_Roma_2160p_FEED_HDTV_MP2_H_265_HBO.jpg"
+        actual = handler.build_thumbnail_url(url)
+        self.assertEqual(desired, actual)
+
     def test_lots_of_dots_url(self):
         url = "https://members.easynews.com/dl/iad/447/3a82a335fd40e8ebee0dbdecc63ef04607951827cae1a.mkv/UEL.2022.2023.Final.Sevilla.vs.Roma.2160p.FEED.HDTV.MP2.H.265-HBO.mkv?sid=df99baf8e98eb8bf60c0f5b6b615d003f6d69a11:6&sig=MTY4Njc5NjA5Mi08YXV0b3Jhci1mNDU5ZTE1N2IzNTE0NTZkOTBkMmFjZDAxN2I3ODYyNUBuZ1Bvc3QtNzhmNzNjNmI+"
         desired = "https://th.easynews.com/thumbnails-3a8/pr-3a82a335fd40e8ebee0dbdecc63ef04607951827c.jpg/th-UEL.2022.2023.Final.Sevilla.vs.Roma.2160p.FEED.HDTV.MP2.H.265-HBO.jpg"

@@ -103,12 +103,12 @@ class EasynewsSearchHandler():
             html_parms = len(url)
 
         extension_dot = url.rfind('.', 0, seventh_slash)
-        if extension_dot == -1:
-            return None
+        if extension_dot == -1 or extension_dot < sixth_slash:
+            extension_dot = seventh_slash
 
         thumb_dot = url.rfind('.', 0, html_parms)
-        if thumb_dot == -1:
-            return None
+        if thumb_dot == -1 or thumb_dot < seventh_slash:
+            thumb_dot = html_parms
 
         thumb_url = 'https://th.easynews.com/thumbnails-'
         thumb_url += url[sixth_slash + 1: sixth_slash + 4]
