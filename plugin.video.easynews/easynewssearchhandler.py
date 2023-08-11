@@ -90,29 +90,34 @@ class EasynewsSearchHandler():
         return start
 
     def build_thumbnail_url(self, url):
-        sixthslash = self.findNth(url, "/", 6)
-        if sixthslash == -1:
+        sixth_slash = self.findNth(url, "/", 6)
+        if sixth_slash == -1:
             return None
 
-        firstdot = url.find('.', sixthslash)
-        if firstdot == -1:
+        seventh_slash = self.findNth(url, "/", 7)
+        if seventh_slash == -1:
             return None
-        nextslash = url.find('/', firstdot)
-        if nextslash == -1:
+
+        html_parms = url.find("?", seventh_slash)
+        if html_parms == -1:
+            html_parms = len(url)
+
+        extension_dot = url.rfind('.', 0, seventh_slash)
+        if extension_dot == -1:
             return None
-        seconddot = url.find('.', nextslash)
-        if seconddot == -1:
+
+        thumb_dot = url.rfind('.', 0, html_parms)
+        if thumb_dot == -1:
             return None
 
         thumb_url = 'https://th.easynews.com/thumbnails-'
-        thumb_url += url[sixthslash+1: sixthslash+4]
+        thumb_url += url[sixth_slash + 1: sixth_slash + 4]
         thumb_url += '/pr-'
-        thumb_url += url[sixthslash+1: firstdot - 4]
+        thumb_url += url[sixth_slash + 1: extension_dot - 4]
         thumb_url += '.jpg/th-'
-        thumb_url += url[nextslash + 1: seconddot]
+        thumb_url += url[seventh_slash + 1: thumb_dot]
         thumb_url += '.jpg'
 
-        xbmc.log('%s.build_thumbnail_url Source: %s Thumbnail: %s' % (self.name, url, thumb_url), 1)
         return thumb_url
 
     def split_index(self, title, open_char, close_char):
