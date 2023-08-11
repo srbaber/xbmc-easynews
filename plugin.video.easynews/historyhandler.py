@@ -8,26 +8,25 @@ from easynewshistoryhandler import EasynewsHistoryHandler
 
 class HistoryHandler():
     name = 'HistoryHandler'
-    showHistory = 'ShowHistory'
+    show_history_operation = 'ShowHistory'
 
     def contextmenu(self, activity):
-        remove = action.of(EasynewsCleanupHandler.name, EasynewsCleanupHandler.removeHistory,
-                           EasynewsCleanupHandler.removeHistory, activity.thumbnail, activity.state)
-        cm = [(EasynewsCleanupHandler.removeHistory, 'RunPlugin(%s)' % remove.url())]
+        remove = action.of(EasynewsCleanupHandler.name, EasynewsCleanupHandler.remove_operation,
+                           EasynewsCleanupHandler.remove_history, activity.thumbnail, activity.state)
+        cm = [(EasynewsCleanupHandler.remove_history, 'RunPlugin(%s)' % remove.url())]
 
         item = activity.playableitem()
         item.addContextMenuItems(cm)
         return item
 
     def add_history(self, addonhandle, searchPhrase):
-        historyAction = action.of(EasynewsHistoryHandler.name, EasynewsHistoryHandler.searchKeyword, searchPhrase,
+        historyAction = action.of(EasynewsHistoryHandler.name, EasynewsHistoryHandler.search_operation, searchPhrase,
                                   state={'searchPhrase': searchPhrase})
         contextmenu = self.contextmenu(historyAction)
         xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), contextmenu, isFolder=True)
 
     def add_clear_history(self, addonhandle):
-        handler = EasynewsCleanupHandler()
-        historyAction = action.of(handler.name, handler.clearHistory, 'Clear History')
+        historyAction = action.of(EasynewsCleanupHandler.name, EasynewsCleanupHandler.clear_operation, EasynewsCleanupHandler.clear_history)
         xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.directoryitem(), isFolder=False)
 
     def show_history(self, addonhandle):
@@ -43,7 +42,7 @@ class HistoryHandler():
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
 
-        if activity.operation == self.showHistory:
+        if activity.operation == self.show_history_operation:
             self.show_history(addonhandle)
 
 

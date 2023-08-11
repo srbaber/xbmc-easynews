@@ -8,7 +8,7 @@ import xbmc
 #
 class EasynewsGroupHandler(easynewssearchhandler.EasynewsSearchHandler):
     name = 'EasynewsGroupHandler'
-    searchGroup = 'SearchGroup'
+    search_group_operation = 'SearchGroup'
     group = ''
 
     def build_params(self, action):

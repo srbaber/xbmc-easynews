@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: Easynews.com
 # Addon id: plugin.video.easynews
-# Addon version: 20.0.1
+# Addon version: 20.0.2
 # Addon Provider: xbmc-easynews
 msgid ""
 msgstr ""
@@ -25,7 +25,7 @@ msgctxt "Addon Description"
 msgid "Browse collections (user designed categories) as well as the most popular videos today/week/month as decided by the users of the site"
 msgstr ""
 
-msgctxt "#30100"
+msgctxt "#30200"
 msgid "Account"
 msgstr "Konto"
 
@@ -56,3 +56,51 @@ msgstr "Download ordner"
 msgctxt "#30208"
 msgid "History size"
 msgstr "Geschichte größe"
+
+msgctxt "#30209"
+msgid "Filter on videos"
+msgstr "Filter op videos"
+
+msgctxt "#30210"
+msgid "Filter on images"
+msgstr "Filter op afbeeldingen"
+
+msgctxt "#30300"
+msgid "Download"
+msgstr "Downloaden"
+
+msgctxt "#30301"
+msgid "Downloading"
+msgstr "downloaden"
+
+msgctxt "#30302"
+msgid "Downloading Complete"
+msgstr "Downloaden voltooid"
+
+msgctxt "#30303"
+msgid "Downloading Failed"
+msgstr "Downloaden mislukt"
+
+msgctxt "#30310"
+msgid "Search Videos"
+msgstr "Zoek video"
+
+msgctxt "#30320"
+msgid "Remove From Queue"
+msgstr "Verwijderen uit wachtrij"
+
+msgctxt "#30330"
+msgid "Delete Download"
+msgstr "Downloaden verwijderen"
+
+msgctxt "#30331"
+msgid "Delete All Downloads"
+msgstr "Verwijder alle downloads"
+
+msgctxt "#30340"
+msgid "Remove From History"
+msgstr "Verwijderen uit geschiedenis"
+
+msgctxt "#30341"
+msgid "Clear All History"
+msgstr "Wis alle geschiedenis"

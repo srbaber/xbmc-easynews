@@ -1,6 +1,14 @@
 import constants
 import xbmcaddon
 
+def get_localized_string(id, withDefault=None):
+    usrsettings = xbmcaddon.Addon(id=constants.ADDON_NAME)
+    value = usrsettings.getLocalizedString(id)
+    if value:
+        return value.strip()
+    else:
+        return withDefault
+
 
 def get_property(name, withDefault=None):
     usrsettings = xbmcaddon.Addon(id=constants.ADDON_NAME)

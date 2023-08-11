@@ -32,25 +32,25 @@ class MainMenuHandler():
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s' % (self.name, addonhandle), 1)
 
-        activity = action.of(EasynewsSearchHandler.name, EasynewsSearchHandler.searchByDate, self.searchByDate)
+        activity = action.of(EasynewsSearchHandler.name, EasynewsSearchHandler.search_by_date_operation, self.searchByDate)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
-        activity = action.of(EasynewsSizeHandler.name, EasynewsSizeHandler.searchBySize, self.searchBySize)
+        activity = action.of(EasynewsSizeHandler.name, EasynewsSizeHandler.search_by_size_operation, self.searchBySize)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
-        activity = action.of(EasynewsGroupsHandler.name, EasynewsGroupsHandler.searchGroups, self.searchGroup)
+        activity = action.of(EasynewsGroupsHandler.name, EasynewsGroupsHandler.search_groups_operation, self.searchGroup)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
-        activity = action.of(EasynewsKeywordHandler.name, EasynewsKeywordHandler.searchKeyword, self.searchKeyword)
+        activity = action.of(EasynewsKeywordHandler.name, EasynewsKeywordHandler.search_operation, self.searchKeyword)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
-        activity = action.of(HistoryHandler.name, HistoryHandler.showHistory, self.searchHistory)
+        activity = action.of(HistoryHandler.name, HistoryHandler.show_history_operation, self.searchHistory)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
         activity = action.of(FileHandler.name, FileHandler.playback, self.downloads)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
-        activity = action.of(EasynewsZipManagerHandler.name, EasynewsZipManagerHandler.listQueues, self.zipmanager)
+        activity = action.of(EasynewsZipManagerHandler.name, EasynewsZipManagerHandler.list_queues_operation, self.zipmanager)
         xbmcplugin.addDirectoryItem(addonhandle, activity.url(), activity.directoryitem(), isFolder=True)
 
         xbmcplugin.endOfDirectory(addonhandle)

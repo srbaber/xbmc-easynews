@@ -14,7 +14,11 @@ progressDialog = xbmcgui.DialogProgress()
 #
 class DownloadHandler():
     name = 'DownloadHandler'
-    download = 'Download'
+    download_operation = 'Download'
+    download_file = properties.get_localized_string(30300, 'Download')
+    downloading = properties.get_localized_string(30301,'Downloading Easynews')
+    download_complete = properties.get_localized_string(30302,'Downloading Complete')
+    download_failed = properties.get_localized_string(30303, 'Download Failed')
 
     def __init__(self):
         pass
@@ -30,14 +34,14 @@ class DownloadHandler():
         datapath = properties.get_property('download', constants.DATA_PATH)
         fullpath = os.path.join(datapath, filename)
 
-        progressDialog.create('Easynews Downloading')
+        progressDialog.create(self.downloading)
         getrequest.download(self, url, fullpath, download_report_hook)
         progressDialog.close()
 
         if fullpath is not None and os.path.isfile(fullpath):
-            title = 'Download Complete'
+            title = self.download_complete
         else:
-            title = 'Download Failed'
+            title = self.download_failed
 
         xbmcgui.Dialog().ok(title, filename)
 

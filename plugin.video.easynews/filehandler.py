@@ -13,16 +13,18 @@ import xbmcplugin
 class FileHandler():
     name = 'FileHandler'
     playback = 'Video'
-    delete = 'Delete'
-    clear = 'Clear'
+    delete_operation = 'Delete'
+    clear_operation = 'Clear'
+    deletefile = properties.get_localized_string(30330, 'Delete Download')
+    clearall = properties.get_localized_string(30331, 'Clear Downloads')
 
     def add_clear_downloads(self, addonhandle):
-        historyAction = action.of(self.name, self.clear, 'Delete Downloads')
+        historyAction = action.of(self.name, self.clear_operation, self.clearall)
         xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.directoryitem(), isFolder=False)
 
     def contextmenu(self, activity):
-        delete = action.of(self.name, self.delete, self.delete, activity.thumbnail, activity.state)
-        cm = [(self.delete, 'RunPlugin(%s)' % delete.url())]
+        delete = action.of(self.name, self.delete_operation, self.deletefile, activity.thumbnail, activity.state)
+        cm = [(self.deletefile, 'RunPlugin(%s)' % delete.url())]
 
         item = activity.playableitem()
         item.addContextMenuItems(cm)
@@ -70,7 +72,7 @@ class FileHandler():
 
         if activity.operation == self.playback:
             self.list_downloads(addonhandle)
-        elif activity.operation == self.delete:
+        elif activity.operation == self.delete_operation:
             self.delete_download(addonhandle, activity.state['url'])
-        elif activity.operation == self.clear:
+        elif activity.operation == self.clear_operation:
             self.delete_downloads(addonhandle)

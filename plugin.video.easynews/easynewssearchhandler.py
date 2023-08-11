@@ -24,9 +24,11 @@ DEFAULT_PERPAGE = 100
 #
 class EasynewsSearchHandler():
     name = 'EasynewsSearchHandler'
-    searchByDate = 'SearchAndOrderByDate'
+    search_by_date_operation = 'SearchAndOrderByDate'
     playbackOperation = 'Video'
     nextPage = 'Next Page'
+
+    video_extensions = 'AVI|MPEG|MPG|WMV|ASF|FLV|MKV|MKA|QT4|MP4|M4A|AAC|NUT|OGG|OGM|RAM|RM|RV|RA|RMVB|3GP|VIV|PVA|NUV|NSV|NSA|FLI|FLC|DVR|WTV'
 
     pagenumber = '1'
 
@@ -41,11 +43,14 @@ class EasynewsSearchHandler():
     def build_params(self, action):
         params = {}
 
-        extensions = properties.get_property('extensions', '')
+        extensions = properties.get_property('extensions', self.video_extensions)
         groups = properties.get_property('groups', '')
         perpage = properties.get_property('perpage', DEFAULT_PERPAGE)
+        filter_video = properties.get_property('videos', 'true') == 'true'
+        filter_image = properties.get_property('images', 'false') == 'true'
 
         params['ns'] = groups
+        
         params['fex'] = extensions
 
         params['pby'] = perpage
@@ -57,21 +62,28 @@ class EasynewsSearchHandler():
         params['s2d'] = ASCENDING
         params['s3'] = SORT_BY_SIZE
         params['s3d'] = DECENDING
-
         params['sS'] = '5'
-        params['fty[]'] = 'VIDEO'
+
+        params['fty[]'] = []
+        if filter_video:
+            params['fty[]'].append("VIDEO")
+
+        if filter_image:
+            params['fty[]'].append("IMAGES")
+
         params['spamf'] = '1'
         params['u'] = '1'
         params['st'] = 'adv'
         params['safeO'] = '0'
         params['sb'] = '1'
+
         return params
 
     def search(self, action):
         return getrequest.get(self, self.build_url(), self.build_params(action))
 
     def build_thumbnail_url(self, url):
-        if len(url) <= 40:
+        if len(url) <= 41:
             return None
 
         firstdot = url.find('.', 41)
@@ -170,9 +182,9 @@ class EasynewsSearchHandler():
         xbmcplugin.addDirectoryItem(addonhandle, pageAction.url(), pageAction.directoryitem(), isFolder=True)
 
     def contextmenu(self, activity):
-        download = action.of(DownloadHandler.name, DownloadHandler.download, DownloadHandler.download,
+        download = action.of(DownloadHandler.name, DownloadHandler.download_operation, DownloadHandler.download_file,
                              activity.thumbnail, activity.state)
-        cm = [(DownloadHandler.download, 'RunPlugin(%s)' % download.url())]
+        cm = [(DownloadHandler.download_file, 'RunPlugin(%s)' % download.url())]
 
         item = activity.playableitem()
         item.addContextMenuItems(cm)

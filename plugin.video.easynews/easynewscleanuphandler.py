@@ -11,8 +11,10 @@ LAST_KEYWORDS = 'lastKeywords'
 #
 class EasynewsCleanupHandler():
     name = 'EasynewsCleanupHandler'
-    removeHistory = 'Remove'
-    clearHistory = 'ClearHistory'
+    remove_operation = 'Remove'
+    clear_operation = 'Clear'
+    remove_history = properties.get_localized_string(30340, 'Remove')
+    clear_history = properties.get_localized_string(30341, 'Clear History')
 
     def __init__(self):
         pass
@@ -20,10 +22,10 @@ class EasynewsCleanupHandler():
     def apply(self, addonhandle, activity):
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
-        if activity.operation == self.removeHistory:
+        if activity.operation == self.remove_operation:
             remove_history(activity.state['searchPhrase'])
             xbmc.executebuiltin('Container.Refresh')
-        elif activity.operation == self.clearHistory:
+        elif activity.operation == self.clear_operation:
             clear_history()
             xbmc.executebuiltin('Container.Refresh')
 

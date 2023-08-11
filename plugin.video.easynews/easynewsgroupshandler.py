@@ -16,10 +16,7 @@ MAIN_URL = 'https://members.easynews.com/index.html'
 #
 class EasynewsGroupsHandler(easynewssearchhandler.EasynewsSearchHandler):
     name = 'EasynewsGroupsHandler'
-    searchGroups = 'SearchGroups'
-
-    def __init__(self):
-        pass
+    search_groups_operation = 'SearchGroups'
 
     def build_params(self, action):
         params = super().build_params(action)
@@ -34,9 +31,9 @@ class EasynewsGroupsHandler(easynewssearchhandler.EasynewsSearchHandler):
         return MAIN_URL
 
     def contextmenu(self, activity):
-        download = action.of(DownloadHandler.name, DownloadHandler.download, DownloadHandler.download,
+        download = action.of(DownloadHandler.name, DownloadHandler.download_operation, DownloadHandler.download_file,
                              activity.thumbnail, activity.state)
-        cm = [(DownloadHandler.download, 'RunPlugin(%s)' % download.url())]
+        cm = [(DownloadHandler.download_file, 'RunPlugin(%s)' % download.url())]
 
         item = activity.playableitem()
         item.addContextMenuItems(cm)
@@ -44,7 +41,7 @@ class EasynewsGroupsHandler(easynewssearchhandler.EasynewsSearchHandler):
 
     def add_group(self, addonhandle, group, count):
         title = '%s (%s posts)' % (group, count)
-        groupAction = action.of(EasynewsGroupHandler.name, EasynewsGroupHandler.searchGroup, title,
+        groupAction = action.of(EasynewsGroupHandler.name, EasynewsGroupHandler.search_group_operation, title,
                                 state={'group': group})
         contextmenu = self.contextmenu(groupAction)
         xbmcplugin.addDirectoryItem(addonhandle, groupAction.url(), contextmenu, isFolder=True)
@@ -52,9 +49,12 @@ class EasynewsGroupsHandler(easynewssearchhandler.EasynewsSearchHandler):
     def parse(self, addonhandle, data):
         xbmc.log("Parse Data : %s" % data, 1)
         results = re.compile('<table class="grouplist"(.+?)</table>',
-                             re.DOTALL).findall(data)[0]
+                             re.DOTALL).findall(data)
+        if len(results) == 0:
+            return
+
         items = re.compile('<tr class=(.+?)</tr>',
-                           re.DOTALL).findall(results)
+                           re.DOTALL).findall(results[0])
 
         if items:
             for item in items:
