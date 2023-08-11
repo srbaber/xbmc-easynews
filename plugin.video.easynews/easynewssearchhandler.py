@@ -82,11 +82,19 @@ class EasynewsSearchHandler():
     def search(self, action):
         return getrequest.get(self, self.build_url(), self.build_params(action))
 
+    def findNth(self, str, val, occurance):
+        start = str.find(val)
+        while start >= 0 and occurance > 1:
+            start = str.find(val, start+len(val))
+            occurance -= 1
+        return start
+
     def build_thumbnail_url(self, url):
-        if len(url) <= 41:
+        sixthslash = self.findNth(url, "/", 6)
+        if sixthslash == -1:
             return None
 
-        firstdot = url.find('.', 41)
+        firstdot = url.find('.', sixthslash)
         if firstdot == -1:
             return None
         nextslash = url.find('/', firstdot)
@@ -97,13 +105,14 @@ class EasynewsSearchHandler():
             return None
 
         thumb_url = 'https://th.easynews.com/thumbnails-'
-        thumb_url += url[41: 44]
+        thumb_url += url[sixthslash+1: sixthslash+4]
         thumb_url += '/pr-'
-        thumb_url += url[41: firstdot - 4]
+        thumb_url += url[sixthslash+1: firstdot - 4]
         thumb_url += '.jpg/th-'
         thumb_url += url[nextslash + 1: seconddot]
         thumb_url += '.jpg'
 
+        xbmc.log('%s.build_thumbnail_url Source: %s Thumbnail: %s' % (self.name, url, thumb_url), 1)
         return thumb_url
 
     def split_index(self, title, open_char, close_char):
