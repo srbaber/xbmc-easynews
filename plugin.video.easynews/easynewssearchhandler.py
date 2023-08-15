@@ -30,8 +30,6 @@ class EasynewsSearchHandler():
 
     video_extensions = 'AVI|MPEG|MPG|WMV|ASF|FLV|MKV|MKA|QT4|MP4|M4A|AAC|NUT|OGG|OGM|RAM|RM|RV|RA|RMVB|3GP|VIV|PVA|NUV|NSV|NSA|FLI|FLC|DVR|WTV'
 
-    pagenumber = '1'
-
     num_significant_chars = 10
 
     def __init__(self):
@@ -55,7 +53,7 @@ class EasynewsSearchHandler():
         params['fex'] = extensions
 
         params['pby'] = perpage
-        params['pno'] = self.pagenumber
+        params['pno'] = self.pagenumber(action)
 
         params['s1'] = SORT_BY_DATE
         params['s1d'] = DECENDING
@@ -193,13 +191,17 @@ class EasynewsSearchHandler():
         # xbmc.log("Clean Title > : %s\n" % title, 1)
         return title
 
-    def paginate(self, activity):
+    def pagenumber(self, activity):
+        pagenumber=1
         if 'pagenumber' in activity.state:
-            self.pagenumber = int(activity.state['pagenumber']) + 1
+            pagenumber = int(activity.state['pagenumber'])
+        return pagenumber
+
+    def paginate(self, activity):
+            return self.pagenumber(activity) + 1
 
     def add_next_page(self, addonhandle, activity):
-        activity.state['pagenumber'] = int(self.pagenumber) + 1
-        pageAction = action.of(activity.handler, activity.operation, self.nextPage, state=activity.state)
+        pageAction = action.of(activity.handler, activity.operation, self.nextPage, state={'pagenumber': self.paginate(activity)})
         xbmcplugin.addDirectoryItem(addonhandle, pageAction.url(), pageAction.directoryitem(), isFolder=True)
 
     def contextmenu(self, activity):
@@ -236,8 +238,6 @@ class EasynewsSearchHandler():
     def apply(self, addonhandle, activity):
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
-
-        self.paginate(activity)
 
         response = self.search(activity)
         self.parse(addonhandle, response)
