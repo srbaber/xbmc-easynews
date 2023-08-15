@@ -25,7 +25,7 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
     deletefile = properties.get_localized_string(30320, 'Remove From Queue')
     clearall = properties.get_localized_string(30321, 'Clear Queue')
 
-    def build_url(self):
+    def build_url(self, action):
         return MAIN_URL
 
     def build_params(self, action):
@@ -101,13 +101,13 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
             self.add_zip_queue(addonhandle, title, queuename)
 
     def search(self, action):
-        return getrequest.get(self, self.build_url(), self.build_params(action))
+        return getrequest.get(self, self.build_url(action), self.build_params(action))
 
     def clear_queue(self, action):
         formdata = {}
         formdata['clearzip'] = action.state['queue']
 
-        getrequest.get(self, self.build_url(), formdata)
+        getrequest.get(self, self.build_url(action), formdata)
 
     def delete(self, action):
         formdata = {}
@@ -117,7 +117,7 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
 
         xbmc.log('%s.delete %s' % (self.name, formdata), 1)
 
-        getrequest.post(self, self.build_url(), formdata)
+        getrequest.post(self, self.build_url(action), formdata)
 
     def apply(self, addonhandle, activity):
         if constants.APPLY_LOG:

@@ -27,7 +27,7 @@ class EasynewsGroupsHandler(easynewssearchhandler.EasynewsSearchHandler):
 
         return params
 
-    def build_url(self):
+    def build_url(self, action):
         return MAIN_URL
 
     def contextmenu(self, activity):

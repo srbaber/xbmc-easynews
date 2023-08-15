@@ -37,7 +37,7 @@ class EasynewsSearchHandler():
     def __init__(self):
         pass
 
-    def build_url(self):
+    def build_url(self, action):
         return MAIN_URL
 
     def build_params(self, action):
@@ -87,7 +87,7 @@ class EasynewsSearchHandler():
         return params
 
     def search(self, action):
-        return getrequest.get(self, self.build_url(), self.build_params(action))
+        return getrequest.get(self, self.build_url(action), self.build_params(action))
 
     def find_nth(self, str, val, occurrence):
         start = str.find(val)
