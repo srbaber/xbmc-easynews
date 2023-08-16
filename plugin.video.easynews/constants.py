@@ -13,4 +13,4 @@ DATA_PATH = xbmcvfs.translatePath('special://profile/addon_data/' + ADDON_NAME)
 
 LOGO_IMAGE = os.path.join(ADDON_PATH, 'resources', 'images', 'provocative_logo.png')
 
-APPLY_LOG = True
+APPLY_LOG = False
