@@ -29,6 +29,7 @@ class EasynewsSearchHandler():
     nextPage = 'Next Page'
 
     video_extensions = 'AVI|MPEG|MPG|WMV|ASF|FLV|MKV|MKA|QT4|MP4|M4A|AAC|NUT|OGG|OGM|RAM|RM|RV|RA|RMVB|3GP|VIV|PVA|NUV|NSV|NSA|FLI|FLC|DVR|WTV'
+    image_extensions = 'bmp|gif|jp[eg]|png|tga'
 
     num_significant_chars = 10
 
@@ -68,7 +69,7 @@ class EasynewsSearchHandler():
             params['fty[]'].append("VIDEO")
 
         if filter_image:
-            params['fty[]'].append("IMAGES")
+            params['fty[]'].append("IMAGE")
 
         if minSize != '':
             params['b1'] = minSize + 'mb'
@@ -82,6 +83,7 @@ class EasynewsSearchHandler():
         params['safeO'] = '0'
         params['sb'] = '1'
 
+        # xbmc.log("%s.build_params : %s" % (self.name, params), 1)
         return params
 
     def search(self, action):
@@ -111,18 +113,27 @@ class EasynewsSearchHandler():
         if extension_dot == -1 or extension_dot < sixth_slash:
             extension_dot = seventh_slash
 
+        extension = url[extension_dot + 1: extension_dot + 4]
+        is_image = len(re.compile(self.image_extensions, re.DOTALL).findall(extension)) > 0;
+
         thumb_dot = url.rfind('.', 0, html_parms)
         if thumb_dot == -1 or thumb_dot < seventh_slash:
             thumb_dot = html_parms
 
         thumb_url = 'https://th.easynews.com/thumbnails-'
         thumb_url += url[sixth_slash + 1: sixth_slash + 4]
-        thumb_url += '/pr-'
+
+        if is_image:
+            thumb_url += '/sm-'
+        else:
+            thumb_url += '/pr-'
+
         thumb_url += url[sixth_slash + 1: extension_dot - 4]
         thumb_url += '.jpg/th-'
         thumb_url += url[seventh_slash + 1: thumb_dot]
         thumb_url += '.jpg'
 
+        # xbmc.log("%s.build_thumbnail_url : %s -> %s" % (self.name, url, thumb_url), 1)
         return thumb_url
 
     def split_index(self, title, open_char, close_char):

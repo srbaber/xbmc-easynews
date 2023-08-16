@@ -3,6 +3,7 @@ import constants
 import xbmc
 import xbmcplugin
 from easynewscleanuphandler import get_search, set_search, maxHistory, EasynewsCleanupHandler
+from easynewssearchhandler import EasynewsSearchHandler
 from easynewshistoryhandler import EasynewsHistoryHandler
 
 
@@ -20,7 +21,7 @@ class HistoryHandler():
         return item
 
     def add_history(self, addonhandle, searchPhrase):
-        historyAction = action.of(EasynewsHistoryHandler.name, EasynewsHistoryHandler.search_operation, searchPhrase,
+        historyAction = action.of(EasynewsHistoryHandler.name, EasynewsSearchHandler.search_by_date_operation, searchPhrase,
                                   state={'searchPhrase': searchPhrase})
         contextmenu = self.contextmenu(historyAction)
         xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), contextmenu, isFolder=True)
