@@ -39,14 +39,18 @@ class EasynewsSavedSearchHandler(EasynewsSearchHandler):
         return getrequest.get(self, SAVED_SEARCH_URL, {})
 
     def parse_saved_searches(self, addonhandle, data):
-        searches = re.compile('<input type="text" name="l[0-9]*" value="(.+?)".*>', re.DOTALL).findall(data)
-        urls = re.compile('2.0</a></td><td align="center"><a target="gSearch" href="(.+?)">Global5</a>', re.DOTALL).findall(data)
+        data = re.sub('</td>', '</td>\n', data)
+        searches = re.compile('<input type="text" name="l[0-9]*" value="(.+?)"', re.DOTALL).findall(data)
+        urls = re.compile('<a target="gSearch" href="(.+?)"', re.DOTALL).findall(data)
+
         if searches:
             for i in range(len(searches)):
                 search = searches[i]
-                url = urls[i]
+                url = urls[i*3+1]
                 if search is not None and len(url) > 2 and url is not None:
                     self.add_saved_search(addonhandle, search, url)
+            return len(searches)
+        return 0
 
     def show_saved_searches(self, addonhandle):
         response = self.find_saved_searches()
