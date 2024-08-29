@@ -243,12 +243,12 @@ class EasynewsSearchHandler():
         items = re.compile('<item>(.+?)</item>', re.DOTALL).findall(data)
         if items:
             for item in items:
-                title = re.compile('<title>(.+?)</title>', re.DOTALL).findall(item)
-                title = html.unescape(title[0])
-                title = self.cleanup_title(title)
-
                 gurl = re.compile('<link>(.+?)</link>', re.DOTALL).findall(item)
                 gurl = html.unescape(gurl[0])
+
+                title = re.compile('<title>(.+?)</title>', re.DOTALL).findall(item)
+                title = html.unescape(title[0])
+                title = self.cleanup_title(title, gurl)
 
                 thumbnail = self.build_thumbnail_url(gurl)
 
