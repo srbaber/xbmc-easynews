@@ -114,7 +114,7 @@ class EasynewsSearchHandler():
             extension_dot = seventh_slash
 
         extension = url[extension_dot + 1: extension_dot + 4]
-        is_image = len(re.compile(self.image_extensions, re.DOTALL).findall(extension)) > 0;
+        is_image = len(re.compile(self.image_extensions, re.DOTALL).findall(extension)) > 0
 
         thumb_dot = url.rfind('.', 0, html_parms)
         if thumb_dot == -1 or thumb_dot < seventh_slash:
@@ -153,20 +153,26 @@ class EasynewsSearchHandler():
     def normalize(self, title):
         return re.sub('[^\w]', '', title).lower()
 
-    def cleanup_title(self, title):
+    def cleanup_title(self, title, gurl=''):
         # xbmc.log("Clean Title < : %s" % title, 1)
 
         title = re.sub(' AutoUnRAR', '', title)
         title = re.sub('\.part[0-9]*\.rar', '', title)
         title = re.sub('y[eE]nc \([0-9]*/[0-9]*\) ', '', title)
         title = re.sub('\[[0-9]*/[0-9]*] ', '', title)
-
         org_title = title
+
+        filesize = re.search('[0-9.]+ .B$', title)
+        if filesize != None:
+            filesize = filesize[0]
+            title = title[0:len(title) - len(filesize) - 1]
+        else:
+            filesize = ''
 
         split_pos = self.split_index(title, '(', ')')
         if split_pos == -1:
             description = title
-            filename = ''
+            filename = DownloadHandler.extract_filename(DownloadHandler, gurl)
         else:
             description = title[0:split_pos - 1]
             description = re.sub('\w{15,}', '', description)
@@ -179,27 +185,30 @@ class EasynewsSearchHandler():
             quoted_text = re.sub('^(.*?)"', '', description)
             quoted_text = re.sub('".*$', '', quoted_text)
 
-        normalized_filename = re.sub('\.[^.]*$', '', filename)
-        normalized_filename = re.sub('\.[^.]*$', '', normalized_filename)
+        normalized_filename = re.sub('\.[^.]+$', '', filename)
         normalized_filename = self.normalize(normalized_filename)
         normalized_description = self.normalize(description)
 
         title = filename
-        if len(filename) > 0 and normalized_description.find(normalized_filename) == -1:
+
+        if normalized_description.find(normalized_filename) == -1:
             if len(quoted_text) > 10:
                 title += ' "' + quoted_text + '"'
             elif len(description) > 20:
                 title += ' (' + description + ')'
 
+        if len(filesize) > 0:
+            title += ' ' + filesize
+
         if len(title) < 20:
             title = org_title
 
-        # xbmc.log("    filename    : %s" % filename, 1)
-        # xbmc.log("    quoted text : %s" % quoted_text, 1)
-        # xbmc.log("    description : %s" % description, 1)
-        # xbmc.log("    normal desc : %s" % normalized_description, 1)
-        # xbmc.log("    normal file : %s" % normalized_filename, 1)
-        # xbmc.log("Clean Title > : %s\n" % title, 1)
+        #xbmc.log("    filename    : %s" % filename, 1)
+        #xbmc.log("    quoted text : %s" % quoted_text, 1)
+        #xbmc.log("    description : %s" % description, 1)
+        #xbmc.log("    normal desc : %s" % normalized_description, 1)
+        #xbmc.log("    normal file : %s" % normalized_filename, 1)
+        #xbmc.log("Clean Title > : %s\n" % title, 1)
         return title
 
     def pagenumber(self, activity):
