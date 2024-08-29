@@ -51,7 +51,7 @@ class EasynewsSearchHandlerTestCase(unittest.TestCase):
         self.assertEqual(desired, actual)
 
     def test_nothing_really_matches_midlength_quoted_text(self):
-        desired = "f7781073491242a7a22303521769f54f.mkv 53.34 GB \"12345678901.rar\""
+        desired = "f7781073491242a7a22303521769f54f.mkv \"12345678901.rar\" 53.34 GB"
         actual = handler.cleanup_title("0ko7fwYW7jBbEp_tXbqTlcygLxb[8/13] \"12345678901.rar\" yEnc (31/59) (f7781073491242a7a22303521769f54f.mkv AutoUnRAR) 53.34 GB")
         self.assertEqual(desired, actual)
 
@@ -81,7 +81,7 @@ class EasynewsSearchHandlerTestCase(unittest.TestCase):
         self.assertEqual(desired, actual)
 
     def test_short_crap_description(self):
-        desired = "Spiderhead.2022.MULTi.1080p.WEB.x264.mkv 2.45 GB \"F45920GW4KZ.11\""
+        desired = "Spiderhead.2022.MULTi.1080p.WEB.x264.mkv \"F45920GW4KZ.11\" 2.45 GB"
         actual = handler.cleanup_title("F45920GW4KZ - [11/43] - \"F45920GW4KZ.11\" yEnc (1/80) 57281393 (Spiderhead.2022.MULTi.1080p.WEB.x264.mkv AutoUnRAR) 2.45 GB")
         self.assertEqual(desired, actual)
 
@@ -96,7 +96,7 @@ class EasynewsSearchHandlerTestCase(unittest.TestCase):
         self.assertEqual(desired, actual)
 
     def test_quoted_text_no_matched_name(self):
-        desired = "ps-unc.bdx2-sample.mkv 10.45 MB \"Uncharted.2022.German.AC3D.5.1.BDRip.x264-PS\""
+        desired = "ps-unc.bdx2-sample.mkv \"Uncharted.2022.German.AC3D.5.1.BDRip.x264-PS\" 10.45 MB"
         actual = handler.cleanup_title("Uncharted.2022.German.AC3D.5.1.BDRip.x264-PS - [00/28] - \"Uncharted.2022.German.AC3D.5.1.BDRip.x264-PS.part18.rar\" yEnc (001/118) (ps-unc.bdx2-sample.mkv AutoUnRAR) 10.45 MB")
         self.assertEqual(desired, actual)
 
@@ -106,7 +106,7 @@ class EasynewsSearchHandlerTestCase(unittest.TestCase):
         self.assertEqual(desired, actual)
 
     def test_special_characters_in_name(self):
-        desired = "Auf Messers Schneide Ã¢ Rivalen am Abgrund - 1998 - german - der sir.mkv 1.95 GB \"Auf Messers Schneide  Rivalen am Abgrund - 1998 - german - der sir\""
+        desired = "Auf Messers Schneide Ã¢ Rivalen am Abgrund - 1998 - german - der sir.mkv \"Auf Messers Schneide  Rivalen am Abgrund - 1998 - german - der sir\" 1.95 GB"
         actual = handler.cleanup_title("(1243134923423) [23/33] - \"Auf Messers Schneide  Rivalen am Abgrund - 1998 - german - der sir.part20.rar\" yEnc (001/219) (Auf Messers Schneide Ã¢ Rivalen am Abgrund - 1998 - german - der sir.mkv AutoUnRAR) 1.95 GB")
         self.assertEqual(desired, actual)
 
@@ -116,8 +116,18 @@ class EasynewsSearchHandlerTestCase(unittest.TestCase):
         self.assertEqual(desired, actual)
 
     def test_mismatch_on_name(self):
-        desired = "dark.mutants.out.of.control.2020.german.bdrip.x264-lizardsquad.sample.mkv 6.35 MB \"Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad\""
+        desired = "dark.mutants.out.of.control.2020.german.bdrip.x264-lizardsquad.sample.mkv \"Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad\" 6.35 MB"
         actual = handler.cleanup_title("Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad - [00/28] - \"Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad.part18.rar\" yEnc (01/69) (dark.mutants.out.of.control.2020.german.bdrip.x264-lizardsquad.sample.mkv AutoUnRAR) 6.35 MB")
+        self.assertEqual(desired, actual)
+
+    def test_mismatch_on_filename_takes_from_title(self):
+        desired = "dark.mutants.out.of.control.2020.german.bdrip.x264-lizardsquad.sample.mkv \"Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad\" 6.35 MB"
+        actual = handler.cleanup_title("Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad - [00/28] - \"Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad.part18.rar\" yEnc (01/69) (dark.mutants.out.of.control.2020.german.bdrip.x264-lizardsquad.sample.mkv AutoUnRAR) 6.35 MB", "https://host.com/dark.mutants.out.of.control.2020.mkv")
+        self.assertEqual(desired, actual)
+
+    def test_no_filename_in_title(self):
+        desired = "dark.mutants.out.of.control.2020.mkv 6.35 MB"
+        actual = handler.cleanup_title("Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad - [00/28] - \"Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad.part18.rar\" yEnc (01/69) 6.35 MB", "https://host.com/dark.mutants.out.of.control.2020.mkv")
         self.assertEqual(desired, actual)
 
     def test_empty(self):
