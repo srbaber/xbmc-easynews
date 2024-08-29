@@ -130,6 +130,11 @@ class EasynewsSearchHandlerTestCase(unittest.TestCase):
         actual = handler.cleanup_title("Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad - [00/28] - \"Dark.Mutants.Out.of.Control.2020.German.BDRip.x264-LizardSquad.part18.rar\" yEnc (01/69) 6.35 MB", "https://host.com/dark.mutants.out.of.control.2020.mkv")
         self.assertEqual(desired, actual)
 
+    def test_hash_only(self):
+        desired = "house.of.the.dragon.s02e04.internal.polish.dv.hdr.2160p.web.h265-flame-sample.mkv (PapbX4olat1LZ2xcONXBoev7m) 120.50 MB"
+        actual = handler.cleanup_title("PapbX4olat1LZ2xcONXBoev7m 120.50 MB", "https://members.easynews.com/dl/iad/447/e71623a9dfe4714eb0e418eac5d0770a0943462877dfc.mkv/house.of.the.dragon.s02e04.internal.polish.dv.hdr.2160p.web.h265-flame-sample.mkv?sid=0f9915947b0c59db9aa2664b5110548ab1347436:0&sig=MTcyMzMxMjA4NC08T2dNYlB5RXNGaFJrT2xHbVN4TnVZdU11LTE3MjMzMTIwNzQ1MDNAbnl1dT4=")
+        self.assertEqual(desired, actual)
+
     def test_empty(self):
         desired = ""
         actual = handler.cleanup_title("")
