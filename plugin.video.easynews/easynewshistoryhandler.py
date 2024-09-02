@@ -1,10 +1,9 @@
-import constants
+
 import easynewssearchhandler
-import xbmc
 
 
 #
-# handler responsible for performing the size search for easynews
+# handler responsible for performing a previous search for easynews
 #
 class EasynewsHistoryHandler(easynewssearchhandler.EasynewsSearchHandler):
     name = 'EasynewsHistoryHandler'
