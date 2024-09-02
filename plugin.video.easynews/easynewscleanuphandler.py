@@ -13,8 +13,10 @@ class EasynewsCleanupHandler():
     name = 'EasynewsCleanupHandler'
     remove_operation = 'Remove'
     clear_operation = 'Clear'
+    edit_history_operation = 'EditHistory'
     remove_history = properties.get_localized_string(30340, 'Remove')
     clear_history = properties.get_localized_string(30341, 'Clear History')
+    edit_history = properties.get_localized_string(30342, 'Edit')
 
     def __init__(self):
         pass
@@ -28,12 +30,24 @@ class EasynewsCleanupHandler():
         elif activity.operation == self.clear_operation:
             clear_history()
             xbmc.executebuiltin('Container.Refresh')
+        elif activity.operation == self.edit_history_operation:
+            edit_history(activity)
+            xbmc.executebuiltin('Container.Refresh')
 
+
+def edit_history(activity):
+    old_phrase = activity.state['searchPhrase']
+
+    kb = xbmc.Keyboard(old_phrase, EasynewsCleanupHandler.edit_history, False)
+    kb.doModal()
+    if kb.isConfirmed():
+        # get text from keyboard
+        new_phrase = kb.getText()
+        replace_search(old_phrase, new_phrase)
 
 def clear_history():
     for i in range(int(maxHistory)):
         set_search(i, '')
-
 
 def remove_history(searchPhrase):
     j = 0
@@ -53,3 +67,9 @@ def get_search(index):
 
 def set_search(index, searchPhrase):
     properties.set_property(LAST_KEYWORDS + "_%d" % index, searchPhrase)
+
+def replace_search(oldPhrase, searchPhrase):
+    for i in range(int(maxHistory)):
+        value = get_search(i)
+        if value == oldPhrase:
+            set_search(i, searchPhrase)

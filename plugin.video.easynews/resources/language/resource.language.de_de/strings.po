@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: Easynews.com
 # Addon id: plugin.video.easynews
-# Addon version: 20.0.10
+# Addon version: 20.0.11
 # Addon Provider: xbmc-easynews
 msgid ""
 msgstr ""
@@ -108,3 +108,7 @@ msgstr "Verwijderen uit geschiedenis"
 msgctxt "#30341"
 msgid "Clear All History"
 msgstr "Wis alle geschiedenis"
+
+msgctxt "#30342"
+msgid "Edit"
+msgstr "Bearbeiten"

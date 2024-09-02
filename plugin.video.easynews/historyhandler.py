@@ -1,20 +1,23 @@
 import action
 import constants
+import properties
 import xbmc
 import xbmcplugin
-from easynewscleanuphandler import get_search, set_search, maxHistory, EasynewsCleanupHandler
+from easynewscleanuphandler import get_search, set_search, replace_search, maxHistory, EasynewsCleanupHandler
 from easynewssearchhandler import EasynewsSearchHandler
 from easynewshistoryhandler import EasynewsHistoryHandler
-
 
 class HistoryHandler():
     name = 'HistoryHandler'
     show_history_operation = 'ShowHistory'
 
     def contextmenu(self, activity):
+        edit = action.of(EasynewsCleanupHandler.name, EasynewsCleanupHandler.edit_history_operation,
+                         EasynewsCleanupHandler.edit_history, activity.thumbnail, activity.state)
         remove = action.of(EasynewsCleanupHandler.name, EasynewsCleanupHandler.remove_operation,
                            EasynewsCleanupHandler.remove_history, activity.thumbnail, activity.state)
-        cm = [(EasynewsCleanupHandler.remove_history, 'RunPlugin(%s)' % remove.url())]
+        cm = [(EasynewsCleanupHandler.edit_history, 'RunPlugin(%s)' % edit.url()),
+              (EasynewsCleanupHandler.remove_history, 'RunPlugin(%s)' % remove.url())]
 
         item = activity.playableitem()
         item.addContextMenuItems(cm)
@@ -46,10 +49,8 @@ class HistoryHandler():
         if activity.operation == self.show_history_operation:
             self.show_history(addonhandle)
 
-
 def last_search():
     return get_search(0)
-
 
 def add_search(searchPhrase):
     last_index = int(maxHistory) - 1
