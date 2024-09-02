@@ -1,9 +1,8 @@
 import action
 import constants
-import properties
 import xbmc
 import xbmcplugin
-from easynewscleanuphandler import get_search, set_search, replace_search, maxHistory, EasynewsCleanupHandler
+from easynewscleanuphandler import get_search, set_search, maxHistory, EasynewsCleanupHandler
 from easynewssearchhandler import EasynewsSearchHandler
 from easynewshistoryhandler import EasynewsHistoryHandler
 
