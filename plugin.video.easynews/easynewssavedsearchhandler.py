@@ -1,3 +1,5 @@
+import html
+
 import action
 import constants
 import getrequest
@@ -20,19 +22,12 @@ class EasynewsSavedSearchHandler(EasynewsSearchHandler):
 
     def build_params(self, action):
         params = {}
-        url = action.state['searchUrl']
-        url = re.sub('^.*\?', '', url)
-        url_params = url.split('&amp;')
-        for param in url_params:
-            key_values=param.split('=')
-            params[key_values[0]] = key_values[1]
-
-        params['sS'] = 5
         return params
 
     def build_url(self, action):
         url = action.state['searchUrl']
-        url = re.sub('\?.*$', '', url)
+        url = html.unescape(url)
+        url = re.sub('sS=.', 'sS=5', url)
         return url
 
     def find_saved_searches(self):
@@ -47,7 +42,7 @@ class EasynewsSavedSearchHandler(EasynewsSearchHandler):
             for i in range(len(searches)):
                 search = searches[i]
                 url = urls[i*3+1]
-                if search is not None and len(url) > 2 and url is not None:
+                if search is not None and url is not None and len(url) > 2:
                     self.add_saved_search(addonhandle, search, url)
             return len(searches)
         return 0
