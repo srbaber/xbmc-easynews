@@ -41,7 +41,7 @@ class EasynewsSavedSearchHandler(EasynewsSearchHandler):
         if searches:
             for i in range(len(searches)):
                 search = searches[i]
-                url = urls[i*3+1]
+                url = urls[i*2]
                 if search is not None and url is not None and len(url) > 2:
                     self.add_saved_search(addonhandle, search, url)
             return len(searches)
