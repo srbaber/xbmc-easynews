@@ -2,7 +2,7 @@
 <addons>
 <addon id="plugin.video.easynews"
        name="Easynews.com"
-       version="20.0.12"
+       version="20.0.13"
        provider-name="xbmc-easynews">
     <requires>
         <import addon="script.module.requests"/>
@@ -22,7 +22,7 @@
     </extension>
 </addon>
 
-<addon id="repository.easynews" name="XBMC-Easynews Addons" version="20.0.12" provider-name="xbmc-easynews">
+<addon id="repository.easynews" name="XBMC-Easynews Addons" version="20.0.13" provider-name="xbmc-easynews">
 	<extension point="xbmc.addon.repository" name="XBMC Easynews Addons">
 		<dir>
 			<info compressed="false">https://srbaber.github.io/xbmc-easynews/addons.xml</info>
@@ -38,7 +38,7 @@
 	</extension>
 </addon>
 
-<addon id="repository.easynews" name="XBMC-Easynews Addons" version="20.0.12" provider-name="xbmc-easynews">
+<addon id="repository.easynews" name="XBMC-Easynews Addons" version="20.0.13" provider-name="xbmc-easynews">
 	<extension point="xbmc.addon.repository" name="XBMC Easynews Addons">
 		<dir>
 			<info compressed="false">https://srbaber.github.io/xbmc-easynews/addons.xml</info>

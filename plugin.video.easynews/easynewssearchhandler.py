@@ -126,9 +126,9 @@ class EasynewsSearchHandler():
         if is_image:
             thumb_url += '/sm-'
         else:
-            thumb_url += '/pr-'
+            thumb_url += '/th-'
 
-        thumb_url += url[sixth_slash + 1: extension_dot - 4]
+        thumb_url += url[sixth_slash + 1: extension_dot]
         thumb_url += '.jpg/th-'
         thumb_url += url[seventh_slash + 1: thumb_dot]
         thumb_url += '.jpg'
