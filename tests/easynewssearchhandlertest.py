@@ -5,33 +5,39 @@ handler = EasynewsSearchHandler()
 
 class EasynewsSearchHandlerTestCase(unittest.TestCase):
 
+    def test_update_from_2024_10_10(self):
+        url = "https://members.easynews.com/dl/auto/443/2591e9ba2ff261e549792b4719253b450722f6b15.mkv/Gordon%20Ramsays%20Food%20Stars%20%282023%29%20S02E01%20%281080p%20HULU%20WEB-DL%20H264%20SDR%20DDP%205.1%20English%20-%20HONE%29.mkv?sig=eNoBYACf|yeRSdyUB9uucnHlzzzFQV35oarzdUh5yKM0nAg9JQnAioaUhU9WI3a40f7tuhJXMWqPn71jsy7ly2ZU|TKOMqO8U9akPby2XgWuOyOT95-B2ZOQDSZZ05hKKzXwQrJbQFWcMEQ"
+        desired = "https://th.easynews.com/thumbnails-259/th-2591e9ba2ff261e549792b4719253b450722f6b15.jpg/th-Gordon%20Ramsays%20Food%20Stars%20%282023%29%20S02E01%20%281080p%20HULU%20WEB-DL%20H264%20SDR%20DDP%205.1%20English%20-%20HONE%29.jpg"
+        actual = handler.build_thumbnail_url(url)
+        self.assertEqual(desired, actual)
+
     def test_jpg_image(self):
         url = "https://members.easynews.com/dl/iad/447/418bb2aae1121bed3349bc29a57d2a6301814fa671f16.jpg/00-hans_zimmer_and_james_newton_howard-the_dark_knight-ost-cd-flac-2008-proof.jpg?sid=7dfcd27e1b6b7e880d77a8449309e18d09452114:0&sig=MTY5MTk1NDkyNC08YXV0b3Jhci0yYWI0YzVkNGE0MzM0ZjA3OWU0ZTM0ZjY2OTAzMGIyYkBuZ1Bvc3QtOTE0NTdlMTA+"
-        desired = "https://th.easynews.com/thumbnails-418/sm-418bb2aae1121bed3349bc29a57d2a6301814fa67.jpg/th-00-hans_zimmer_and_james_newton_howard-the_dark_knight-ost-cd-flac-2008-proof.jpg"
+        desired = "https://th.easynews.com/thumbnails-418/sm-418bb2aae1121bed3349bc29a57d2a6301814fa671f16.jpg/th-00-hans_zimmer_and_james_newton_howard-the_dark_knight-ost-cd-flac-2008-proof.jpg"
         actual = handler.build_thumbnail_url(url)
         self.assertEqual(desired, actual)
 
     def test_no_extension_url(self):
         url = "https://members.easynews.com/dl/iad/447/3a82a335fd40e8ebee0dbdecc63ef04607951827cae1a/UEL_2022_2023_Final_Sevilla_vs_Roma_2160p_FEED_HDTV_MP2_H_265_HBO?sid=df99baf8e98eb8bf60c0f5b6b615d003f6d69a11:6&sig=MTY4Njc5NjA5Mi08YXV0b3Jhci1mNDU5ZTE1N2IzNTE0NTZkOTBkMmFjZDAxN2I3ODYyNUBuZ1Bvc3QtNzhmNzNjNmI+"
-        desired = "https://th.easynews.com/thumbnails-3a8/pr-3a82a335fd40e8ebee0dbdecc63ef04607951827c.jpg/th-UEL_2022_2023_Final_Sevilla_vs_Roma_2160p_FEED_HDTV_MP2_H_265_HBO.jpg"
+        desired = "https://th.easynews.com/thumbnails-3a8/th-3a82a335fd40e8ebee0dbdecc63ef04607951827cae1a.jpg/th-UEL_2022_2023_Final_Sevilla_vs_Roma_2160p_FEED_HDTV_MP2_H_265_HBO.jpg"
         actual = handler.build_thumbnail_url(url)
         self.assertEqual(desired, actual)
 
     def test_lots_of_dots_url(self):
         url = "https://members.easynews.com/dl/iad/447/3a82a335fd40e8ebee0dbdecc63ef04607951827cae1a.mkv/UEL.2022.2023.Final.Sevilla.vs.Roma.2160p.FEED.HDTV.MP2.H.265-HBO.mkv?sid=df99baf8e98eb8bf60c0f5b6b615d003f6d69a11:6&sig=MTY4Njc5NjA5Mi08YXV0b3Jhci1mNDU5ZTE1N2IzNTE0NTZkOTBkMmFjZDAxN2I3ODYyNUBuZ1Bvc3QtNzhmNzNjNmI+"
-        desired = "https://th.easynews.com/thumbnails-3a8/pr-3a82a335fd40e8ebee0dbdecc63ef04607951827c.jpg/th-UEL.2022.2023.Final.Sevilla.vs.Roma.2160p.FEED.HDTV.MP2.H.265-HBO.jpg"
+        desired = "https://th.easynews.com/thumbnails-3a8/th-3a82a335fd40e8ebee0dbdecc63ef04607951827cae1a.jpg/th-UEL.2022.2023.Final.Sevilla.vs.Roma.2160p.FEED.HDTV.MP2.H.265-HBO.jpg"
         actual = handler.build_thumbnail_url(url)
         self.assertEqual(desired, actual)
 
     def test_auto_download_url(self):
         url = "https://members.easynews.com/dl/auto/443/2790b226e1cedd7b47924e4587050f9809779f17c77f4.avi/Teen%20Titans%20-%203x11%20-%20%2337%20-%20Bunny%20Raven%20or%20How%20To%20Make%20a%20TitanAnimal%20Disappear.avi"
-        desired = "https://th.easynews.com/thumbnails-279/pr-2790b226e1cedd7b47924e4587050f9809779f17c.jpg/th-Teen%20Titans%20-%203x11%20-%20%2337%20-%20Bunny%20Raven%20or%20How%20To%20Make%20a%20TitanAnimal%20Disappear.jpg"
+        desired = "https://th.easynews.com/thumbnails-279/th-2790b226e1cedd7b47924e4587050f9809779f17c77f4.jpg/th-Teen%20Titans%20-%203x11%20-%20%2337%20-%20Bunny%20Raven%20or%20How%20To%20Make%20a%20TitanAnimal%20Disappear.jpg"
         actual = handler.build_thumbnail_url(url)
         self.assertEqual(desired, actual)
 
     def test_iad_download_url(self):
         url = "https://members.easynews.com/dl/iad/447/d130c8aca87927f1019e0d2b7d83eb8f0e0235a314fcc.mkv/b75bd85864bd5c16408c8064976eb2017023661f5525ac8f7fbb1bd1a7fe0c96.mkv?sid=492c2937286ee9b64e41d734c367a1df45026cba:98&sig=MTY5MTc1MDE4MS08WHVHY0lqVG9PYkF3SmtMeFp3UWpRbE53LTE2OTE3MTU1MTUzMDRAUFJpVkFURT4="
-        desired = "https://th.easynews.com/thumbnails-d13/pr-d130c8aca87927f1019e0d2b7d83eb8f0e0235a31.jpg/th-b75bd85864bd5c16408c8064976eb2017023661f5525ac8f7fbb1bd1a7fe0c96.jpg"
+        desired = "https://th.easynews.com/thumbnails-d13/th-d130c8aca87927f1019e0d2b7d83eb8f0e0235a314fcc.jpg/th-b75bd85864bd5c16408c8064976eb2017023661f5525ac8f7fbb1bd1a7fe0c96.jpg"
         actual = handler.build_thumbnail_url(url)
         self.assertEqual(desired, actual)
 
