@@ -36,12 +36,12 @@ class EasynewsSavedSearchHandler(EasynewsSearchHandler):
     def parse_saved_searches(self, addonhandle, data):
         data = re.sub('</td>', '</td>\n', data)
         searches = re.compile('<input type="text" name="l[0-9]*" value="(.+?)"', re.DOTALL).findall(data)
-        urls = re.compile('<a target="gSearch" href="(.+?)"', re.DOTALL).findall(data)
+        urls = re.compile('<a target="gSearch" href="/1.0/global5/(.+?)"', re.DOTALL).findall(data)
 
         if searches:
             for i in range(len(searches)):
                 search = searches[i]
-                url = urls[i*2]
+                url = "https://members.easynews.com/1.0/global5" + urls[i]
                 if search is not None and url is not None and len(url) > 2:
                     self.add_saved_search(addonhandle, search, url)
             return len(searches)
