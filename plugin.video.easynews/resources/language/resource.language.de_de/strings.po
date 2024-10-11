@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: Easynews.com
 # Addon id: plugin.video.easynews
-# Addon version: 20.0.13
+# Addon version: 20.0.14
 # Addon Provider: xbmc-easynews
 msgid ""
 msgstr ""

@@ -14,7 +14,7 @@ SORT_BY_NAME = 'nrfile'
 SORT_BY_DATE = 'dtime'
 ASCENDING = '+'
 DECENDING = '-'
-MAIN_URL = 'https://members.easynews.com/global5/search.html'
+MAIN_URL = 'https://members.easynews.com/1.0/global5/search.html'
 
 DEFAULT_PERPAGE = 100
 
@@ -77,11 +77,20 @@ class EasynewsSearchHandler():
             params['b2'] = ''
             params['b2t'] = ''
 
-        params['spamf'] = '1'
-        params['u'] = '1'
-        params['st'] = 'adv'
-        params['safeO'] = '0'
-        params['sb'] = '1'
+        #params['spamf'] = '1'
+        #params['u'] = '1'
+        #params['st'] = 'adv'
+        #params['safeO'] = '0'
+        #params['sb'] = '1'
+        params['sbj'] = ''
+        params['from'] = ''
+        params['ns'] = ''
+        params['fil'] = ''
+        params['fex'] = ''
+        params['vc'] = ''
+        params['ac'] = ''
+        params['submit'] = 'Search'
+        params['fly'] = '2'
 
         # xbmc.log("%s.build_params : %s" % (self.name, params), 1)
         return params
@@ -239,8 +248,9 @@ class EasynewsSearchHandler():
         xbmcplugin.addDirectoryItem(addonhandle, url, contextmenu, isFolder=False)
 
     def parse(self, addonhandle, data):
-        # xbmc.log("Parse Data : %s" % data, 1)
-        items = re.compile('<item>(.+?)</item>', re.DOTALL).findall(data)
+        inputdata = re.sub('\n', '', data)
+        #xbmc.log("Parse Data : %s" % inputdata, 1)
+        items = re.compile('<item>(.+?)</item>', re.DOTALL).findall(inputdata)
         if items:
             for item in items:
                 gurl = re.compile('<link>(.+?)</link>', re.DOTALL).findall(item)
