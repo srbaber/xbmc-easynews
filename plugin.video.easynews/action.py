@@ -19,20 +19,24 @@ class Action:
     def url(self):
         return constants.PLUGIN_URL + 'action=%s' % encode(self)
 
-    def playableitem(self):
-        item = self.directoryitem()
+    def playable_item(self):
+        item = self.directory_item()
         item.setProperty('IsPlayable', 'true')
         item.setLabel(self.title)
         return item
 
-    def directoryitem(self):
-        item = xbmcgui.ListItem(self.title)
+    def directory_item(self):
+        path = ''
+        if 'url' in self.state:
+            path=self.state['url']
 
+        list_item = xbmcgui.ListItem(label=self.title, path=path)
         if self.thumbnail:
-            item.setArt({'thumb': self.thumbnail,
+            list_item.setArt({'thumb': self.thumbnail,
                          'icon': 'DefaultVideo.png',
                          'poster': self.thumbnail})
-        return item
+
+        return list_item
 
     def tostring(self):
         return json.dumps(self, default=lambda x: x.__dict__)
@@ -65,8 +69,8 @@ def encode(action):
 
 def decode(data):
     data = base64.urlsafe_b64decode(data.encode('utf-8'))
-    dict = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
-    if (dict == None):
+    data = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+    if data is None:
         return None
     else:
-        return of(dict.handler, dict.operation, dict.title, dict.thumbnail, dict.state.__dict__)
+        return of(data.handler, data.operation, data.title, data.thumbnail, data.state.__dict__)

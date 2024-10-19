@@ -9,7 +9,7 @@ LAST_KEYWORDS = 'lastKeywords'
 #
 # handler responsible for clean up of download delete
 #
-class EasynewsCleanupHandler():
+class EasynewsCleanupHandler:
     name = 'EasynewsCleanupHandler'
     remove_operation = 'Remove'
     clear_operation = 'Clear'
@@ -21,11 +21,12 @@ class EasynewsCleanupHandler():
     def __init__(self):
         pass
 
-    def apply(self, addonhandle, activity):
+    def apply(self, addon_handle, activity):
         if constants.APPLY_LOG:
-            xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
+            xbmc.log('%s.apply %s %s' % (self.name, addon_handle, activity.tostring()), 1)
+
         if activity.operation == self.remove_operation:
-            remove_history(activity.state['searchPhrase'])
+            remove_history(activity.state['search_phrase'])
             xbmc.executebuiltin('Container.Refresh')
         elif activity.operation == self.clear_operation:
             clear_history()
@@ -36,7 +37,7 @@ class EasynewsCleanupHandler():
 
 
 def edit_history(activity):
-    old_phrase = activity.state['searchPhrase']
+    old_phrase = activity.state['search_phrase']
 
     kb = xbmc.Keyboard(old_phrase, EasynewsCleanupHandler.edit_history, False)
     kb.doModal()
@@ -45,15 +46,17 @@ def edit_history(activity):
         new_phrase = kb.getText()
         replace_search(old_phrase, new_phrase)
 
+
 def clear_history():
     for i in range(int(maxHistory)):
         set_search(i, '')
 
-def remove_history(searchPhrase):
+
+def remove_history(search_phrase):
     j = 0
     for i in range(int(maxHistory)):
         value = get_search(i)
-        if value != searchPhrase:
+        if value != search_phrase:
             set_search(j, value)
             j = j + 1
 
@@ -65,11 +68,12 @@ def get_search(index):
     return properties.get_property(LAST_KEYWORDS + '_%d' % index, '')
 
 
-def set_search(index, searchPhrase):
-    properties.set_property(LAST_KEYWORDS + "_%d" % index, searchPhrase)
+def set_search(index, search_phrase):
+    properties.set_property(LAST_KEYWORDS + "_%d" % index, search_phrase)
 
-def replace_search(oldPhrase, searchPhrase):
+
+def replace_search(old_phrase, search_phrase):
     for i in range(int(maxHistory)):
         value = get_search(i)
-        if value == oldPhrase:
-            set_search(i, searchPhrase)
+        if value == old_phrase:
+            set_search(i, search_phrase)

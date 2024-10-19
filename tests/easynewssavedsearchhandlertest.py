@@ -8,13 +8,13 @@ from easynewssearchhandler import EasynewsSearchHandler
 class EasynewsSavedSearchHandlerTestMock(EasynewsSavedSearchHandler):
     count = 0
 
-    def add_video(self, addonhandle, url, title, thumbnail):
+    def add_video(self, addon_handle, url, title, thumbnail):
         self.count += 1
 
 class EasynewsSearchHandlerTestMock(EasynewsSearchHandler):
     count = 0
 
-    def add_video(self, addonhandle, url, title, thumbnail):
+    def add_video(self, addon_handle, url, title, thumbnail):
         self.count += 1
 
 

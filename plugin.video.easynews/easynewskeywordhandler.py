@@ -15,15 +15,17 @@ class EasynewsKeywordHandler(easynewssearchhandler.EasynewsSearchHandler):
     def build_params(self, action):
         params = super().build_params(action)
 
-        searchPhrase = historyhandler.last_search()
-        if not 'pagenumber' in action.state or action.state['pagenumber'] == '1':
-            kb = xbmc.Keyboard(searchPhrase, self.search_videos, False)
+        search_phrase = historyhandler.last_search()
+        if 'page_number' not in action.state or action.state['page_number'] == '1':
+            kb = xbmc.Keyboard(search_phrase, self.search_videos, False)
             kb.doModal()
             if kb.isConfirmed():
                 # get text from keyboard
-                searchPhrase = kb.getText()
-                historyhandler.add_search(searchPhrase)
+                search_phrase = kb.getText()
+                historyhandler.add_search(search_phrase)
+            else:
+                search_phrase = self.search_abort_operation
 
-        params['gps'] = searchPhrase
+        params['gps'] = search_phrase
 
         return params

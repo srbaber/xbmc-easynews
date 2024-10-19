@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: Easynews.com
 # Addon id: plugin.video.easynews
-# Addon version: 20.0.14
+# Addon version: 20.0.15
 # Addon Provider: xbmc-easynews
 msgid ""
 msgstr ""
@@ -54,7 +54,7 @@ msgid "Download folder"
 msgstr ""
 
 msgctxt "#30208"
-msgid "History size"
+msgid "Search History size"
 msgstr ""
 
 msgctxt "#30209"
@@ -67,6 +67,30 @@ msgstr ""
 
 msgctxt "#30211"
 msgid "Minimum file size (in MB)"
+msgstr ""
+
+msgctxt "#30212"
+msgid "Sort By"
+msgstr ""
+
+msgctxt "#30213"
+msgid "Date"
+msgstr ""
+
+msgctxt "#30214"
+msgid "Size"
+msgstr ""
+
+msgctxt "#30215"
+msgid "Filename"
+msgstr ""
+
+msgctxt "#30216"
+msgid "Subject"
+msgstr ""
+
+msgctxt "#30217"
+msgid "Descending"
 msgstr ""
 
 msgctxt "#30300"
@@ -87,6 +111,10 @@ msgstr ""
 
 msgctxt "#30310"
 msgid "Search Videos"
+msgstr ""
+
+msgctxt "#30311"
+msgid "Search Groups"
 msgstr ""
 
 msgctxt "#30320"

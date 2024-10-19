@@ -1,4 +1,3 @@
-
 import easynewssearchhandler
 
 
@@ -10,5 +9,5 @@ class EasynewsHistoryHandler(easynewssearchhandler.EasynewsSearchHandler):
 
     def build_params(self, action):
         params = super().build_params(action)
-        params['gps'] = action.state['searchPhrase']
+        params['gps'] = action.state['search_phrase']
         return params
