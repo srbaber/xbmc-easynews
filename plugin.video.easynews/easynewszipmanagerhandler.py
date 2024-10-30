@@ -3,7 +3,7 @@ import re
 
 import action
 import constants
-import easynewssearchhandler
+from easynewssearchhandler import EasynewsSearchHandler, cleanup_title, go_to_main_menu
 import getrequest
 import properties
 import xbmc
@@ -14,9 +14,9 @@ MAIN_URL = 'https://members.easynews.com/2.0/tools/zip-manager'
 
 
 #
-# handler responsible for build the zip manager menu
+# handler responsible for building the zip manager menu
 #
-class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
+class EasynewsZipManagerHandler(EasynewsSearchHandler):
     name = 'EasynewsZipManagerHandler'
 
     list_queue_operation = 'ListQueue'
@@ -58,7 +58,7 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
             for item in items:
                 title = re.compile('target="fileTarget" >(.+?)</a>', re.DOTALL).findall(item)
                 title = html.unescape(title[0])
-                title = easynewssearchhandler.cleanup_title(title)
+                title = cleanup_title(title)
 
                 gurl = re.compile('<a href="(.+?)" target="fileTarget" >', re.DOTALL).findall(item)
                 gurl = html.unescape(gurl[0])
@@ -87,7 +87,6 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
 
     def clear_queue(self, activity):
         form_data = {'clearzip': activity.state['queue']}
-
         getrequest.get(self.build_url(activity), form_data)
 
     def delete(self, activity):
@@ -96,12 +95,15 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
                      'DEL': 'Remove Checked Files'}
 
         # xbmc.log('%s.delete %s' % (self.name, form_data), 1)
-
         getrequest.post(self.build_url(activity), form_data)
 
     def apply(self, addon_handle, activity):
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s %s' % (self.name, addon_handle, activity.tostring()), 1)
+
+        if check_for_invalid_user_id(addon_handle):
+            go_to_main_menu(addon_handle)
+            return
 
         if activity.operation == self.list_queue_operation:
             response = self.search(activity)
@@ -117,10 +119,6 @@ class EasynewsZipManagerHandler(easynewssearchhandler.EasynewsSearchHandler):
             list_queues_menu(addon_handle)
 
         xbmcplugin.endOfDirectory(addon_handle)
-
-
-def sort_by_title(video_action):
-    return video_action['title']
 
 
 def clear_queues_menu(addon_handle, queue_name):

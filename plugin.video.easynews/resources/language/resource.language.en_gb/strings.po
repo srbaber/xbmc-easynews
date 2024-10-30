@@ -93,6 +93,14 @@ msgctxt "#30217"
 msgid "Descending"
 msgstr ""
 
+msgctxt "#30218"
+msgid "Track Watched"
+msgstr ""
+
+msgctxt "#30219"
+msgid "Watched History size"
+msgstr ""
+
 msgctxt "#30300"
 msgid "Download"
 msgstr ""
@@ -143,4 +151,8 @@ msgstr ""
 
 msgctxt "#30342"
 msgid "Edit"
+msgstr ""
+
+msgctxt "#30343"
+msgid "Clear All Watched"
 msgstr ""

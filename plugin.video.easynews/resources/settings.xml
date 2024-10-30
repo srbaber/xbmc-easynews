@@ -12,5 +12,7 @@
         <setting id="minsize" type="text" label="30211" default=""/>
         <setting id="sort" type="select" label="30212" lvalues="30213|30214|30215|30216"/>
         <setting id="descending" type="bool" label="30217" default="true"/>
+        <setting id="watched_enabled" type="bool" label="30218" default="false"/>
+        <setting id="watched" type="text" label="30219" default="50"/>
     </category>
 </settings>

@@ -6,9 +6,10 @@ import constants
 import getrequest
 import xbmc
 import xbmcplugin
-from easynewssearchhandler import EasynewsSearchHandler
+from easynewssearchhandler import EasynewsSearchHandler, go_to_main_menu, check_for_invalid_user_id
 
 SAVED_SEARCH_URL = 'https://members.easynews.com/savedSrch.html'
+MAIN_URL = "https://members.easynews.com/1.0/global5"
 
 
 class EasynewsSavedSearchHandler(EasynewsSearchHandler):
@@ -22,45 +23,40 @@ class EasynewsSavedSearchHandler(EasynewsSearchHandler):
     def build_url(self, activity):
         url = activity.state['searchUrl']
         url = html.unescape(url)
+
+        # makes sure we set the result output as RSS feed for easy parsing
         url = re.sub('sS=.', 'sS=5', url)
         return url
+
+    def add_saved_search(self, addon_handle, search_phrase, search_url):
+        search_action = action.of(EasynewsSavedSearchHandler.name, EasynewsSearchHandler.search_and_order_operation,
+                                  search_phrase, state={'searchUrl': search_url})
+        xbmcplugin.addDirectoryItem(addon_handle, search_action.url(), search_action.directory_item(), isFolder=True)
+
+    def parse_saved_searches(self, addon_handle, data):
+        data = re.sub('</td>', '</td>\n', data)
+        searches = re.compile('<input type="text" name="l[0-9]*" value="(.+?)"', re.DOTALL).findall(data)
+        urls = re.compile('<a target="gSearch" href="/1.0/global5/(.+?)"', re.DOTALL).findall(data)
+
+        for i in range(len(searches)):
+            search = searches[i]
+            url = MAIN_URL + urls[i]
+            self.add_saved_search(addon_handle, search, url)
+
+    def show_saved_searches(self, addon_handle):
+        response = getrequest.get(SAVED_SEARCH_URL, {})
+        self.parse_saved_searches(addon_handle, response)
+        xbmcplugin.endOfDirectory(addon_handle)
 
     def apply(self, addon_handle, activity):
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s %s' % (self.name, addon_handle, activity.tostring()), 1)
 
+        if check_for_invalid_user_id(addon_handle):
+            go_to_main_menu(addon_handle)
+            return
+
         if activity.operation == self.show_saved_searches_operation:
-            show_saved_searches(addon_handle)
+            self.show_saved_searches(addon_handle)
         else:
             super().apply(addon_handle, activity)
-
-
-def add_saved_search(addon_handle, search_phrase, search_url):
-    search_action = action.of(EasynewsSavedSearchHandler.name, EasynewsSearchHandler.search_and_order_operation,
-                              search_phrase, state={'searchUrl': search_url})
-    xbmcplugin.addDirectoryItem(addon_handle, search_action.url(), search_action.directory_item(), isFolder=True)
-
-
-def parse_saved_searches(addon_handle, data):
-    data = re.sub('</td>', '</td>\n', data)
-    searches = re.compile('<input type="text" name="l[0-9]*" value="(.+?)"', re.DOTALL).findall(data)
-    urls = re.compile('<a target="gSearch" href="/1.0/global5/(.+?)"', re.DOTALL).findall(data)
-
-    if searches:
-        for i in range(len(searches)):
-            search = searches[i]
-            url = "https://members.easynews.com/1.0/global5" + urls[i]
-            if search is not None and url is not None and len(url) > 2:
-                add_saved_search(addon_handle, search, url)
-        return len(searches)
-    return 0
-
-
-def find_saved_searches():
-    return getrequest.get(SAVED_SEARCH_URL, {})
-
-
-def show_saved_searches(addon_handle):
-    response = find_saved_searches()
-    parse_saved_searches(addon_handle, response)
-    xbmcplugin.endOfDirectory(addon_handle)

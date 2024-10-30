@@ -4,9 +4,7 @@ from urllib.parse import parse_qsl
 import action
 from downloadhandler import DownloadHandler
 from easynewscleanuphandler import EasynewsCleanupHandler
-from easynewsgrouphandler import EasynewsGroupHandler
 from easynewsgroupshandler import EasynewsGroupsHandler
-from easynewshistoryhandler import EasynewsHistoryHandler
 from easynewskeywordhandler import EasynewsKeywordHandler
 from easynewssavedsearchhandler import EasynewsSavedSearchHandler
 from easynewssearchhandler import EasynewsSearchHandler
@@ -20,8 +18,6 @@ handlers = {
     EasynewsSearchHandler.name: EasynewsSearchHandler(),
     EasynewsKeywordHandler.name: EasynewsKeywordHandler(),
     EasynewsGroupsHandler.name: EasynewsGroupsHandler(),
-    EasynewsGroupHandler.name: EasynewsGroupHandler(),
-    EasynewsHistoryHandler.name: EasynewsHistoryHandler(),
     EasynewsCleanupHandler.name: EasynewsCleanupHandler(),
     EasynewsZipManagerHandler.name: EasynewsZipManagerHandler(),
     EasynewsSavedSearchHandler.name: EasynewsSavedSearchHandler(),

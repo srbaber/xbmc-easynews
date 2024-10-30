@@ -23,6 +23,7 @@ def stream(url, params, data_stream):
 
 
 def submit(url, params, data_stream):
+    # xbmc.log('%s.submit %s' % ('getRequest', url), 1)
     user_name = properties.get_property('username')
     passwd = properties.get_property('password')
 

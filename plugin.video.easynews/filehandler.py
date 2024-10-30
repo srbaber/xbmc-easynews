@@ -1,10 +1,11 @@
+import html
 import os
+import re
 
 import action
 import constants
 import properties
 import xbmc
-import re
 import xbmcplugin
 
 
@@ -60,7 +61,9 @@ class FileHandler:
 
 
 def extract_filename(url):
-    filename = re.sub('^.*/', '', url)
+    filename = html.unescape(url)
+    filename = re.sub(' ', '_', filename)
+    filename = re.sub('^.*/', '', filename)
     filename = re.sub('\?.*', '', filename)
     return filename
 
@@ -73,6 +76,11 @@ def list_files():
         if os.path.isfile(fullpath) and f != 'settings.xml' and f != '.DS_Store':
             files.append(f)
     return files
+
+
+def read_whole_file(path):
+    with open(path, 'r') as input_file:
+        return input_file.read()
 
 
 def delete_downloads():

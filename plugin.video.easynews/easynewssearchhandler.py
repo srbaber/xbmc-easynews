@@ -6,8 +6,10 @@ import constants
 import getrequest
 import properties
 import xbmc
+import xbmcgui
 import xbmcplugin
 from downloadhandler import DownloadHandler
+from easynewscleanuphandler import add_watched
 from filehandler import extract_filename
 
 SORT_BY_DATE_SELECTION = '0'
@@ -29,11 +31,23 @@ DEFAULT_PER_PAGE = 100
 #
 # handler responsible for performing the basic search for easynews
 #
+def check_for_invalid_user_id(addon_handle):
+    user_name = properties.get_property('username')
+    passwd = properties.get_property('password')
+    if user_name is None or user_name == '' or passwd is None or passwd == '':
+        xbmcgui.Dialog().ok('Easynews Configuration',
+                            'Please configure your username and password in the settings')
+        return True
+    else:
+        return False
+
+
 class EasynewsSearchHandler:
     name = 'EasynewsSearchHandler'
     search_and_order_operation = 'SearchAndOrder'
     search_recent_operation = 'SearchRecent'
     search_abort_operation = 'AbortSearchPlease'
+    search_group_operation = 'SearchGroup'
     playbackOperation = 'Video'
     nextPage = 'Next Page'
 
@@ -52,6 +66,7 @@ class EasynewsSearchHandler:
     def build_params(self, activity):
         params = {}
 
+        # get the configurations
         extensions = properties.get_property('extensions', self.video_extensions)
         groups = properties.get_property('groups', '')
         per_page = properties.get_property('perpage', DEFAULT_PER_PAGE)
@@ -61,13 +76,18 @@ class EasynewsSearchHandler:
         sort = properties.get_property('sort', SORT_BY_DATE_SELECTION)
         descending = properties.get_property('descending', 'true') == 'true'
 
-        params['ns'] = groups
+        # apply the search phrase
+        params['gps'] = activity.state.get('search_phrase', '')
+
+        # set the group if we are doing a group search or if group regex is configured
+        params['ns'] = activity.state.get('group', groups)
 
         params['fex'] = extensions
 
         params['pby'] = per_page
         params['pno'] = get_page_number(activity)
 
+        # apply the sorts
         if sort == SORT_BY_DATE_SELECTION:
             params['s1'] = SORT_BY_DATE
             params['s2'] = SORT_BY_SUBJECT
@@ -93,8 +113,10 @@ class EasynewsSearchHandler:
         params['s2d'] = ASCENDING
         params['s3d'] = ASCENDING
 
+        # response should be in RSS feed format for easy parsing
         params['sS'] = '5'
 
+        # allow easynews to filter on video or image
         params['fty[]'] = []
         if filter_video:
             params['fty[]'].append("VIDEO")
@@ -102,12 +124,14 @@ class EasynewsSearchHandler:
         if filter_image:
             params['fty[]'].append("IMAGE")
 
+        # allow easynews to filter on file size
         if min_size != '':
             params['b1'] = min_size + 'mb'
             params['b1t'] = ''
             params['b2'] = ''
             params['b2t'] = ''
 
+        # apply the filter for 1 week for recent search
         if activity.operation == self.search_recent_operation:
             params['d1t'] = '1'
             params['d2t'] = '12'  # less than 1 week old
@@ -115,7 +139,7 @@ class EasynewsSearchHandler:
         params['submit'] = 'Search'
         params['fly'] = '2'
 
-        xbmc.log("%s.build_params : %s" % (self.name, params), 1)
+        # xbmc.log("%s.build_params : %s" % (self.name, params), 1)
         return params
 
     def search(self, activity):
@@ -123,10 +147,13 @@ class EasynewsSearchHandler:
         params = self.build_params(activity)
 
         if 'gps' in params and params['gps'] == self.search_abort_operation:
+            # handle the cancel buttons on the data entry dialogs
             return None
         elif 'search' in params and params['search'] == self.search_abort_operation:
+            # handle the cancel buttons on the data entry dialogs
             return None
         else:
+            # otherwise performs the search
             return getrequest.get(url, params)
 
     def build_thumbnail_url(self, url):
@@ -190,7 +217,7 @@ class EasynewsSearchHandler:
 
     def parse(self, addon_handle, data):
         data = re.sub('\n', '', data)
-        # xbmc.log("Parse Data : %s" % input_data, 1)
+        xbmc.log("Parse Data : %s" % data, 1)
         items = re.compile('<item>(.+?)</item>', re.DOTALL).findall(data)
         if items:
             for item in items:
@@ -203,25 +230,35 @@ class EasynewsSearchHandler:
 
                 thumbnail = self.build_thumbnail_url(gurl)
 
-                gurl = getrequest.url_auth(gurl)
-                self.add_video(addon_handle, gurl, title, thumbnail)
+                url = getrequest.url_auth(gurl)
+                self.add_video(addon_handle, url, title, thumbnail)
 
     def apply(self, addon_handle, activity):
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s %s' % (self.name, addon_handle, activity.tostring()), 1)
 
+        if check_for_invalid_user_id(addon_handle):
+            go_to_main_menu(addon_handle)
+            return
+
         if activity.operation == self.playbackOperation:
+            add_watched(activity)
             xbmcplugin.setResolvedUrl(addon_handle, succeeded=True, listitem=activity.playable_item())
         else:
             response = self.search(activity)
             if response is None:
-                xbmc.executebuiltin('Container.Refresh')
+                go_to_main_menu(addon_handle)
             else:
                 self.parse(addon_handle, response)
 
                 self.add_next_page(addon_handle, activity)
 
                 xbmcplugin.endOfDirectory(addon_handle)
+
+
+def go_to_main_menu(addon_handle):
+    main_menu_action = action.of('MainMenuHandler')
+    xbmcplugin.setResolvedUrl(addon_handle, succeeded=False, listitem=main_menu_action.directory_item())
 
 
 def find_nth(data, val, occurrence):
@@ -311,9 +348,7 @@ def cleanup_title(title, gurl=''):
 
 
 def get_page_number(activity):
-    page_number = 1
-    if 'page_number' in activity.state:
-        page_number = int(activity.state['page_number'])
+    page_number = int(activity.state.get('page_number', '1'))
     return page_number
 
 

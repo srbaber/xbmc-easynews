@@ -17,13 +17,14 @@ from historyhandler import HistoryHandler
 class MainMenuHandler:
     name = 'MainMenuHandler'
 
-    searchByDate = 'Recent Posts'
-    searchKeyword = 'Keyword Search'
-    searchHistory = 'Search History'
-    searchGroup = 'Group Search'
+    search_by_date = 'Recent Posts'
+    search_keyword = 'Keyword Search'
+    search_history = 'Search History'
+    watched_history = 'Watched History'
+    search_group = 'Group Search'
     downloads = 'Downloads'
-    zipManager = 'Zip Manager'
-    savedSearches = 'Saved Searches'
+    zip_manager = 'Zip Manager'
+    saved_searches = 'Saved Searches'
 
     def __init__(self):
         pass
@@ -33,24 +34,26 @@ class MainMenuHandler:
             xbmc.log('%s.apply %s %s' % (self.name, addon_handle, activity.tostring()), 1)
 
         add_menu_item(addon_handle, EasynewsSearchHandler.name, EasynewsSearchHandler.search_recent_operation,
-                      self.searchByDate)
+                      self.search_by_date)
 
         add_menu_item(addon_handle, EasynewsGroupsHandler.name, EasynewsGroupsHandler.search_groups_operation,
-                      self.searchGroup)
+                      self.search_group)
 
         add_menu_item(addon_handle, EasynewsKeywordHandler.name, EasynewsKeywordHandler.search_operation,
-                      self.searchKeyword)
+                      self.search_keyword)
 
-        add_menu_item(addon_handle, HistoryHandler.name, HistoryHandler.show_history_operation, self.searchHistory)
+        add_menu_item(addon_handle, HistoryHandler.name, HistoryHandler.show_history_operation, self.search_history)
 
         add_menu_item(addon_handle, FileHandler.name, FileHandler.playback, self.downloads)
 
         add_menu_item(addon_handle, EasynewsZipManagerHandler.name, EasynewsZipManagerHandler.list_queues_operation,
-                      self.zipManager)
+                      self.zip_manager)
 
         add_menu_item(addon_handle, EasynewsSavedSearchHandler.name,
                       EasynewsSavedSearchHandler.show_saved_searches_operation,
-                      self.savedSearches)
+                      self.saved_searches)
+
+        add_menu_item(addon_handle, HistoryHandler.name, HistoryHandler.show_watched_operation, self.watched_history)
 
         xbmcplugin.endOfDirectory(addon_handle)
 

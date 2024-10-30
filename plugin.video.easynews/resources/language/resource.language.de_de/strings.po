@@ -94,7 +94,11 @@ msgid "Descending"
 msgstr "Aflopend"
 
 msgctxt "#30218"
-msgid "Watched history size"
+msgid "Track Watched"
+msgstr "Baan bekeken"
+
+msgctxt "#30219"
+msgid "Watched History size"
 msgstr "Geschiedenisgrootte bekeken"
 
 msgctxt "#30300"
@@ -144,3 +148,7 @@ msgstr "Wis alle geschiedenis"
 msgctxt "#30342"
 msgid "Edit"
 msgstr "Bearbeiten"
+
+msgctxt "#30343"
+msgid "Clear All Watched"
+msgstr "Wis alles bekeken"
