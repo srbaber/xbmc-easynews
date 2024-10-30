@@ -91,8 +91,9 @@ def show_history(addon_handle):
 
 def show_watched(addon_handle):
     watched_list = get_watched()
-    for watched_activity in watched_list:
-        add_watched_activity(addon_handle, watched_activity)
+    if watched_list is not None:
+        for watched_activity in watched_list:
+            add_watched_activity(addon_handle, watched_activity)
 
     add_clear_watched(addon_handle)
     xbmcplugin.endOfDirectory(addon_handle)
