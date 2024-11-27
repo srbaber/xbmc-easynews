@@ -1,3 +1,4 @@
 /.idea/
 *.run.xml
 target
+/tools/tools-*.zip
