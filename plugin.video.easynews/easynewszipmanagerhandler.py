@@ -8,7 +8,7 @@ import properties
 import xbmc
 import xbmcplugin
 from downloadhandler import DownloadHandler
-from easynewssearchhandler import EasynewsSearchHandler, cleanup_title, go_to_main_menu
+from easynewssearchhandler import EasynewsSearchHandler, cleanup_title, go_to_main_menu, check_for_invalid_user_id
 
 MAIN_URL = 'https://members.easynews.com/2.0/tools/zip-manager'
 
@@ -101,7 +101,7 @@ class EasynewsZipManagerHandler(EasynewsSearchHandler):
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s %s' % (self.name, addon_handle, activity.tostring()), 1)
 
-        if check_for_invalid_user_id(addon_handle):
+        if check_for_invalid_user_id():
             go_to_main_menu(addon_handle)
             return
 
