@@ -358,7 +358,7 @@ class Dialog(object):
     def info(self, listitem):
         """Shows the info window for the passed in listitem. Added in v17.0"""
         pass
-    def contextmenu(self, list):
+    def add_context_menu(self, list):
         """Shows a context menu of items and returns the selected index, or -1 if cancelled. Added in v17.0"""
         return -1
 

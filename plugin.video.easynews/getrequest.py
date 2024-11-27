@@ -9,43 +9,44 @@ timeout = 60
 
 
 def url_auth(url):
-    usernm = properties.get_property('username')
+    user_name = properties.get_property('username')
     passwd = properties.get_property('password')
-    return url.replace('https://', 'https://%s:%s@' % (usernm, passwd))
+    return url.replace('https://', 'https://%s:%s@' % (user_name, passwd))
 
 
-def stream(self, url, params, stream):
-    usernm = properties.get_property('username')
+def stream(url, params, data_stream):
+    user_name = properties.get_property('username')
     passwd = properties.get_property('password')
 
-    response = requests.get(url, params=params, auth=(usernm, passwd), timeout=timeout, stream=stream)
+    response = requests.get(url, params=params, auth=(user_name, passwd), timeout=timeout, stream=data_stream)
     return response
 
 
-def submit(self, url, params, stream):
-    usernm = properties.get_property('username')
+def submit(url, params, data_stream):
+    # xbmc.log('%s.submit %s' % ('getRequest', url), 1)
+    user_name = properties.get_property('username')
     passwd = properties.get_property('password')
 
-    response = requests.post(url, data=params, auth=(usernm, passwd), timeout=timeout, stream=stream)
+    response = requests.post(url, data=params, auth=(user_name, passwd), timeout=timeout, stream=data_stream)
     return response
 
 
-def get(self, url, params=None):
+def get(url, params=None):
     if params is None:
         params = {}
-    return stream(self, url, params, False).text
+    return stream(url, params, False).text
 
 
-def post(self, url, params=None):
+def post(url, params=None):
     if params is None:
         params = {}
-    return submit(self, url, params, False).text
+    return submit(url, params, False).text
 
 
-def download(self, url, filename, download_report_hook):
-    with stream(self, url, None, True) as response:
+def download(url, filename, download_report_hook):
+    with stream(url, None, True) as response:
         size = response.headers['Content-Length']
-        if not size is None:
+        if size is not None:
             read = 0
             size = int(size)
             chunk_size = max(int(size / 1000), 1024 * 1024)

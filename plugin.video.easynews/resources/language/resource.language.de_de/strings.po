@@ -1,7 +1,7 @@
 # XBMC Media Center language file
 # Addon Name: Easynews.com
 # Addon id: plugin.video.easynews
-# Addon version: 20.0.14
+# Addon version: 21.1.0
 # Addon Provider: xbmc-easynews
 msgid ""
 msgstr ""
@@ -54,8 +54,8 @@ msgid "Download folder"
 msgstr "Download ordner"
 
 msgctxt "#30208"
-msgid "History size"
-msgstr "Geschichte größe"
+msgid "Search history size"
+msgstr "Grootte van zoekgeschiedenis"
 
 msgctxt "#30209"
 msgid "Filter on videos"
@@ -69,13 +69,45 @@ msgctxt "#30211"
 msgid "Minimum file size (in MB)"
 msgstr "Minimale Dateigröße (in MB)"
 
+msgctxt "#30212"
+msgid "Sort By"
+msgstr "Sorteer op"
+
+msgctxt "#30213"
+msgid "Date"
+msgstr "Datum"
+
+msgctxt "#30214"
+msgid "Size"
+msgstr "Maat"
+
+msgctxt "#30215"
+msgid "Filename"
+msgstr "Bestandsnaam"
+
+msgctxt "#30216"
+msgid "Subject"
+msgstr "Onderwerp"
+
+msgctxt "#30217"
+msgid "Descending"
+msgstr "Aflopend"
+
+msgctxt "#30218"
+msgid "Track Watched"
+msgstr "Baan bekeken"
+
+msgctxt "#30219"
+msgid "Watched History size"
+msgstr "Geschiedenisgrootte bekeken"
+
 msgctxt "#30300"
 msgid "Download"
 msgstr "Downloaden"
 
 msgctxt "#30301"
 msgid "Downloading"
-msgstr "downloaden"
+msgstr "Downloaden"
 
 msgctxt "#30302"
 msgid "Downloading Complete"
@@ -88,6 +120,10 @@ msgstr "Downloaden mislukt"
 msgctxt "#30310"
 msgid "Search Videos"
 msgstr "Zoek video"
+
+msgctxt "#30311"
+msgid "Search Groups"
+msgstr "Zoek groepen"
 
 msgctxt "#30320"
 msgid "Remove From Queue"
@@ -112,3 +148,7 @@ msgstr "Wis alle geschiedenis"
 msgctxt "#30342"
 msgid "Edit"
 msgstr "Bearbeiten"
+
+msgctxt "#30343"
+msgid "Clear All Watched"
+msgstr "Wis alles bekeken"

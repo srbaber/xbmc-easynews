@@ -1,4 +1,6 @@
+import html
 import os
+import re
 
 import action
 import constants
@@ -10,69 +12,85 @@ import xbmcplugin
 #
 # handler responsible for listing downloaded content
 #
-class FileHandler():
+class FileHandler:
     name = 'FileHandler'
     playback = 'Video'
     delete_operation = 'Delete'
     clear_operation = 'Clear'
-    deletefile = properties.get_localized_string(30330, 'Delete Download')
-    clearall = properties.get_localized_string(30331, 'Clear Downloads')
+    delete_file = properties.get_localized_string(30330, 'Delete Download')
+    clear_all = properties.get_localized_string(30331, 'Clear Downloads')
 
-    def add_clear_downloads(self, addonhandle):
-        historyAction = action.of(self.name, self.clear_operation, self.clearall)
-        xbmcplugin.addDirectoryItem(addonhandle, historyAction.url(), historyAction.directoryitem(), isFolder=False)
+    def add_clear_downloads(self, addon_handle):
+        history_action = action.of(self.name, self.clear_operation, self.clear_all)
+        xbmcplugin.addDirectoryItem(addon_handle, history_action.url(), history_action.directory_item(), isFolder=False)
 
-    def contextmenu(self, activity):
-        delete = action.of(self.name, self.delete_operation, self.deletefile, activity.thumbnail, activity.state)
-        cm = [(self.deletefile, 'RunPlugin(%s)' % delete.url())]
+    def add_context_menu(self, activity):
+        delete = action.of(self.name, self.delete_operation, self.delete_file, activity.thumbnail, activity.state)
+        cm = [(self.delete_file, 'RunPlugin(%s)' % delete.url())]
 
-        item = activity.playableitem()
+        item = activity.playable_item()
         item.addContextMenuItems(cm)
         return item
 
-    def add_file(self, addonhandle, filename, fullpath):
-        fileAction = action.of(self.name, self.playback, filename, state={'url': fullpath})
-        contextmenu = self.contextmenu(fileAction)
-        contextmenu.setPath(fullpath)
+    def add_file(self, addon_handle, filename, fullpath):
+        file_action = action.of(self.name, self.playback, filename, state={'url': fullpath})
+        list_item = self.add_context_menu(file_action)
+        file_action.directory_item().setPath(fullpath)
 
-        xbmcplugin.addDirectoryItem(addonhandle, fullpath, contextmenu, isFolder=False)
+        xbmcplugin.addDirectoryItem(addon_handle, fullpath, list_item, isFolder=False)
 
-    def list_files(self):
-        files = []
+    def list_downloads(self, addon_handle):
         datapath = properties.get_property('download', constants.DATA_PATH)
-        for f in os.listdir(datapath):
+        for f in list_files():
             fullpath = os.path.join(datapath, f)
-            if os.path.isfile(fullpath) and f != 'settings.xml' and f != '.DS_Store':
-                files.append(f)
-        return files
+            self.add_file(addon_handle, f, fullpath)
 
-    def list_downloads(self, addonhandle):
-        datapath = properties.get_property('download', constants.DATA_PATH)
-        for f in self.list_files():
-            fullpath = os.path.join(datapath, f)
-            self.add_file(addonhandle, f, fullpath)
+        self.add_clear_downloads(addon_handle)
+        xbmcplugin.endOfDirectory(addon_handle)
 
-        self.add_clear_downloads(addonhandle)
-        xbmcplugin.endOfDirectory(addonhandle)
-
-    def delete_downloads(self, addonhandle):
-        datapath = properties.get_property('download', constants.DATA_PATH)
-        for f in self.list_files():
-            fullpath = os.path.join(datapath, f)
-            os.remove(fullpath)
-        xbmc.executebuiltin('Container.Refresh')
-
-    def delete_download(self, addonhandle, fullpath):
-        os.remove(fullpath)
-        xbmc.executebuiltin('Container.Refresh')
-
-    def apply(self, addonhandle, activity):
+    def apply(self, addon_handle, activity):
         if constants.APPLY_LOG:
-            xbmc.log('%s.apply %s %s' % (self.name, addonhandle, activity.tostring()), 1)
+            xbmc.log('%s.apply %s %s' % (self.name, addon_handle, activity.tostring()), 1)
 
         if activity.operation == self.playback:
-            self.list_downloads(addonhandle)
+            self.list_downloads(addon_handle)
         elif activity.operation == self.delete_operation:
-            self.delete_download(addonhandle, activity.state['url'])
+            delete_download(activity.state['url'])
         elif activity.operation == self.clear_operation:
-            self.delete_downloads(addonhandle)
+            delete_downloads()
+
+
+def extract_filename(url):
+    filename = html.unescape(url)
+    filename = re.sub(' ', '_', filename)
+    filename = re.sub('^.*/', '', filename)
+    filename = re.sub('\?.*', '', filename)
+    return filename
+
+
+def list_files():
+    files = []
+    datapath = properties.get_property('download', constants.DATA_PATH)
+    for f in os.listdir(datapath):
+        fullpath = os.path.join(datapath, f)
+        if os.path.isfile(fullpath) and f != 'settings.xml' and f != '.DS_Store':
+            files.append(f)
+    return files
+
+
+def read_whole_file(path):
+    with open(path, 'r') as input_file:
+        return input_file.read()
+
+
+def delete_downloads():
+    datapath = properties.get_property('download', constants.DATA_PATH)
+    for f in list_files():
+        fullpath = os.path.join(datapath, f)
+        os.remove(fullpath)
+    xbmc.executebuiltin('Container.Refresh')
+
+
+def delete_download(fullpath):
+    os.remove(fullpath)
+    xbmc.executebuiltin('Container.Refresh')

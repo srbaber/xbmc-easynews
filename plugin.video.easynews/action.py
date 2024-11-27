@@ -12,6 +12,7 @@ class Action:
     title = None
     thumbnail = None
     state = None
+    list_item = None
 
     def __init__(self):
         pass
@@ -19,23 +20,32 @@ class Action:
     def url(self):
         return constants.PLUGIN_URL + 'action=%s' % encode(self)
 
-    def playableitem(self):
-        item = self.directoryitem()
+    def playable_item(self):
+        item = self.directory_item()
         item.setProperty('IsPlayable', 'true')
         item.setLabel(self.title)
         return item
 
-    def directoryitem(self):
-        item = xbmcgui.ListItem(self.title)
+    def directory_item(self):
+        title = self.title
+        path = self.state.get('url', '')
+
+        if self.list_item is None:
+            self.list_item = xbmcgui.ListItem(label=title, path=path)
 
         if self.thumbnail:
-            item.setArt({'thumb': self.thumbnail,
-                         'icon': 'DefaultVideo.png',
-                         'poster': self.thumbnail})
-        return item
+            self.list_item.setArt({'thumb': self.thumbnail,
+                                   'icon': 'DefaultVideo.png',
+                                   'poster': self.thumbnail})
+
+        return self.list_item
 
     def tostring(self):
-        return json.dumps(self, default=lambda x: x.__dict__)
+        list_item = self.list_item
+        self.list_item = None
+        string_value = json.dumps(self, default=lambda x: x.__dict__)
+        self.list_item = list_item
+        return string_value
 
 
 def copy(action):
@@ -57,16 +67,34 @@ def of(handler=None, operation=None, title=None, thumbnail=None, state=None):
 
 
 def encode(action):
-    data = json.dumps(action, default=lambda x: x.__dict__)
+    if action is None:
+        return ''
+
+    list_item = action.list_item
+    action.list_item = None
+
+    data = dumps(action)
+
+    action.list_item = list_item
+    return data
+
+
+def dumps(data):
+    data = json.dumps(data, default=lambda x: x.__dict__)
     data = data.encode('utf-8')
     data = base64.urlsafe_b64encode(data).decode('utf-8')
     return data
 
 
 def decode(data):
-    data = base64.urlsafe_b64decode(data.encode('utf-8'))
-    dict = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
-    if (dict == None):
+    data = loads(data)
+    if data is None:
         return None
     else:
-        return of(dict.handler, dict.operation, dict.title, dict.thumbnail, dict.state.__dict__)
+        return of(data.handler, data.operation, data.title, data.thumbnail, data.state.__dict__)
+
+
+def loads(data):
+    data = base64.urlsafe_b64decode(data.encode('utf-8'))
+    data = json.loads(data, object_hook=lambda d: SimpleNamespace(**d))
+    return data

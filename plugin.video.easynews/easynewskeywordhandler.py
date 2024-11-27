@@ -1,5 +1,5 @@
+import easynewscleanuphandler
 import easynewssearchhandler
-import historyhandler
 import properties
 import xbmc
 
@@ -12,18 +12,19 @@ class EasynewsKeywordHandler(easynewssearchhandler.EasynewsSearchHandler):
     search_operation = 'SearchKeywordAndOrderBySize'
     search_videos = properties.get_localized_string(30310, 'Search Easynews.com Videos')
 
-    def build_params(self, action):
-        params = super().build_params(action)
+    def build_params(self, activity):
+        # use the last search  phrase as the default value
+        search_phrase = easynewscleanuphandler.last_search()
 
-        searchPhrase = historyhandler.last_search()
-        if not 'pagenumber' in action.state or action.state['pagenumber'] == '1':
-            kb = xbmc.Keyboard(searchPhrase, self.search_videos, False)
+        # only prompt on the first page of the search results
+        if activity.state.get('page_number', '1') == '1':
+            kb = xbmc.Keyboard(search_phrase, self.search_videos, False)
             kb.doModal()
             if kb.isConfirmed():
-                # get text from keyboard
-                searchPhrase = kb.getText()
-                historyhandler.add_search(searchPhrase)
+                search_phrase = kb.getText()
+                easynewscleanuphandler.add_search(search_phrase)
+                activity.state['search_phrase'] = search_phrase
+            else:
+                activity.state['search_phrase'] = self.search_abort_operation
 
-        params['gps'] = searchPhrase
-
-        return params
+        return super().build_params(activity)

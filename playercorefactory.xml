@@ -1,0 +1,12 @@
+<playercorefactory>
+    <players>
+        <player name="vlc" type="ExternalPlayer" audio="false" video="true">
+            <filename>org.videolan.vlc</filename>
+            <args>--fullscreen "{1}"</args>
+            <hidexbmc>true</hidexbmc>
+        </player>
+    </players>
+    <rules action="prepend">
+        <rule player="vlc"/>
+    </rules>
+</playercorefactory>
