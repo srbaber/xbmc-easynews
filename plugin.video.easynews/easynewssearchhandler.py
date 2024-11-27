@@ -31,17 +31,6 @@ DEFAULT_PER_PAGE = 100
 #
 # handler responsible for performing the basic search for easynews
 #
-def check_for_invalid_user_id(addon_handle):
-    user_name = properties.get_property('username')
-    passwd = properties.get_property('password')
-    if user_name is None or user_name == '' or passwd is None or passwd == '':
-        xbmcgui.Dialog().ok('Easynews Configuration',
-                            'Please configure your username and password in the settings')
-        return True
-    else:
-        return False
-
-
 class EasynewsSearchHandler:
     name = 'EasynewsSearchHandler'
     search_and_order_operation = 'SearchAndOrder'
@@ -197,8 +186,9 @@ class EasynewsSearchHandler:
         return thumb_url
 
     def add_next_page(self, addon_handle, activity):
+        activity.state['page_number'] = paginate(activity)
         page_action = action.of(activity.handler, activity.operation, self.nextPage,
-                                state={'page_number': paginate(activity)})
+                                state=activity.state)
         xbmcplugin.addDirectoryItem(addon_handle, page_action.url(), page_action.directory_item(), isFolder=True)
 
     def add_context_menu(self, activity):
@@ -217,7 +207,6 @@ class EasynewsSearchHandler:
 
     def parse(self, addon_handle, data):
         data = re.sub('\n', '', data)
-        xbmc.log("Parse Data : %s" % data, 1)
         items = re.compile('<item>(.+?)</item>', re.DOTALL).findall(data)
         if items:
             for item in items:
@@ -231,13 +220,16 @@ class EasynewsSearchHandler:
                 thumbnail = self.build_thumbnail_url(gurl)
 
                 url = getrequest.url_auth(gurl)
+
+                # strip off any parameters from the url
+                url = re.sub('\?.*$', '', url)
                 self.add_video(addon_handle, url, title, thumbnail)
 
     def apply(self, addon_handle, activity):
         if constants.APPLY_LOG:
             xbmc.log('%s.apply %s %s' % (self.name, addon_handle, activity.tostring()), 1)
 
-        if check_for_invalid_user_id(addon_handle):
+        if check_for_invalid_user_id():
             go_to_main_menu(addon_handle)
             return
 
@@ -354,3 +346,14 @@ def get_page_number(activity):
 
 def paginate(activity):
     return get_page_number(activity) + 1
+
+
+def check_for_invalid_user_id():
+    user_name = properties.get_property('username')
+    passwd = properties.get_property('password')
+    if user_name is None or user_name == '' or passwd is None or passwd == '':
+        xbmcgui.Dialog().ok('Easynews Configuration',
+                            'Please configure your username and password in the settings')
+        return True
+    else:
+        return False

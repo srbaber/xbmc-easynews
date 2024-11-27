@@ -3,12 +3,12 @@ import re
 
 import action
 import constants
-from easynewssearchhandler import EasynewsSearchHandler, cleanup_title, go_to_main_menu
 import getrequest
 import properties
 import xbmc
 import xbmcplugin
 from downloadhandler import DownloadHandler
+from easynewssearchhandler import EasynewsSearchHandler, cleanup_title, go_to_main_menu
 
 MAIN_URL = 'https://members.easynews.com/2.0/tools/zip-manager'
 

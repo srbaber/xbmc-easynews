@@ -183,7 +183,6 @@ def add_watched(watched_activity):
         for watched_item in watched_list:
             existing_url = get_url(watched_item)
             watched_url = get_url(watched_activity)
-            xbmc.log('%s.compare %s == %s' % (EasynewsCleanupHandler.name, existing_url, watched_url), 1)
             if existing_url == watched_url:
                 watched_list.remove(watched_item)
 
