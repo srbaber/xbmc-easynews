@@ -4,6 +4,7 @@ import requests
 
 import constants
 import properties
+import xbmc
 
 timeout = 60
 
@@ -18,12 +19,17 @@ def stream(url, params, data_stream):
     user_name = properties.get_property('username')
     passwd = properties.get_property('password')
 
+    if constants.REQUEST_LOG:
+        xbmc.log('%s.stream %s %s' % ('getRequest', url, params), 1)
+
     response = requests.get(url, params=params, auth=(user_name, passwd), timeout=timeout, stream=data_stream)
     return response
 
 
 def submit(url, params, data_stream):
-    # xbmc.log('%s.submit %s' % ('getRequest', url), 1)
+    if constants.REQUEST_LOG:
+        xbmc.log('%s.submit %s %s' % ('getRequest', url, params), 1)
+
     user_name = properties.get_property('username')
     passwd = properties.get_property('password')
 
