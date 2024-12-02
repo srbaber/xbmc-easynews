@@ -23,6 +23,7 @@ class Action:
     def playable_item(self):
         item = self.directory_item()
         item.setProperty('IsPlayable', 'true')
+        item.setInfo('Video', {'Title': self.title})
         item.setLabel(self.title)
         return item
 

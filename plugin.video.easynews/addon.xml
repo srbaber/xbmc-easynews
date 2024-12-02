@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" standalone="yes"?>
 <addon id="plugin.video.easynews"
        name="Easynews.com"
-       version="21.1.0"
+       version="21.1.1"
        provider-name="xbmc-easynews">
     <requires>
         <import addon="script.module.requests"/>
