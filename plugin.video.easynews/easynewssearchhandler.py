@@ -205,8 +205,9 @@ class EasynewsSearchHandler:
         list_item = self.add_context_menu(video_action)
         xbmcplugin.addDirectoryItem(addon_handle, video_action.url(), list_item, isFolder=False)
 
-    def parse(self, addon_handle, data):
-        data = re.sub('\n', '', data)
+    def parse(self, addon_handle, response):
+        session_id = response.headers.get('ENSESSID', None)
+        data = re.sub('\n', '', response.text)
         items = re.compile('<item>(.+?)</item>', re.DOTALL).findall(data)
         if items:
             for item in items:
@@ -219,7 +220,7 @@ class EasynewsSearchHandler:
 
                 thumbnail = self.build_thumbnail_url(gurl)
 
-                url = getrequest.url_auth(gurl)
+                url = getrequest.url_auth(gurl, session_id)
 
                 # strip off any parameters from the url
                 url = re.sub('\?.*$', '', url)
@@ -238,7 +239,7 @@ class EasynewsSearchHandler:
             xbmcplugin.setResolvedUrl(addon_handle, succeeded=True, listitem=activity.playable_item())
         else:
             response = self.search(activity)
-            if response is None:
+            if response.text is None:
                 go_to_main_menu(addon_handle)
             else:
                 self.parse(addon_handle, response)

@@ -1,5 +1,6 @@
 import base64
 import json
+import re
 from types import SimpleNamespace
 
 import constants
@@ -23,7 +24,7 @@ class Action:
     def playable_item(self):
         item = self.directory_item()
         item.setProperty('IsPlayable', 'true')
-        item.setInfo('Video', {'Title': self.title})
+        item.getVideoInfoTag().setTitle(self.title)
         item.setLabel(self.title)
         return item
 
@@ -44,8 +45,21 @@ class Action:
     def tostring(self):
         list_item = self.list_item
         self.list_item = None
+
+        if self.state is None:
+            orig_url = ''
+        else:
+            orig_url = self.state.get('url', '')
+            scrubbed_url = re.sub('^https://.*:.*@', 'https://USERNAME:PASSWORD@', orig_url)
+            self.state['url'] = scrubbed_url
+
+
         string_value = json.dumps(self, default=lambda x: x.__dict__)
         self.list_item = list_item
+
+        if orig_url != '':
+            self.state['url'] = orig_url
+
         return string_value
 
 

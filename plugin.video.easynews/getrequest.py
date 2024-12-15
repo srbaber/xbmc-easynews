@@ -9,7 +9,7 @@ import xbmc
 timeout = 60
 
 
-def url_auth(url):
+def url_auth(url, session_id=None):
     user_name = properties.get_property('username')
     passwd = properties.get_property('password')
     return url.replace('https://', 'https://%s:%s@' % (user_name, passwd))
@@ -40,13 +40,13 @@ def submit(url, params, data_stream):
 def get(url, params=None):
     if params is None:
         params = {}
-    return stream(url, params, False).text
+    return stream(url, params, False)
 
 
 def post(url, params=None):
     if params is None:
         params = {}
-    return submit(url, params, False).text
+    return submit(url, params, False)
 
 
 def download(url, filename, download_report_hook):

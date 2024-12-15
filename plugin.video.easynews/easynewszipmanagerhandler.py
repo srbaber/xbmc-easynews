@@ -52,8 +52,8 @@ class EasynewsZipManagerHandler(EasynewsSearchHandler):
         list_item = self.add_context_menu(video_action)
         xbmcplugin.addDirectoryItem(addon_handle, gurl, list_item, isFolder=False)
 
-    def parse_queue(self, addon_handle, data, queue):
-        items = re.compile('<tr class="rRow(.+?)</tr>', re.DOTALL).findall(data)
+    def parse_queue(self, addon_handle, response, queue):
+        items = re.compile('<tr class="rRow(.+?)</tr>', re.DOTALL).findall(response.text)
         if items:
             for item in items:
                 title = re.compile('target="fileTarget" >(.+?)</a>', re.DOTALL).findall(item)
