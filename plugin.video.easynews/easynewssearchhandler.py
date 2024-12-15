@@ -206,7 +206,7 @@ class EasynewsSearchHandler:
         xbmcplugin.addDirectoryItem(addon_handle, video_action.url(), list_item, isFolder=False)
 
     def parse(self, addon_handle, response):
-        session_id = response.headers.get('ENSESSID', None)
+        session_id = response.headers.get(getrequest.easynews_session_id, None)
         data = re.sub('\n', '', response.text)
         items = re.compile('<item>(.+?)</item>', re.DOTALL).findall(data)
         if items:

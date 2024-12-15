@@ -7,12 +7,17 @@ import properties
 import xbmc
 
 timeout = 60
-
+easynews_session_id = 'ENSESSID'
 
 def url_auth(url, session_id=None):
     user_name = properties.get_property('username')
     passwd = properties.get_property('password')
-    return url.replace('https://', 'https://%s:%s@' % (user_name, passwd))
+    authorized_url = url.replace('https://', 'https://%s:%s@' % (user_name, passwd))
+
+    if session_id is not None:
+        return authorized_url + '|' + easynews_session_id + '=' + session_id
+    else:
+        return authorized_url
 
 
 def stream(url, params, data_stream):
