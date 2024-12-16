@@ -222,8 +222,6 @@ class EasynewsSearchHandler:
 
                 url = getrequest.url_auth(gurl, session_id)
 
-                # strip off any parameters from the url
-                url = re.sub('\?.*$', '', url)
                 self.add_video(addon_handle, url, title, thumbnail)
 
     def apply(self, addon_handle, activity):
