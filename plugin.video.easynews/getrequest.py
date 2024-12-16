@@ -1,4 +1,6 @@
 import os
+import re
+import html
 
 import requests
 
@@ -7,16 +9,23 @@ import properties
 import xbmc
 
 timeout = 60
-easynews_session_id = 'ENSESSID'
+session_id_cookie = 'ENSESSID'
 
 
 def url_auth(url, session_id=None):
     user_name = properties.get_property('username')
     passwd = properties.get_property('password')
-    authorized_url = url.replace('https://.*:*.*@*', 'https://%s:%s@' % (user_name, passwd))
 
+    # strip old values if present
+    authorized_url = html.escape(url, quote=False)
+    authorized_url = re.sub('^https://.*@', 'https://', authorized_url)
+    authorized_url = re.sub('\|' + session_id_cookie + '=.*$', '', authorized_url)
+    authorized_url = html.unescape(authorized_url)
+
+    # add the username, password, and session id
+    authorized_url = re.sub('^https://', 'https://%s:%s@' % (user_name, passwd), authorized_url)
     if session_id is not None:
-        return authorized_url + '|' + easynews_session_id + '=' + session_id
+        return authorized_url + '|' + session_id_cookie + '=' + session_id
     else:
         return authorized_url
 
