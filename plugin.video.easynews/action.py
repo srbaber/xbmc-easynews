@@ -53,7 +53,6 @@ class Action:
             scrubbed_url = re.sub('^https://.*:.*@', 'https://USERNAME:PASSWORD@', orig_url)
             self.state['url'] = scrubbed_url
 
-
         string_value = json.dumps(self, default=lambda x: x.__dict__)
         self.list_item = list_item
 
