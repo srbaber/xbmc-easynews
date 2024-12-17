@@ -4,6 +4,7 @@ import re
 from types import SimpleNamespace
 
 import constants
+import getrequest
 import xbmcgui
 
 
@@ -50,7 +51,7 @@ class Action:
             orig_url = ''
         else:
             orig_url = self.state.get('url', '')
-            scrubbed_url = re.sub('^https://.*:.*@', 'https://USERNAME:PASSWORD@', orig_url)
+            scrubbed_url = getrequest.scrub_url(orig_url)
             self.state['url'] = scrubbed_url
 
         string_value = json.dumps(self, default=lambda x: x.__dict__)

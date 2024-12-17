@@ -206,7 +206,7 @@ class EasynewsSearchHandler:
         xbmcplugin.addDirectoryItem(addon_handle, video_action.url(), list_item, isFolder=False)
 
     def parse(self, addon_handle, response):
-        session_id = response.headers.get(getrequest.session_id_cookie, None)
+        session_id = response.cookies.get(getrequest.session_id_cookie, None)
         data = re.sub('\n', '', response.text)
         items = re.compile('<item>(.+?)</item>', re.DOTALL).findall(data)
         if items:
@@ -237,7 +237,7 @@ class EasynewsSearchHandler:
             xbmcplugin.setResolvedUrl(addon_handle, succeeded=True, listitem=activity.playable_item())
         else:
             response = self.search(activity)
-            if response.text is None:
+            if response is None or response.text is None:
                 go_to_main_menu(addon_handle)
             else:
                 self.parse(addon_handle, response)

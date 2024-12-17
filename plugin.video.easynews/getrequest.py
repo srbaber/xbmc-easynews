@@ -25,9 +25,12 @@ def url_auth(url, session_id=None):
     # add the username, password, and session id
     authorized_url = re.sub('^https://', 'https://%s:%s@' % (user_name, passwd), authorized_url)
     if session_id is not None:
-        return authorized_url + '|' + session_id_cookie + '=' + session_id
-    else:
-        return authorized_url
+        authorized_url += '|' + session_id_cookie + '=' + session_id
+
+    if constants.REQUEST_LOG:
+        xbmc.log('%s.url_auth %s' % ('getRequest', scrub_url(authorized_url)), 1)
+
+    return authorized_url
 
 
 def stream(url, params, data_stream):
@@ -38,6 +41,16 @@ def stream(url, params, data_stream):
         xbmc.log('%s.stream %s %s' % ('getRequest', url, params), 1)
 
     response = requests.get(url, params=params, auth=(user_name, passwd), timeout=timeout, stream=data_stream)
+
+    if constants.REQUEST_LOG:
+        xbmc.log('%s.stream %s %s' % ('getRequest', 'response.headers', response.headers), 1)
+        xbmc.log('%s.stream %s %s' % ('getRequest', 'response.cookies', response.cookies), 1)
+        xbmc.log('%s.stream %s %s' % ('getRequest', 'response.text', response.text), 1)
+        xbmc.log('%s.stream %s %s' % ('getRequest', 'response.url', response.url), 1)
+        xbmc.log('%s.stream %s %s' % ('getRequest', 'response.status_code', response.status_code), 1)
+        xbmc.log('%s.stream %s %s' % ('getRequest', 'response.reason', response.reason), 1)
+        xbmc.log('%s.stream %s %s' % ('getRequest', 'response.content', response.content), 1)
+
     return response
 
 
@@ -81,3 +94,7 @@ def download(url, filename, download_report_hook):
                         download_report_hook(read, size)
 
             download_report_hook(size, size)
+
+
+def scrub_url(orig_url):
+    return re.sub('^https://.*:.*@', 'https://USERNAME:PASSWORD@', orig_url)
