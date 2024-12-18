@@ -53,7 +53,7 @@ class Addon(object):
 
         # Load settings
         settings_root = os.path.join(os.getcwd(), 'resources', 'settings.xml')
-        settings_user = xbmc.translatePath(os.path.join(self.getAddonInfo("profile"), 'settings.xml'))
+        settings_user = os.path.join(os.getcwd(), 'resources', 'profile', 'settings.xml')
         if not os.path.isfile(settings_user):
             if os.path.isfile(settings_root):
                 xml = ET.parse(settings_root)

@@ -57,8 +57,10 @@ class EasynewsGroupsHandler(EasynewsSearchHandler):
     def build_url(self, activity):
         return MAIN_URL
 
-    def parse(self, addon_handle, data):
+    def parse(self, addon_handle, request):
+        data = request.text
         # xbmc.log("Parse Data : %s" % data, 1)
+
         results = re.compile('<table class="grouplist"(.+?)</table>', re.DOTALL).findall(data)
         if len(results) == 0:
             return

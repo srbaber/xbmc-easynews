@@ -52,8 +52,9 @@ class EasynewsZipManagerHandler(EasynewsSearchHandler):
         list_item = self.add_context_menu(video_action)
         xbmcplugin.addDirectoryItem(addon_handle, gurl, list_item, isFolder=False)
 
-    def parse_queue(self, addon_handle, data, queue):
-        items = re.compile('<tr class="rRow(.+?)</tr>', re.DOTALL).findall(data)
+    def parse_queue(self, addon_handle, response, queue):
+        session_id = response.cookies.get(getrequest.session_id_cookie, None)
+        items = re.compile('<tr class="rRow(.+?)</tr>', re.DOTALL).findall(response.text)
         if items:
             for item in items:
                 title = re.compile('target="fileTarget" >(.+?)</a>', re.DOTALL).findall(item)
@@ -65,7 +66,7 @@ class EasynewsZipManagerHandler(EasynewsSearchHandler):
 
                 thumbnail = self.build_thumbnail_url(gurl)
 
-                gurl = getrequest.url_auth(gurl)
+                gurl = getrequest.url_auth(gurl, session_id)
 
                 sig = re.compile('name="(.+?)" value=', re.DOTALL).findall(item)
                 sig = html.unescape(sig[0])
