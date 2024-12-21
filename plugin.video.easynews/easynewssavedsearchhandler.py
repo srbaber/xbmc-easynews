@@ -34,8 +34,8 @@ class EasynewsSavedSearchHandler(EasynewsSearchHandler):
                                   search_phrase, state={'searchUrl': search_url, 'page_number': '1'})
         xbmcplugin.addDirectoryItem(addon_handle, search_action.url(), search_action.directory_item(), isFolder=True)
 
-    def parse_saved_searches(self, addon_handle, data):
-        data = re.sub('</td>', '</td>\n', data)
+    def parse_saved_searches(self, addon_handle, response):
+        data = re.sub('</td>', '</td>\n', response.text)
         searches = re.compile('<input type="text" name="l[0-9]*" value="(.+?)"', re.DOTALL).findall(data)
         urls = re.compile('<a target="gSearch" href="/1.0/global5/(.+?)"', re.DOTALL).findall(data)
 
