@@ -177,7 +177,8 @@ class EasynewsSearchHandler:
         else:
             thumb_url += '/th-'
 
-        thumb_url += url[sixth_slash + 1: extension_dot]
+        filename = url[sixth_slash + 1: extension_dot]
+        thumb_url += filename[:41]
         thumb_url += '.jpg/th-'
         thumb_url += url[seventh_slash + 1: thumb_dot]
         thumb_url += '.jpg'
